@@ -1,6 +1,6 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/language/app_lang.dart';
 import '../modules/online-users/model/user.dart';
 
 class Application {
@@ -8,8 +8,8 @@ class Application {
   static String version = '1.0.0';
   static String domain = 'Domain.com';
   static SharedPreferences? preferences;
-  // static bool isEnglish = AppLanguage.defaultLanguage.languageCode == 'en';
-  static Device? device;
+  static bool isEnglish = AppLanguage.defaultLanguage.languageCode == 'en';
+  static UserDevice? device;
   static bool isDarktheme = false;
   static String storagePath = '';
   static User? user;
@@ -28,5 +28,18 @@ class Application {
   Application._internal();
 }
 
-class Device {
+class UserDevice {
+  final String? uuid;
+  final String? name;
+  final String? model;
+  final String? version;
+  final String? type;
+
+  UserDevice({
+    this.uuid,
+    this.name,
+    this.model,
+    this.version,
+    this.type,
+  });
 }

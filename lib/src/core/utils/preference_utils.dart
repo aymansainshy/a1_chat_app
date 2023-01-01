@@ -1,6 +1,7 @@
 import '../../config/app_config.dart';
 
 class PreferencesUtils {
+  
   static Future<bool?> clear() async {
     return await Application.preferences?.clear();
   }

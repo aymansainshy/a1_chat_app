@@ -1,21 +1,45 @@
+import 'package:a1_chat_app/app_blocs.dart';
+import 'package:a1_chat_app/src/core/theme/app_theme.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
+
+import 'src/core/language/app_lang.dart';
+import 'src/core/language/app_localization.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      locale: AppLanguage.defaultLanguage,
+      localizationsDelegates: const [
+        AppLocalization.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLanguage.supportLanguage,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
+  }
+
+   @override
+  void dispose() {
+    AppBlocs.dispose();
+    super.dispose();
   }
 }
 
@@ -60,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), 
+      ),
     );
   }
 }
