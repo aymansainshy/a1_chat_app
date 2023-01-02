@@ -1,7 +1,8 @@
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/language/app_lang.dart';
-import '../modules/online-users/model/user.dart';
+import '../modules/auth/model/user.dart';
 
 class Application {
   static bool debug = true;

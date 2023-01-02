@@ -44,6 +44,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc() : super(AppInitial()) {
     on<AppStarted>((event, emit) async {
       // Read Save Device Information
+      emit(AppSetupInProgress());
+
       try {
         if (Platform.isAndroid) {
           final android = await deviceInfoPlugin.androidInfo;
@@ -67,14 +69,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           );
         }
 
-        print("hello");
+        print("Device ${device.name}");
       } catch (e) {
         print("Device setup error $e");
       }
 
-      Application.device = device;
 
-      //TODO: when app started ..
+     Application.device = device;
+
+     await Future.delayed(const Duration(milliseconds: 2000));
+
+     emit(AppSetupInComplete());
+      //TODO: when app started ...
     });
   }
 }

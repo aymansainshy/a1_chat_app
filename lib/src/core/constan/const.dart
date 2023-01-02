@@ -1,0 +1,1 @@
+const kAppName = "A1 Chat";
