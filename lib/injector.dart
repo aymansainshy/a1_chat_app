@@ -1,3 +1,6 @@
+import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
+import 'package:a1_chat_app/src/modules/messages/repository/messages_repository.dart';
+import 'package:a1_chat_app/src/modules/storage/storage.dart';
 import 'package:a1_chat_app/src/router/app_router.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
@@ -40,6 +43,13 @@ void setup() {
   injector.registerLazySingleton<AppBloc>(() => AppBloc(injector()));
   injector.registerLazySingleton<OtpBloc>(() => OtpBloc());
   injector.registerLazySingleton<AuthCubit>(() => AuthCubit());
+  injector.registerLazySingleton<MessageBloc>(() => MessageBloc(injector()));
+
+  // Repositories
+  injector.registerLazySingleton<MessageRepository>(() => MessageRepositoryImpl(injector()));
+
+  // Storage 
+  injector.registerLazySingleton<Storage>(() => MessageStorageImpl());
 
   // AppRouter
   injector.registerLazySingleton<AppRouter>(() => AppRouter(injector()));

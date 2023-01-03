@@ -18,12 +18,9 @@ class AppColors {
 // more control over individual colors
 final colorScheme = ColorScheme.fromSwatch(
   primarySwatch: Colors.blue, // as above
-  // primaryColorDark: primaryColorDark, // as above
   accentColor: AppColors.accentColor, // as above
   cardColor: AppColors.cardColor, // default based on theme brightness, can be set manually
   backgroundColor: AppColors.backgroundColor, // as above
-  // errorColor: errorColor, // default (Colors.red[700]), can be set manually
-  // brightness: brightness, // default (Brightness.light), can be set manually
 );
 
 class AppTheme {

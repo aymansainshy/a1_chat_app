@@ -1,4 +1,5 @@
 import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
+import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     injector<AppBloc>().add(AppStarted());
+    injector<MessageBloc>().add(GetMessages());
   }
 
   @override
@@ -33,6 +35,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<AppBloc>(create: (context) => injector<AppBloc>()),
         BlocProvider<OtpBloc>(create: (context) => injector<OtpBloc>()),
         BlocProvider<AuthCubit>(create: (context) => injector<AuthCubit>()),
+        BlocProvider<MessageBloc>(create: (context) => injector<MessageBloc>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
