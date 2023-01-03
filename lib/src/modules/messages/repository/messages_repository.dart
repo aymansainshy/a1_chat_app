@@ -10,11 +10,11 @@ abstract class MessageRepository {
 }
 
 class MessageRepositoryImpl extends MessageRepository {
-  final MessageStorageImpl messageStorage;
+  final Storage messageStorage;
 
   MessageRepositoryImpl(this.messageStorage);
 
-  final List<Message?>? messages = [
+  final List<Message?>? messages = const [
     Message(
       id: '1',
       sender: '1',
@@ -22,27 +22,28 @@ class MessageRepositoryImpl extends MessageRepository {
       content: 'Hello',
     ),
     Message(
-      id: '1',
-      sender: '1',
-      receiver: '3',
-      content: 'Hi',
-    ),
-    Message(
-      id: '1',
+      id: '3',
       sender: '10',
       receiver: '1',
       content: 'Hello',
     ),
     Message(
-      id: '1',
+      id: '4',
       sender: '10',
       receiver: '1',
       content: 'How are you doing',
     ),
+
     Message(
-      id: '1',
+      id: '2',
+      sender: '1',
+      receiver: '3',
+      content: 'Hi',
+    ),
+    Message(
+      id: '5',
       sender: '3',
-      receiver: '',
+      receiver: '1',
       content: 'Hello',
     ),
   ];

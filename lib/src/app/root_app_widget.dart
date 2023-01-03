@@ -66,7 +66,8 @@ class _MyAppState extends State<MyApp> {
                   // routerDelegate: AppRouter.router.routerDelegate,
                 );
               }
-              return AnimatedSplashView(duration: 1000, imagePath: AssetsUtils.chatLogo);
+              return AnimatedSplashView(
+                  duration: 1000, imagePath: AssetsUtils.chatLogo);
             },
           );
         },

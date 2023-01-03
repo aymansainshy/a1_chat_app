@@ -7,7 +7,9 @@ part 'message_event.dart';
 part 'message_state.dart';
 
 class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
-  final MessageRepositoryImpl messageRepository;
+  final MessageRepository messageRepository;
+
+  late bool isMe;
 
   final Map<MessageRoom, List<Message?>?>? messages = {};
 
@@ -15,13 +17,21 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     on<GetMessages>((event, emit) async {
       List<Message?>? loadedMessages = await messageRepository.getMessages();
 
-      loadedMessages?.map((message) {
-        if ((messages?.containsKey(MessageRoom(id: message?.id)))!) {
-          messages![MessageRoom(id: message?.id)]?.add(message);
+      loadedMessages?.forEach((message) {
+        isMe = message?.sender == '1';
+
+        if ((messages?.containsKey(MessageRoom(id: isMe ? message?.receiver : message?.sender)))!) {
+          messages![MessageRoom(id: isMe ? message?.receiver : message?.sender)]?.add(message);
         } else {
-          messages?.putIfAbsent(MessageRoom(id: message?.id), () => [message]);
+          messages?.putIfAbsent(MessageRoom(id: isMe ? message?.receiver : message?.sender),() => [message]);
         }
       });
+
+      print("messages ${messages.toString()}");
+      // var key = messages?.keys.firstWhere((e) => e.id == '10');
+      // final newKey = MessageRoom(id:key?.id, name: "ayman");
+      // key = newKey;
+      // print("messages ${messages.toString()}");
     });
 
     on<SendMessage>((event, emit) {
@@ -42,6 +52,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         messages![MessageRoom(id: message.id)]?.add(message);
       } else {
         messages?.putIfAbsent(MessageRoom(id: message.id), () => [message]);
+
       }
     });
   }

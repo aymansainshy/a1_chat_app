@@ -10,6 +10,7 @@ import '../../../core/animations/fade_transition.dart';
 import '../../../core/constan/const.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../messages/message-bloc/message_bloc.dart';
 import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 
