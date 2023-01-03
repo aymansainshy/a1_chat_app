@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../modules/auth/auth-bloc/otp_bloc.dart';
-import '../modules/home/app-bloc/app_bloc.dart';
+import 'app-bloc/app_bloc.dart';
 import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../core/constan/const.dart';
 import '../core/theme/app_theme.dart';
@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context, appState) {
               if (appState is AppSetupInComplete) {
                 return MaterialApp.router(
+                  debugShowCheckedModeBanner: false,
                   title: kAppName,
                   theme: AppTheme.lightTheme,
                   darkTheme: AppTheme.darkTheme,

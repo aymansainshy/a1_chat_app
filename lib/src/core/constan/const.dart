@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-const kAppName = "A1 Chat";
+const String kAppName = "A1 Chat";
+const String klogoAnimation = "logoAnimation";
 
 
 

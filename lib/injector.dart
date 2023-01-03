@@ -1,8 +1,9 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:a1_chat_app/src/modules/auth/auth-bloc/auth_cubit.dart';
 import 'package:a1_chat_app/src/modules/auth/auth-bloc/otp_bloc.dart';
-import 'package:a1_chat_app/src/modules/home/app-bloc/app_bloc.dart';
+import 'package:a1_chat_app/src/app/app-bloc/app_bloc.dart';
 
 // class AppBlocs {
 //   static final AuthCubit authCubit = AuthCubit();
@@ -35,7 +36,12 @@ final injector = GetIt.instance;
 
 void setup() {
   // Blocs
-  injector.registerLazySingleton<AppBloc>(() => AppBloc());
+  injector.registerLazySingleton<AppBloc>(() => AppBloc(injector()));
   injector.registerLazySingleton<OtpBloc>(() => OtpBloc());
   injector.registerLazySingleton<AuthCubit>(() => AuthCubit());
+
+  
+  // External 
+  final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  injector.registerLazySingleton(() => deviceInfoPlugin);
 }

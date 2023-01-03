@@ -8,6 +8,9 @@ class AppColors {
   static const Color cardColor = Color.fromRGBO(255, 255, 255, 1);
   static const Color backgroundColor = Color.fromRGBO(233, 239, 253, 1);
   static const Color indicatorColor = Color.fromRGBO(100, 223, 151, 1);
+  static const Color borderColor = Colors.black;
+  static const Color textButtomColor = Colors.white;
+
 }
 
 // This generates the modern simplified set of theme colors flutter recommends
@@ -25,6 +28,7 @@ final colorScheme = ColorScheme.fromSwatch(
 
 class AppTheme {
   static final lightTheme = ThemeData(
+    fontFamily: "Roboto",
     colorScheme: colorScheme,
     primaryColor: AppColors.primaryColor,
     indicatorColor: AppColors.indicatorColor,

@@ -7,8 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/animations/fade_transition.dart';
 import '../../../core/animations/slide_transition.dart';
 import '../../../core/errors/custom_error_dialog.dart';
+import '../../../core/theme/app_theme.dart';
 import '../auth-bloc/otp_bloc.dart';
 import '../views/confirm_otp.dart';
+
+const double KborderRaduios = 15.0;
+const double KbuttonHeight = 48.0;
 
 class LoginForm extends StatefulWidget {
   final bool isLandScape;
@@ -30,6 +34,7 @@ class _LoginFormState extends State<LoginForm> {
   late bool isPhoneValide = true;
 
   final TextEditingController _phoneNumberController = TextEditingController();
+
   String initialCountry = 'SD';
   PhoneNumber number = PhoneNumber(isoCode: 'SD');
   late String? phoneNumber = '';
@@ -51,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _saveForm() async {
-    if (isPhoneValide && phoneNumber!.length > 8) {
+    if (isPhoneValide && phoneNumber!.length >= 8) {
       setState(() {
         logInData['phoneNumber'] = phoneNumber!;
       });
@@ -75,23 +80,22 @@ class _LoginFormState extends State<LoginForm> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             SizedBox(
               height: widget.screenUtil.setHeight(20),
             ),
-            SlidTransition(
-              animationDir: AnimationDir.rtl,
+            FadTransition(
               child: Container(
                 padding: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
+                    Radius.circular(KborderRaduios),
                   ),
                   border: Border.all(
-                    color: !isPhoneValide ? Colors.red : Colors.green,
+                    color: !isPhoneValide ? Theme.of(context).errorColor : AppColors.borderColor,
                     width: 1,
                   ),
                   color: Colors.grey[100],
@@ -101,12 +105,8 @@ class _LoginFormState extends State<LoginForm> {
                     focusNode: _phoneNumberFocusNode,
                     spaceBetweenSelectorAndTextField: 0,
                     selectorTextStyle:
-                        Theme.of(context).textTheme.bodyText2!.copyWith(
-                              fontSize: 17,
-                            ),
-                    textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          fontSize: 17,
-                        ),
+                        Theme.of(context).textTheme.bodyText2!,
+                    textStyle: Theme.of(context).textTheme.bodyText2!,
                     textAlign: TextAlign.start,
                     selectorConfig: const SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
@@ -127,26 +127,26 @@ class _LoginFormState extends State<LoginForm> {
                         Icons.phone_android,
                         color: Colors.grey,
                       ),
-                      prefixIcon: const Icon(
-                        Icons.phone_android,
-                        color: Colors.grey,
-                      ),
-                      hintText: "Phone",
+                      // prefixIcon: const Icon(
+                      //   Icons.phone_android,
+                      //   color: Colors.grey,
+                      // ),
+                      hintText: "Phone number",
                       fillColor: Colors.red,
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(KborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(KborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(KborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(KborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                     ),
@@ -229,19 +229,20 @@ class _LoginFormState extends State<LoginForm> {
                       padding: MaterialStateProperty.all<EdgeInsets>(
                         EdgeInsets.zero,
                       ),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.secondary,
-                      ),
+                      // backgroundColor: MaterialStateProperty.all<Color>(
+                      //   Theme.of(context).colorScheme.secondary,
+                      // ),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(KborderRaduios),
                           // side: BorderSide(color: Colors.red)
                         ),
                       ),
                     ),
                     child: Ink(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      decoration:  BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: const BorderRadius.all(Radius.circular(KborderRaduios)),
                         // gradient: LinearGradient(
                         //   begin: Alignment.centerLeft,
                         //   end: Alignment.centerRight,
@@ -252,15 +253,14 @@ class _LoginFormState extends State<LoginForm> {
                         // ),
                       ),
                       child: SizedBox(
-                        height: 46,
+                        height: KbuttonHeight,
                         width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: widget.isLandScape
-                                ? widget.screenUtil.setSp(12)
-                                : widget.screenUtil.setSp(15),
-                            fontWeight: FontWeight.bold,
+                        child: Center(
+                          child: Text(
+                            "Login",
+                            style: Theme.of(context).textTheme.button?.copyWith(
+                              color: AppColors.textButtomColor,
+                            ),
                           ),
                         ),
                       ),
@@ -272,19 +272,19 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: GestureDetector(
-                onTap: () {},
-                child: const Text(
-                  "Skip",
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
+            // const SizedBox(height: 20),
+            // Padding(
+            //   padding: const EdgeInsets.only(right: 10),
+            //   child: GestureDetector(
+            //     onTap: () {},
+            //     child: const Text(
+            //       "Skip",
+            //       style: TextStyle(
+            //         color: Colors.black,
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
