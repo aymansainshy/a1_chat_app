@@ -228,7 +228,7 @@ class _LoginFormState extends State<LoginForm> {
                 builder: (context, otpState) {
                   return SharedElevatedButton(
                     onPressed: () {
-                       injector<AuthCubit>().tryLogin();
+                      BlocProvider.of<AuthCubit>(context).tryLogin();
                     },
                     child: SizedBox(
                       height: _kbuttonHeight,

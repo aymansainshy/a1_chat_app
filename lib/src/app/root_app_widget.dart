@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
                   //   GlobalCupertinoLocalizations.delegate,
                   // ],
                   // supportedLocales: AppLanguage.supportLanguage,
-                  routerConfig: AppRouter(context.read<AuthCubit>()).router,
+                  routerConfig: injector<AppRouter>().router,
                   // routeInformationParser: AppRouter.router.routeInformationParser,
                   // routerDelegate: AppRouter.router.routerDelegate,
                 );

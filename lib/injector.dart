@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/router/app_router.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
 
@@ -40,8 +41,10 @@ void setup() {
   injector.registerLazySingleton<OtpBloc>(() => OtpBloc());
   injector.registerLazySingleton<AuthCubit>(() => AuthCubit());
 
-  
-  // External 
+  // AppRouter
+  injector.registerLazySingleton<AppRouter>(() => AppRouter(injector()));
+
+  // External
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   injector.registerLazySingleton(() => deviceInfoPlugin);
 }
