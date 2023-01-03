@@ -58,18 +58,23 @@ class AppRouter {
     ],
     redirect: ((BuildContext context, GoRouterState state) {
       bool isAuthenticated = authCubit.state.status == AuthStatus.authenticated;
+      bool isTryLogin = authCubit.state.status == AuthStatus.isTryLogin;
 
-      print(isAuthenticated);
+      // print("isAuthenticated $isAuthenticated");
+      // print('isTryLogin $isTryLogin');
 
       final bool isLoginView = state.subloc == '/login';
 
-      if (!isAuthenticated) {
-        return isLoginView ? null : '/login';
+      if (isTryLogin) {
+        return '/otp';
       }
 
-      // ignore: dead_code
       if (isAuthenticated) {
         return '/';
+      }
+      
+      if (!isAuthenticated) {
+        return isLoginView ? null : '/login';
       }
 
       return null;
