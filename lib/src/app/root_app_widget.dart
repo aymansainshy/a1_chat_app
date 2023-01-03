@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +8,7 @@ import 'app-bloc/app_bloc.dart';
 import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../core/constan/const.dart';
 import '../core/theme/app_theme.dart';
-import '../modules/home/views/splash_view.dart';
+import 'views/splash_view.dart';
 import '../router/app_router.dart';
 import '../../injector.dart';
 
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
                   // routerDelegate: AppRouter.router.routerDelegate,
                 );
               }
-              return AnimatedSplashView(duration: 1000, imagePath: "ddfdfdf");
+              return AnimatedSplashView(duration: 1000, imagePath: AssetsUtils.chatLogo);
             },
           );
         },

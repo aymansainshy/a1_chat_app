@@ -1,18 +1,19 @@
+import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 import '../../../core/animations/fade_transition.dart';
 import '../../../core/animations/slide_transition.dart';
+import '../../../core/constan/const.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
 import '../auth-bloc/otp_bloc.dart';
 import '../views/confirm_otp.dart';
 
-const double KborderRaduios = 15.0;
-const double KbuttonHeight = 48.0;
+const double _kbuttonHeight = 45.0;
 
 class LoginForm extends StatefulWidget {
   final bool isLandScape;
@@ -92,10 +93,12 @@ class _LoginFormState extends State<LoginForm> {
                 padding: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(
-                    Radius.circular(KborderRaduios),
+                    Radius.circular(kborderRaduios),
                   ),
                   border: Border.all(
-                    color: !isPhoneValide ? Theme.of(context).errorColor : AppColors.borderColor,
+                    color: !isPhoneValide
+                        ? Theme.of(context).errorColor
+                        : AppColors.borderColor,
                     width: 1,
                   ),
                   color: Colors.grey[100],
@@ -104,8 +107,7 @@ class _LoginFormState extends State<LoginForm> {
                   child: InternationalPhoneNumberInput(
                     focusNode: _phoneNumberFocusNode,
                     spaceBetweenSelectorAndTextField: 0,
-                    selectorTextStyle:
-                        Theme.of(context).textTheme.bodyText2!,
+                    selectorTextStyle: Theme.of(context).textTheme.bodyText2!,
                     textStyle: Theme.of(context).textTheme.bodyText2!,
                     textAlign: TextAlign.start,
                     selectorConfig: const SelectorConfig(
@@ -134,19 +136,19 @@ class _LoginFormState extends State<LoginForm> {
                       hintText: "Phone number",
                       fillColor: Colors.red,
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(KborderRaduios),
+                        borderRadius: BorderRadius.circular(kborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(KborderRaduios),
+                        borderRadius: BorderRadius.circular(kborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(KborderRaduios),
+                        borderRadius: BorderRadius.circular(kborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(KborderRaduios),
+                        borderRadius: BorderRadius.circular(kborderRaduios),
                         borderSide: BorderSide.none,
                       ),
                     ),
@@ -224,50 +226,23 @@ class _LoginFormState extends State<LoginForm> {
                   }
                 },
                 builder: (context, otpState) {
-                  return ElevatedButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.zero,
-                      ),
-                      // backgroundColor: MaterialStateProperty.all<Color>(
-                      //   Theme.of(context).colorScheme.secondary,
-                      // ),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(KborderRaduios),
-                          // side: BorderSide(color: Colors.red)
-                        ),
-                      ),
-                    ),
-                    child: Ink(
-                      decoration:  BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(KborderRaduios)),
-                        // gradient: LinearGradient(
-                        //   begin: Alignment.centerLeft,
-                        //   end: Alignment.centerRight,
-                        //   colors: [
-                        //     Color.fromRGBO(96, 120, 234, 1),
-                        //     Color.fromRGBO(55, 183, 224, 1),
-                        //   ],
-                        // ),
-                      ),
-                      child: SizedBox(
-                        height: KbuttonHeight,
-                        width: MediaQuery.of(context).size.width,
-                        child: Center(
-                          child: Text(
-                            "Login",
-                            style: Theme.of(context).textTheme.button?.copyWith(
-                              color: AppColors.textButtomColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  return SharedElevatedButton(
                     onPressed: () {
-                      _saveForm();
+                      context.go('/otp');
+                      print("Goooo");
                     },
+                    child: SizedBox(
+                      height: _kbuttonHeight,
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Text(
+                          "Login",
+                          style: Theme.of(context).textTheme.button?.copyWith(
+                                color: AppColors.textButtomColor,
+                              ),
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -299,3 +274,4 @@ class _LoginFormState extends State<LoginForm> {
 //                                     AppColors.greenColor,
 //                                     AppColors.scondryColor),
 //                               )
+
