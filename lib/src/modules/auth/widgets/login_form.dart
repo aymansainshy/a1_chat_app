@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,12 +7,11 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/animations/fade_transition.dart';
-import '../../../core/animations/slide_transition.dart';
 import '../../../core/constan/const.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
+import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
-import '../views/confirm_otp.dart';
 
 const double _kbuttonHeight = 45.0;
 
@@ -215,20 +215,20 @@ class _LoginFormState extends State<LoginForm> {
                   }
 
                   if (otpState is SendOtpSuccess) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => PinCodeVerificationView(
-                          name: logInData['name'],
-                          phoneNumber: logInData['phoneNumber'],
-                        ),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => PinCodeVerificationView(
+                    //       name: logInData['name'],
+                    //       phoneNumber: logInData['phoneNumber'],
+                    //     ),
+                    //   ),
+                    // );
                   }
                 },
                 builder: (context, otpState) {
                   return SharedElevatedButton(
                     onPressed: () {
-                      context.go('/otp');
+                      GoRouter.of(context).go('otp');
                       print("Goooo");
                     },
                     child: SizedBox(

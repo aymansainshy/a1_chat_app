@@ -1,10 +1,9 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/app_config.dart';
 
-enum AuthStatus { unknown, authenticated, unAuthenticated }
+enum AuthStatus { unknown, authenticated, unAuthenticated, isTryLogin }
 
 class AuthState extends Equatable {
   final AuthStatus status;
@@ -14,6 +13,8 @@ class AuthState extends Equatable {
   const AuthState.authenticated() : this._(status: AuthStatus.authenticated);
 
   const AuthState.unAuthenticated() : this._(status: AuthStatus.unAuthenticated);
+
+  const AuthState.isTryLogin() : this._(status: AuthStatus.isTryLogin);
 
   @override
   List<Object?> get props => [status];
@@ -28,5 +29,9 @@ class AuthCubit extends Cubit<AuthState> {
     } else {
       emit(const AuthState.unAuthenticated());
     }
+  }
+
+  void tryLogin() {
+    emit(const AuthState.isTryLogin());
   }
 }

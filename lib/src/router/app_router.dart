@@ -25,7 +25,7 @@ class AppRouter {
 
   late final router = GoRouter(
     initialLocation: '/', // Splash screen
-    routes: [
+    routes: <RouteBase>[
       GoRoute(
         path: '/',
         name: RouteName.home,
@@ -58,6 +58,8 @@ class AppRouter {
     ],
     redirect: ((BuildContext context, GoRouterState state) {
       bool isAuthenticated = authCubit.state.status == AuthStatus.authenticated;
+
+      print(isAuthenticated);
 
       final bool isLoginView = state.subloc == '/login';
 
