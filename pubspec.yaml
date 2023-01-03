@@ -48,7 +48,7 @@ dependencies:
   rflutter_alert: ^2.0.4
   shared_preferences: ^2.0.15
   sleek_circular_slider: ^2.0.1
-
+  get_it: ^7.2.0
   
 
 dev_dependencies:
