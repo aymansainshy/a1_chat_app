@@ -27,11 +27,14 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         }
       });
 
-      print("messages ${messages.toString()}");
-      // var key = messages?.keys.firstWhere((e) => e.id == '10');
-      // final newKey = MessageRoom(id:key?.id, name: "ayman");
-      // key = newKey;
       // print("messages ${messages.toString()}");
+
+      // final room = event.room;
+      // final messages = messages[room];
+      // if(messages != null) {
+      // final messsage[room] = messages;
+      // emit(newstate);
+      // }
     });
 
     on<SendMessage>((event, emit) {
@@ -52,7 +55,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         messages![MessageRoom(id: message.id)]?.add(message);
       } else {
         messages?.putIfAbsent(MessageRoom(id: message.id), () => [message]);
-
       }
     });
   }
