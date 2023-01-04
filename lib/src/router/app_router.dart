@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/auth/views/login_view.dart';
-import 'package:a1_chat_app/src/app/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -66,7 +64,7 @@ class AppRouter {
       final bool isLoginView = state.subloc == '/login';
 
       if (isTryLogin) {
-        return '/otp';
+        return null;
       }
 
       if (isAuthenticated) {

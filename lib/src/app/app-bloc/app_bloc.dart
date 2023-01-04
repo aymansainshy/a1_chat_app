@@ -1,7 +1,7 @@
 import 'package:a1_chat_app/injector.dart';
+import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
@@ -41,9 +41,11 @@ class AppSetupInFailer extends AppState {
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final DeviceInfoPlugin deviceInfoPlugin;
+  final SocketIO socket;
+
   late UserDevice device;
 
-  AppBloc(this.deviceInfoPlugin) : super(AppInitial()) {
+  AppBloc(this.deviceInfoPlugin, this.socket) : super(AppInitial()) {
     on<AppStarted>((event, emit) async {
       // Read Save Device Information
       emit(AppSetupInProgress());
@@ -82,10 +84,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
      injector<AuthCubit>().checkAuth();
 
+     socket.connect();
+
      await Future.delayed(const Duration(milliseconds: 2000));
 
+
      emit(AppSetupInComplete());
-      //TODO: when app started ...
     });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/repository/messages_repository.dart';
+import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
 import 'package:a1_chat_app/src/modules/storage/storage.dart';
 import 'package:a1_chat_app/src/router/app_router.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -40,7 +41,7 @@ final injector = GetIt.instance;
 
 void setup() {
   // Blocs
-  injector.registerLazySingleton<AppBloc>(() => AppBloc(injector()));
+  injector.registerLazySingleton<AppBloc>(() => AppBloc(injector(), injector()));
   injector.registerLazySingleton<OtpBloc>(() => OtpBloc());
   injector.registerLazySingleton<AuthCubit>(() => AuthCubit());
   injector.registerLazySingleton<MessageBloc>(() => MessageBloc(injector()));
@@ -53,6 +54,9 @@ void setup() {
 
   // AppRouter
   injector.registerLazySingleton<AppRouter>(() => AppRouter(injector()));
+
+  // WebSocket
+  injector.registerLazySingleton<SocketIO>(() => SocketIoImpl());
 
   // External
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
