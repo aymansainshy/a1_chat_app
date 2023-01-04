@@ -2,23 +2,33 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 
 abstract class SocketIO {
   void connect();
+  void dispose();
 }
 
 class SocketIoImpl extends SocketIO {
+  late  io.Socket _socket;
+
   @override
   void connect() {
     print('Start connect');
-    io.Socket socket = io.io('http://127.0.0.1:3333');
+     _socket = io.io('http://127.0.0.1:3333');
 
-    socket.onConnect((_) {
+    _socket.onConnect((_) {
       print('connect');
-      socket.emit('msg', 'test');
+      _socket.emit('msg', 'test');
     });
 
-    socket.on('event', (data) => print(data));
+    _socket.on('event', (data) => print(data));
 
-    socket.onDisconnect((_) => print('disconnect'));
+    _socket.onDisconnect((_) => print('disconnect'));
 
-    socket.on('fromServer', (_) => print(_));
+    _socket.on('fromServer', (_) => print(_));
+  }
+  
+
+  @override
+  void dispose() {
+    _socket.disconnect();
+    _socket.dispose();
   }
 }
