@@ -4,14 +4,12 @@ class Message extends Equatable {
   final String? id;
   final String? sender;
   final String? receiver;
-  // final MessageRoom messageRoom;
   final String content;
 
   const Message({
     required this.id,
     required this.sender,
     required this.receiver,
-    // required this.messageRoom,
     required this.content,
   });
   

@@ -1,4 +1,5 @@
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
+import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -227,6 +228,7 @@ class _LoginFormState extends State<LoginForm> {
                 return SharedElevatedButton(
                   onPressed: () {
                     BlocProvider.of<AuthCubit>(context).tryLogin();
+                    BlocProvider.of<MessageBloc>(context).add(SendMessage());
                     context.go('/otp');
                   },
                   child: SizedBox(

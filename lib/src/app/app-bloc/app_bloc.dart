@@ -33,10 +33,10 @@ class AppSetupInProgress extends AppState {}
 
 class AppSetupInComplete extends AppState {}
 
-class AppSetupInFailer extends AppState {
+class AppSetupInFailure extends AppState {
   final String error;
 
-  const AppSetupInFailer(this.error);
+  const AppSetupInFailure(this.error);
 }
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -89,7 +89,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         // emit(AppSetupInFailer("dkdkd".toString()));
         emit(AppSetupInComplete());
       } catch (e) {
-        emit(AppSetupInFailer(e.toString()));
+        emit(AppSetupInFailure(e.toString()));
       }
     });
   }

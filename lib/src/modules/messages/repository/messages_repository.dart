@@ -1,10 +1,8 @@
-import 'package:a1_chat_app/src/modules/messages/models/message.dart';
-import 'package:a1_chat_app/src/modules/storage/storage.dart';
+import '../../../modules/messages/models/message.dart';
+import '../../../modules/storage/storage.dart';
 
 abstract class MessageRepository {
   Future<List<Message?>?> getMessages();
-
-  Future<MessageRoom?> getMessageRoom(String roomId);
 
   Future<void> saveMessage(Message message);
 }
@@ -51,12 +49,6 @@ class MessageRepositoryImpl extends MessageRepository {
   @override
   Future<List<Message?>?> getMessages() async {
     return messages;
-  }
-
-  @override
-  Future<MessageRoom?> getMessageRoom(String roomId) {
-    // TODO: implement getMessageRoom
-    throw UnimplementedError();
   }
 
   @override

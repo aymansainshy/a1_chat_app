@@ -33,6 +33,7 @@ class PinCodeVerificationView extends StatefulWidget {
 
 class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
   TextEditingController textEditingController = TextEditingController();
+
   // ..text = "123456";
 
   late StreamController<ErrorAnimationType> errorController;
@@ -86,10 +87,11 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
               String errorMassege = "Please enter avalid OTP";
 
               customeAlertDialoge(
-                  context: context,
-                  title: "An error occurred !",
-                  errorMessage: errorMassege,
-                  fun: () {});
+                context: context,
+                title: "An error occurred !",
+                errorMessage: errorMassege,
+                fun: () {},
+              );
             }
 
             /////////////////////////////////////////////////////////////////////////
@@ -154,7 +156,9 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                           key: formKey,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 30),
+                              vertical: 8.0,
+                              horizontal: 30,
+                            ),
                             child: Directionality(
                               textDirection: TextDirection.ltr,
                               child: PinCodeTextField(
@@ -182,13 +186,15 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                                   shape: PinCodeFieldShape.box,
                                   borderRadius: BorderRadius.circular(5),
                                   // inactiveColor: Colors.black,
+                                  borderWidth:1.0,
                                   selectedFillColor: Colors.white,
                                   inactiveFillColor: Colors.white,
                                   activeColor: Colors.blue,
                                   fieldHeight: 50,
                                   fieldWidth: 50,
-                                  activeFillColor:
-                                      hasError ? Colors.blue[100] : Colors.white,
+                                  activeFillColor: hasError
+                                      ? Colors.blue[100]
+                                      : Colors.white,
                                 ),
                                 cursorColor: Colors.black,
                                 animationDuration:
@@ -206,7 +212,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                                 // },
                                 onChanged: (value) {
                                   // print(value);
-                      
+
                                   currentText = value;
                                 },
                                 beforeTextPaste: (text) {
@@ -271,9 +277,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                           )
                         ],
                       ),
-                      const SizedBox(
-                        height: 14,
-                      ),
+                      const SizedBox(height: 14),
                       SharedElevatedButton(
                         onPressed: () {
                           formKey.currentState?.save();

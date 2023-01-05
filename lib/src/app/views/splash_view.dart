@@ -66,7 +66,7 @@ class AnimatedSplashState extends State<AnimatedSplashView>
           opacity: _animation,
           child: BlocListener<AppBloc, AppState>(
             listener: (context, appState) {
-              if (appState is AppSetupInFailer) {
+              if (appState is AppSetupInFailure) {
                 simpleErrorDialog(context, () {
                   BlocProvider.of<AppBloc>(context).add(AppStarted());
                 });
