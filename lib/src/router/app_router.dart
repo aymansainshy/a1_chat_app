@@ -10,7 +10,6 @@ import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../modules/auth/views/confirm_otp.dart';
 
 class RouteName {
-  static const splash = "splash";
   static const home = "home";
   static const login = "login";
   static const otp = "otp";
@@ -51,17 +50,26 @@ class AppRouter {
       // GoRoute(
       //   path: '/splash',
       //   name: RouteName.splash,
-      //   builder: (context, state) =>  AnimatedSplashView(duration: 3000, imagePath: AssetsUtils.chatLogo,),
+      //   builder: (context, state) => AnimatedSplashView(
+      //     duration: 3000,
+      //     imagePath: AssetsUtils.chatLogo,
+      //   ),
       // ),
     ],
     redirect: ((BuildContext context, GoRouterState state) {
-      bool isAuthenticated = authCubit.state.status == AuthStatus.authenticated;
       bool isTryLogin = authCubit.state.status == AuthStatus.isTryLogin;
+      bool isAuthenticated = authCubit.state.status == AuthStatus.authenticated;
+      // bool isSplash = authCubit.state.status == AuthStatus.splash;
 
       // print("isAuthenticated $isAuthenticated");
       // print('isTryLogin $isTryLogin');
+      // print('isSplash $isSplash');
 
       final bool isLoginView = state.subloc == '/login';
+
+      // if (isSplash) {
+      //   return '/splash';
+      // }
 
       if (isTryLogin) {
         return null;
@@ -70,7 +78,7 @@ class AppRouter {
       if (isAuthenticated) {
         return '/';
       }
-      
+
       if (!isAuthenticated) {
         return isLoginView ? null : '/login';
       }

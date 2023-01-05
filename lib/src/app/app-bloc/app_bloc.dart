@@ -48,48 +48,49 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc(this.deviceInfoPlugin, this.socket) : super(AppInitial()) {
     on<AppStarted>((event, emit) async {
       // Read Save Device Information
-      emit(AppSetupInProgress());
-
       try {
-        if (Platform.isAndroid) {
-          final android = await deviceInfoPlugin.androidInfo;
+        emit(AppSetupInProgress());
 
-          device = UserDevice(
-            uuid: android.id,
-            name: "Android",
-            model: android.model,
-            version: android.version.sdkInt.toString(),
-            type: android.type,
-          );
-        } else if (Platform.isIOS) {
-          
-          final IosDeviceInfo ios = await deviceInfoPlugin.iosInfo;
+        try {
+          if (Platform.isAndroid) {
+            final android = await deviceInfoPlugin.androidInfo;
 
-          device = UserDevice(
-            uuid: ios.identifierForVendor,
-            name: ios.name,
-            model: ios.systemName,
-            version: ios.systemVersion,
-            type: ios.utsname.machine,
-          );
+            device = UserDevice(
+              uuid: android.id,
+              name: "Android",
+              model: android.model,
+              version: android.version.sdkInt.toString(),
+              type: android.type,
+            );
+          } else if (Platform.isIOS) {
+            final IosDeviceInfo ios = await deviceInfoPlugin.iosInfo;
+
+            device = UserDevice(
+              uuid: ios.identifierForVendor,
+              name: ios.name,
+              model: ios.systemName,
+              version: ios.systemVersion,
+              type: ios.utsname.machine,
+            );
+          }
+
+          // print("Device ${device.name}");
+        } catch (e) {
+          // print("Device setup error $e");
         }
 
-        print("Device ${device.name}");
+        Application.device = device;
+
+        socket.connect();
+
+        await Future.delayed(const Duration(milliseconds: 2000));
+
+        injector<AuthCubit>().checkAuth();
+        // emit(AppSetupInFailer("dkdkd".toString()));
+        emit(AppSetupInComplete());
       } catch (e) {
-        print("Device setup error $e");
+        emit(AppSetupInFailer(e.toString()));
       }
-
-
-     Application.device = device;
-
-     injector<AuthCubit>().checkAuth();
-
-     socket.connect();
-
-     await Future.delayed(const Duration(milliseconds: 2000));
-
-
-     emit(AppSetupInComplete());
     });
   }
 }

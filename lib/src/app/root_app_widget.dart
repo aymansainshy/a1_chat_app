@@ -42,10 +42,7 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (BuildContext context, Widget? child) {
-          return BlocConsumer<AppBloc, AppState>(
-            listener: (context, appState) {
-              // TODO: implement listener
-            },
+          return BlocBuilder<AppBloc, AppState>(
             builder: (context, appState) {
               if (appState is AppSetupInComplete) {
                 return MaterialApp.router(
@@ -66,14 +63,18 @@ class _MyAppState extends State<MyApp> {
                   // routerDelegate: AppRouter.router.routerDelegate,
                 );
               }
+
               return AnimatedSplashView(
-                  duration: 1000, imagePath: AssetsUtils.chatLogo);
+                duration: 1000,
+                imagePath: AssetsUtils.chatLogo,
+              );
             },
           );
         },
       ),
     );
   }
+
   @override
   void dispose() {
     injector<AppBloc>().socket.dispose();

@@ -10,8 +10,8 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void connect() {
+     _socket = io.io('http://localhost:3000');
     print('Start connect');
-     _socket = io.io('http://127.0.0.1:3333');
 
     _socket.onConnect((_) {
       print('connect');
@@ -20,11 +20,13 @@ class SocketIoImpl extends SocketIO {
 
     _socket.on('event', (data) => print(data));
 
+    _socket.on('send', (data) => print(data));
+
     _socket.onDisconnect((_) => print('disconnect'));
 
     _socket.on('fromServer', (_) => print(_));
   }
-  
+
 
   @override
   void dispose() {

@@ -192,7 +192,7 @@ class _LoginFormState extends State<LoginForm> {
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    "Phone number invalid!",
+                    "Invalid phone number !",
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
