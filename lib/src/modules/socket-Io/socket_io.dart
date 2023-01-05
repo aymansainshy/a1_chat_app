@@ -12,7 +12,7 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void connectAndListen() {
-    _socket = io.io('http://192.168.43.104:3000/', <String, dynamic>{
+    _socket = io.io('http://192.168.43.104:3333/', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': true,
     });
