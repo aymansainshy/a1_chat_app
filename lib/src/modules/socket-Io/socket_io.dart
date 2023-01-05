@@ -1,30 +1,30 @@
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 abstract class SocketIO {
-  void connect();
+  void connectAndListen();
   void dispose();
 }
 
 class SocketIoImpl extends SocketIO {
-  late  io.Socket _socket;
+  late io.Socket _socket;
+
+  Map<String, String> data = {"data": 'Data from cleint'};
 
   @override
-  void connect() {
-     _socket = io.io('http://localhost:3000');
-    print('Start connect');
-
-    _socket.onConnect((_) {
-      print('connect');
-      _socket.emit('msg', 'test');
+  void connectAndListen() {
+    _socket = io.io('http://192.168.43.104:3000/', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': true,
     });
 
-    _socket.on('event', (data) => print(data));
+    _socket.onConnect((_) {
+      print('Socket connected...');
+      _socket.emit('sendData', data);
+    });
 
     _socket.on('send', (data) => print(data));
 
     _socket.onDisconnect((_) => print('disconnect'));
-
-    _socket.on('fromServer', (_) => print(_));
   }
 
 

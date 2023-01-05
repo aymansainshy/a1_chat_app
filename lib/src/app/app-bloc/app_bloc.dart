@@ -81,7 +81,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
         Application.device = device;
 
-        socket.connect();
+        socket.connectAndListen();
 
         await Future.delayed(const Duration(milliseconds: 2000));
 
