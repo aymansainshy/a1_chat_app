@@ -80,7 +80,8 @@ class AppRouter {
       }
 
       if (!isAuthenticated) {
-        return isLoginView ? null : '/login';
+        // return isLoginView ? null : '/login';
+        return isLoginView ? null : '/';
       }
 
       return null;

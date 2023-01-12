@@ -10,6 +10,8 @@ class AppColors {
   static const Color indicatorColor = Color.fromRGBO(100, 223, 151, 1);
   static const Color borderColor = Colors.black;
   static const Color textButtomColor = Colors.white;
+  static const Color blackGray = Colors.black45;
+  static const Color iconColors = Colors.grey;
 
 }
 
@@ -17,9 +19,13 @@ class AppColors {
 // using when theming Widgets based on the theme. Set it manually if you need
 // more control over individual colors
 final colorScheme = ColorScheme.fromSwatch(
-  primarySwatch: Colors.blue, // as above
-  accentColor: AppColors.accentColor, // as above
-  cardColor: AppColors.cardColor, // default based on theme brightness, can be set manually
+  primarySwatch: Colors.blue,
+  // as above
+  accentColor: AppColors.accentColor,
+  // as above
+  cardColor: AppColors.cardColor,
+
+  // default based on theme brightness, can be set manually
   backgroundColor: AppColors.backgroundColor, // as above
 );
 
