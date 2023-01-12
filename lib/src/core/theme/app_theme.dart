@@ -12,25 +12,18 @@ class AppColors {
   static const Color textButtomColor = Colors.white;
   static const Color blackGray = Colors.black45;
   static const Color iconColors = Colors.grey;
-
 }
 
-// This generates the modern simplified set of theme colors flutter recommends
-// using when theming Widgets based on the theme. Set it manually if you need
-// more control over individual colors
 final colorScheme = ColorScheme.fromSwatch(
   primarySwatch: Colors.blue,
-  // as above
   accentColor: AppColors.accentColor,
-  // as above
   cardColor: AppColors.cardColor,
-
-  // default based on theme brightness, can be set manually
-  backgroundColor: AppColors.backgroundColor, // as above
+  backgroundColor: AppColors.backgroundColor,
 );
 
 class AppTheme {
   static final lightTheme = ThemeData(
+    brightness: Brightness.light,
     fontFamily: "Roboto",
     colorScheme: colorScheme,
     primaryColor: AppColors.primaryColor,
@@ -42,6 +35,13 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData(
+    brightness: Brightness.light,
     primarySwatch: Colors.blue,
+    fontFamily: "Roboto",
+    colorScheme: colorScheme,
+    pageTransitionsTheme: PageTransitionsTheme(builders: {
+      TargetPlatform.android: CustomPageTransitionBuilder(),
+      TargetPlatform.iOS: CustomPageTransitionBuilder(),
+    }),
   );
 }

@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/core/theme/theme_cubit.dart';
 import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<OtpBloc>(create: (context) => injector<OtpBloc>()),
         BlocProvider<AuthCubit>(create: (context) => injector<AuthCubit>()),
         BlocProvider<MessageBloc>(create: (context) => injector<MessageBloc>()),
+        BlocProvider<ThemeCubit>(create: (context) => injector<ThemeCubit>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
@@ -45,22 +47,27 @@ class _MyAppState extends State<MyApp> {
           return BlocBuilder<AppBloc, AppState>(
             builder: (context, appState) {
               if (appState is AppSetupInComplete) {
-                return MaterialApp.router(
-                  debugShowCheckedModeBanner: false,
-                  title: kAppName,
-                  theme: AppTheme.lightTheme,
-                  darkTheme: AppTheme.darkTheme,
-                  // locale: AppLanguage.defaultLanguage,
-                  // localizationsDelegates: const [
-                  //   AppLocalization.delegate,
-                  //   GlobalWidgetsLocalizations.delegate,
-                  //   GlobalMaterialLocalizations.delegate,
-                  //   GlobalCupertinoLocalizations.delegate,
-                  // ],
-                  // supportedLocales: AppLanguage.supportLanguage,
-                  routerConfig: injector<AppRouter>().router,
-                  // routeInformationParser: AppRouter.router.routeInformationParser,
-                  // routerDelegate: AppRouter.router.routerDelegate,
+                return BlocBuilder<ThemeCubit, ThemeState>(
+                  builder: (context, themeState) {
+                    return MaterialApp.router(
+                      debugShowCheckedModeBanner: false,
+                      title: kAppName,
+                      theme: AppTheme.lightTheme,
+                      darkTheme: AppTheme.darkTheme,
+                      themeMode: themeState.themeMode,
+                      // locale: AppLanguage.defaultLanguage,
+                      // localizationsDelegates: const [
+                      //   AppLocalization.delegate,
+                      //   GlobalWidgetsLocalizations.delegate,
+                      //   GlobalMaterialLocalizations.delegate,
+                      //   GlobalCupertinoLocalizations.delegate,
+                      // ],
+                      // supportedLocales: AppLanguage.supportLanguage,
+                      routerConfig: injector<AppRouter>().router,
+                      // routeInformationParser: AppRouter.router.routeInformationParser,
+                      // routerDelegate: AppRouter.router.routerDelegate,
+                    );
+                  },
                 );
               }
 
