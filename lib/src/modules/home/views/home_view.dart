@@ -48,7 +48,7 @@ class ButtonSwitcher extends StatelessWidget {
             child: Container(
               height: ScreenUtil().setHeight(30),
               decoration: BoxDecoration(
-                color: isTapping ? AppColors.blackGray : AppColors.borderColor,
+                color:Theme.of(context).primaryColor,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(20),
                 ),
@@ -68,7 +68,7 @@ class ButtonSwitcher extends StatelessWidget {
             child: Container(
               height: ScreenUtil().setHeight(30),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color:  isTapping ? AppColors.blackGray : AppColors.borderColor,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(20),
                 ),
@@ -89,7 +89,7 @@ class UserInformationWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const UserAvatar(imageUrl: 'https://spcfonline.com/wp-content/uploads/2021/11/profile-pic.jpg', radius: 30,),
           const SizedBox(width: 10),

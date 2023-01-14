@@ -33,10 +33,10 @@ class UserAvatar extends StatelessWidget {
             bottom: pos1,
             right: pos2,
             child: const CircleAvatar(
-              radius: 8,
+              radius: 7,
               backgroundColor: Colors.white,
               child: CircleAvatar(
-                radius: 6,
+                radius: 4.5,
                 backgroundColor: Color.fromARGB(255, 53, 228, 9),
               ),
             ),

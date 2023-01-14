@@ -42,7 +42,7 @@ class RoomWidget extends StatelessWidget {
                       const SizedBox(height: 7),
                       Expanded(
                         child: Text(
-                          "hi how are you .I am looking for something thitjrle l ... ",
+                          "hi how are you .I am looking for something can you help me ? ... ",
                           style: Theme.of(context)
                               .textTheme
                               .caption
@@ -77,7 +77,7 @@ class RoomWidget extends StatelessWidget {
                           '1',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1
+                              .bodyText2
                               ?.copyWith(color: Theme.of(context).cardColor),
                         ),
                       ),

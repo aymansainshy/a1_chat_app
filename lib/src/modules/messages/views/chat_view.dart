@@ -2,12 +2,10 @@ import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart'
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
 import '../../home/widgets/user_avatar.dart';
-import '../widgets/text_message_widget.dart';
+import '../widgets/message_widget.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({
@@ -89,9 +87,7 @@ class _ChatViewState extends State<ChatView> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
-                                    ?.copyWith(
-                                      fontSize: 20,
-                                    ),
+                                    ?.copyWith(fontSize: 20),
                               ),
                               const SizedBox(height: 8),
                               Transform.translate(
@@ -107,9 +103,7 @@ class _ChatViewState extends State<ChatView> {
                         const Spacer(),
                         Transform.translate(
                           offset: const Offset(-15, 0),
-                          child: const Icon(
-                            Icons.info_outline,
-                          ),
+                          child: const Icon(Icons.info_outline),
                         )
                       ],
                     ),
@@ -134,7 +128,7 @@ class _ChatViewState extends State<ChatView> {
                         final message = messageState
                             .messageRooms?[widget.messageRoom.id]?.messages[i];
                         var isMe = message?.sender != '1';
-                        return TextMessageItem(
+                        return MessageWidget(
                           isMe: isMe,
                           message: message,
                           avatar: widget.messageRoom.imageUrl,

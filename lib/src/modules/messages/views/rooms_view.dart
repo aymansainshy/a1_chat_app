@@ -11,7 +11,6 @@ class MessagesRoomView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MessageBloc, MessageBlocState>(
       builder: (context, messagesState) {
-
         return ListView.builder(
           itemCount: messagesState.messageRooms!.keys.length,
           itemBuilder: (context, i) {
