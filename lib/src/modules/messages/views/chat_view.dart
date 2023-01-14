@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
+import '../../home/widgets/user_avatar.dart';
 import '../widgets/text_message_widget.dart';
 
 class ChatView extends StatefulWidget {
@@ -42,8 +43,6 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil screenUtil = ScreenUtil();
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: BlocConsumer<MessageBloc, MessageBlocState>(
@@ -59,14 +58,67 @@ class _ChatViewState extends State<ChatView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  height: 100,
-                  // color: Theme.of(context).backgroundColor,
+                SizedBox(
+                  height: 90,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                        UserAvatar(
+                          imageUrl: widget.messageRoom.imageUrl,
+                          radius: 28,
+                          isOnline: true,
+                          pos1: 0,
+                          pos2: 0,
+                        ),
+                        const SizedBox(width: 8),
+                        Transform.translate(
+                          offset: const Offset(0, 4),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.messageRoom.name ?? widget.messageRoom.phoneNumber}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      fontSize: 20,
+                                    ),
+                              ),
+                              const SizedBox(height: 8),
+                              Transform.translate(
+                                offset: const Offset(0, -5),
+                                child: Text(
+                                  "Online",
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        Transform.translate(
+                          offset: const Offset(-15, 0),
+                          child: const Icon(
+                            Icons.info_outline,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
                 Expanded(
                   child: Container(
-                    decoration:  BoxDecoration(
-                    color: Theme.of(context).cardColor,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(45),
                         topRight: Radius.circular(45),
@@ -91,13 +143,11 @@ class _ChatViewState extends State<ChatView> {
                     ),
                   ),
                 ),
+                // const SizedBox(height: 5),
                 Container(
                   padding: const EdgeInsets.only(
-                    top: 5,
-                    bottom: 5,
-                    left: 15,
-                    right: 15,
-                  ),
+                      top: 15, bottom: 10, left: 15, right: 15),
+                  color: Theme.of(context).cardColor,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -107,12 +157,13 @@ class _ChatViewState extends State<ChatView> {
                           child: TextFormField(
                             maxLines: 4,
                             minLines: 1,
+                            // autofocus: true,
                             textDirection: TextDirection.ltr,
                             decoration: InputDecoration(
-                              labelText: "  اكتب رسالتك...",
-                              labelStyle: TextStyle(
-                                fontSize: screenUtil.setSp(30),
-                              ),
+                              labelText: "Type your message ...",
+                              // labelStyle: TextStyle(
+                              //   fontSize: screenUtil.setSp(30),
+                              // ),
                               contentPadding: const EdgeInsets.all(10.0),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
@@ -132,7 +183,7 @@ class _ChatViewState extends State<ChatView> {
                               ),
                               filled: true,
                               fillColor: Colors.grey.shade300,
-                              focusColor: Theme.of(context).accentColor,
+                              focusColor: Theme.of(context).primaryColor,
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
                             ),
@@ -149,12 +200,20 @@ class _ChatViewState extends State<ChatView> {
                           ),
                         ),
                       ),
+                      const SizedBox(width: 3),
                       InkWell(
                         child: Container(
-                            height: 40,
-                            width: 40,
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(Icons.location_off)),
+                          height: 45,
+                          width: 45,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              shape: BoxShape.circle),
+                          child: Icon(
+                            Icons.arrow_forward,
+                            color: Theme.of(context).cardColor,
+                          ),
+                        ),
                         onTap: () async {
                           var newMassege = Message(
                             id: DateTime.now().toString(),

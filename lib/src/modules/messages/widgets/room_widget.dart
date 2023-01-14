@@ -1,6 +1,7 @@
 import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
 import 'package:flutter/material.dart';
 
+import '../../home/widgets/user_avatar.dart';
 import '../models/message.dart';
 
 class RoomWidget extends StatelessWidget {
@@ -23,26 +24,7 @@ class RoomWidget extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Row(
             children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    backgroundImage: NetworkImage(
-                      messageRoom.imageUrl ?? "",
-                      // scale: 10.0,
-                    ),
-                  ),
-                  const Positioned(
-                    bottom: 5,
-                    right: 3,
-                    child: CircleAvatar(
-                      radius: 6,
-                      backgroundColor: Color.fromARGB(255, 53, 228, 9),
-                    ),
-                  )
-                ],
-              ),
+              UserAvatar(imageUrl: messageRoom.imageUrl, isOnline: true),
               const SizedBox(width: 10),
               Expanded(
                 child: Transform.translate(
@@ -88,7 +70,7 @@ class RoomWidget extends StatelessWidget {
                       height: 22,
                       width: 22,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                          shape: BoxShape.circle,
                           color: Theme.of(context).primaryColor),
                       child: Center(
                         child: Text(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../messages/views/rooms_view.dart';
+import '../widgets/user_avatar.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -90,15 +91,7 @@ class UserInformationWidget extends StatelessWidget {
       child: Row(
         // mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          CircleAvatar(
-            radius: ScreenUtil().setSp(28),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
+          const UserAvatar(imageUrl: 'https://spcfonline.com/wp-content/uploads/2021/11/profile-pic.jpg', radius: 30,),
           const SizedBox(width: 10),
           Transform.translate(
             offset: const Offset(0, 5),

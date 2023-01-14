@@ -14,10 +14,6 @@ class MessagesRoomView extends StatelessWidget {
 
         return ListView.builder(
           itemCount: messagesState.messageRooms!.keys.length,
-          // separatorBuilder: (BuildContext context, int index) => const Divider(
-          //   height: 0.5,
-          //   color: Colors.black,
-          // ),
           itemBuilder: (context, i) {
             final messageRoom = messagesState.messageRooms!.values.toList();
             return RoomWidget(messageRoom: messageRoom[i]);
@@ -27,3 +23,11 @@ class MessagesRoomView extends StatelessWidget {
     );
   }
 }
+
+
+
+
+// separatorBuilder: (BuildContext context, int index) => const Divider(
+//   height: 0.5,
+//   color: Colors.black,
+// ),

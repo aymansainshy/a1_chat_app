@@ -18,14 +18,6 @@ class TextMessageItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
 
-    // To catculate Time ago ..............
-    // var now = new DateTime.now();
-    // final difference = now.difference(message.createdAt);
-    //
-    // var _timeAgo = timeago.format(now.subtract(difference),
-    //     locale: AppLanguage.defaultLanguage.languageCode);
-    // locale: 'en_short',
-
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Column(
@@ -38,8 +30,8 @@ class TextMessageItem extends StatelessWidget {
             children: [
               if (!isMe)
                 Container(
-                  height: 30,
-                  width: 30,
+                  height: 25,
+                  width: 25,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
