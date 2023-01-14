@@ -12,13 +12,9 @@ class ChatView extends StatefulWidget {
   const ChatView({
     Key? key,
     required this.messageRoom,
-    required this.isMe,
-    required this.message,
   }) : super(key: key);
 
   final MessageRoom messageRoom;
-  final Message message;
-  final bool isMe;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -35,6 +31,7 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
+    // BlocProvider.of<MessageBloc>(context).
   }
 
   @override
@@ -48,22 +45,7 @@ class _ChatViewState extends State<ChatView> {
     ScreenUtil screenUtil = ScreenUtil();
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        toolbarHeight: 60,
-        title: Text("${widget.messageRoom.name}"),
-        backgroundColor: Theme.of(context).primaryColor,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            context.pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
-      ),
+      backgroundColor: Theme.of(context).backgroundColor,
       body: BlocConsumer<MessageBloc, MessageBlocState>(
         listener: (context, messageState) {
           // if (messageState is SendMessageWithNotificationSuccess) {
@@ -72,101 +54,123 @@ class _ChatViewState extends State<ChatView> {
           // }
         },
         builder: (context, messageState) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  reverse: true,
-                  itemCount: 54,
-                  itemBuilder: (context, i) {
-                    return TextMessageItem(
-                      isMe: widget.isMe,
-                      message: widget.message,
-                      messageRoom: widget.messageRoom,
-                    );
-                  },
+          return SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  height: 100,
+                  // color: Theme.of(context).backgroundColor,
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                  top: 5,
-                  bottom: 5,
-                  left: 15,
-                  right: 15,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          maxLines: 4,
-                          minLines: 1,
-                          textDirection: TextDirection.ltr,
-                          decoration: InputDecoration(
-                            labelText: "  اكتب رسالتك...",
-                            labelStyle: TextStyle(
-                              fontSize: screenUtil.setSp(30),
-                            ),
-                            contentPadding: const EdgeInsets.all(10.0),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey.shade300,
-                            focusColor: Theme.of(context).accentColor,
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                          ),
-                          controller: _textEditingController,
-                          // validator: (value) {
-                          //   if (value?.trim().isEmpty) {
-                          //     return ;
-                          //   }
-                          //   return null;
-                          // },
-                          onSaved: (value) {
-                            messageText = _textEditingController.value.text;
-                          },
-                        ),
+                Expanded(
+                  child: Container(
+                    decoration:  BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(45),
+                        topRight: Radius.circular(45),
                       ),
                     ),
-                    InkWell(
-                      child: Container(
-                          height: 40,
-                          width: 40,
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(Icons.location_off)),
-                      onTap: () async {
-                        var newMassege = Message(
-                          id: DateTime.now().toString(),
-                          sender: Application.user?.toString(),
-                          receiver: Application.user?.toString(),
-                          content: messageText,
+                    child: ListView.builder(
+                      reverse: true,
+                      itemCount: messageState
+                          .messageRooms?[widget.messageRoom.id]
+                          ?.messages
+                          .length,
+                      itemBuilder: (context, i) {
+                        final message = messageState
+                            .messageRooms?[widget.messageRoom.id]?.messages[i];
+                        var isMe = message?.sender != '1';
+                        return TextMessageItem(
+                          isMe: isMe,
+                          message: message,
+                          avatar: widget.messageRoom.imageUrl,
                         );
-
-                        // AppBlocs.chatMessagesBloc.add(SendMessage(chatMessage: newMassege));
                       },
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+                Container(
+                  padding: const EdgeInsets.only(
+                    top: 5,
+                    bottom: 5,
+                    left: 15,
+                    right: 15,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            maxLines: 4,
+                            minLines: 1,
+                            textDirection: TextDirection.ltr,
+                            decoration: InputDecoration(
+                              labelText: "  اكتب رسالتك...",
+                              labelStyle: TextStyle(
+                                fontSize: screenUtil.setSp(30),
+                              ),
+                              contentPadding: const EdgeInsets.all(10.0),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade300,
+                              focusColor: Theme.of(context).accentColor,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                            ),
+                            controller: _textEditingController,
+                            // validator: (value) {
+                            //   if (value?.trim().isEmpty) {
+                            //     return ;
+                            //   }
+                            //   return null;
+                            // },
+                            onSaved: (value) {
+                              messageText = _textEditingController.value.text;
+                            },
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        child: Container(
+                            height: 40,
+                            width: 40,
+                            padding: const EdgeInsets.all(8),
+                            child: const Icon(Icons.location_off)),
+                        onTap: () async {
+                          var newMassege = Message(
+                            id: DateTime.now().toString(),
+                            sender: Application.user?.toString(),
+                            receiver: Application.user?.toString(),
+                            content: messageText,
+                          );
+
+                          // AppBlocs.chatMessagesBloc.add(SendMessage(chatMessage: newMassege));
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

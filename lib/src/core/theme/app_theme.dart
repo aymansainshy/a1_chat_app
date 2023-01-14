@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../animations/custom_page_transition.dart';
 
 class AppColors {
-  static const Color primaryColor = Color.fromRGBO(86, 122, 244, 1);
+  static const Color primaryColor = Color.fromARGB(255, 41, 78, 200);
   static const Color accentColor = Color.fromRGBO(251, 112, 214, 1);
   static const Color cardColor = Color.fromRGBO(255, 255, 255, 1);
-  static const Color backgroundColor = Color.fromRGBO(233, 239, 253, 1);
+  static const Color backgroundColor = Color.fromARGB(255, 232, 235, 243);
   static const Color indicatorColor = Color.fromRGBO(100, 223, 151, 1);
   static const Color borderColor = Colors.black;
   static const Color textButtomColor = Colors.white;
@@ -28,6 +28,9 @@ class AppTheme {
     colorScheme: colorScheme,
     primaryColor: AppColors.primaryColor,
     indicatorColor: AppColors.indicatorColor,
+    backgroundColor: AppColors.backgroundColor,
+    cardColor:AppColors.cardColor ,
+    // scaffoldBackgroundColor: AppColors.backgroundColor,
     pageTransitionsTheme: PageTransitionsTheme(builders: {
       TargetPlatform.android: CustomPageTransitionBuilder(),
       TargetPlatform.iOS: CustomPageTransitionBuilder(),

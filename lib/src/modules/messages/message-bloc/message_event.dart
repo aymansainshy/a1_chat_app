@@ -7,9 +7,6 @@ abstract class MessageBlocEvent extends Equatable {
   List<Object> get props => [];
 }
 
-
-class GetMessages extends MessageBlocEvent {}
-
 class GetMessagesRoom extends MessageBlocEvent {}
 
 class SendMessage extends MessageBlocEvent {

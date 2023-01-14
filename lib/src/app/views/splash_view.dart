@@ -56,12 +56,14 @@ class AnimatedSplashState extends State<AnimatedSplashView>
 
   @override
   Widget build(BuildContext context) {
-    var isLandScape = MediaQuery.of(context).orientation == Orientation.landscape;
+    var isLandScape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     var mediaQuery = MediaQuery.of(context).size;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 232, 235, 243),
         body: FadeTransition(
           opacity: _animation,
           child: BlocListener<AppBloc, AppState>(

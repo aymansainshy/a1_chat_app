@@ -1,62 +1,110 @@
+import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../models/message.dart';
 
 class RoomWidget extends StatelessWidget {
-  const RoomWidget({Key? key}) : super(key: key);
+  const RoomWidget({Key? key, required this.messageRoom}) : super(key: key);
+  final MessageRoom messageRoom;
 
   @override
   Widget build(BuildContext context) {
-    return  SizedBox(
-      height: 80,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: ScreenUtil().setSp(30),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: ((context) => ChatView(messageRoom: messageRoom)),
+          ),
+        );
+      },
+      child: SizedBox(
+        height: 85,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              Stack(
                 children: [
-                  Text(
-                    "Ayman Sainshy",
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: Text(
-                      "hi how are you .I am looking for something thitjrle l ... ",
-                      style: Theme.of(context).textTheme.bodyText2,
+                  CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    backgroundImage: NetworkImage(
+                      messageRoom.imageUrl ?? "",
+                      // scale: 10.0,
                     ),
                   ),
+                  const Positioned(
+                    bottom: 5,
+                    right: 3,
+                    child: CircleAvatar(
+                      radius: 6,
+                      backgroundColor: Color.fromARGB(255, 53, 228, 9),
+                    ),
+                  )
                 ],
               ),
-            ),
-            // Spacer(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  "5 min",
-                  style: Theme.of(context).textTheme.bodyText2,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Transform.translate(
+                  offset: const Offset(0, 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${messageRoom.name ?? messageRoom.phoneNumber}",
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontSize: 18,
+                                ),
+                      ),
+                      const SizedBox(height: 7),
+                      Expanded(
+                        child: Text(
+                          "hi how are you .I am looking for something thitjrle l ... ",
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption
+                              ?.copyWith(fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const Spacer(),
-                Icon(
-                  Icons.access_time_filled,
-                  color: Theme.of(context).primaryColor,
+              ),
+              Transform.translate(
+                offset: const Offset(0, 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "5 min",
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption
+                          ?.copyWith(fontSize: 13),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      height: 22,
+                      width: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                          color: Theme.of(context).primaryColor),
+                      child: Center(
+                        child: Text(
+                          '1',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.copyWith(color: Theme.of(context).cardColor),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

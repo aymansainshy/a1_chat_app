@@ -15,13 +15,14 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Column(
           children: const [
             UserInformationWidget(),
             ButtonSwitcher(),
             Expanded(
-              child: MessagesRoomList(),
+              child: MessagesRoomView(),
             ),
           ],
         ),

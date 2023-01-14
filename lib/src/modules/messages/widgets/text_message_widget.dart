@@ -7,12 +7,12 @@ class TextMessageItem extends StatelessWidget {
     Key? key,
     required this.isMe,
     required this.message,
-    required this.messageRoom,
+    this.avatar,
   }) : super(key: key);
 
   final bool isMe;
-  final Message message;
-  final MessageRoom messageRoom;
+  final Message? message;
+  final String? avatar;
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +29,24 @@ class TextMessageItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Column(
-        mainAxisAlignment:
-            isMe ? MainAxisAlignment.start : MainAxisAlignment.end,
-        crossAxisAlignment:
-            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        mainAxisAlignment: isMe ? MainAxisAlignment.start : MainAxisAlignment.end,
+        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment:
-                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-            crossAxisAlignment:
-                isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            mainAxisAlignment:isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            crossAxisAlignment: isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             children: [
-              Container(
-                height: 30,
-                width: 30,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
+              if (!isMe)
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage("$avatar"),
+                  ),
                 ),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage("${messageRoom.imageUrl}"),
-                ),
-              ),
               const SizedBox(width: 2),
               Container(
                 padding: const EdgeInsets.only(
@@ -62,25 +59,25 @@ class TextMessageItem extends StatelessWidget {
                   maxWidth: mediaQuery.width / 1.3,
                 ),
                 decoration: BoxDecoration(
-                  color: isMe ? Colors.yellow[100] : Colors.blue[700],
+                  color: isMe ? Theme.of(context).backgroundColor : Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(10),
-                    topRight: const Radius.circular(10),
+                    topLeft: const Radius.circular(15),
+                    topRight: const Radius.circular(15),
                     bottomLeft: isMe
-                        ? const Radius.circular(10)
+                        ? const Radius.circular(15)
                         : const Radius.circular(0),
                     bottomRight: isMe
                         ? const Radius.circular(0)
-                        : const Radius.circular(10),
+                        : const Radius.circular(15),
                   ),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     const SizedBox(height: 5),
                     Text(
-                      message.content,
+                      message!.content,
                       textAlign: isMe ? TextAlign.right : TextAlign.left,
                       style: Theme.of(context).textTheme.bodyText2?.copyWith(
                             fontSize: 16,
@@ -89,7 +86,8 @@ class TextMessageItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      "${DateTime.now()} ",
+                      "${DateTime.now().minute} min ",
+                      textAlign: TextAlign.right,
                       style: Theme.of(context).textTheme.bodyText2?.copyWith(
                             fontSize: 10,
                             color: isMe ? Colors.grey : Colors.grey,
@@ -98,18 +96,6 @@ class TextMessageItem extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 2),
-              if (!isMe)
-                Container(
-                  height: 30,
-                  width: 30,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(messageRoom.imageUrl!),
-                  ),
-                ),
             ],
           ),
         ],

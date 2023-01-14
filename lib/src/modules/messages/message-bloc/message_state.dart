@@ -10,15 +10,15 @@ part of 'message_bloc.dart';
 // class MessageBlocInitial extends MessageBlocState {}
 
 class MessageBlocState {
-  final Map<MessageRoom, List<Message?>?>? messages;
+  final Map<String, MessageRoom>? messageRooms;
 
   MessageBlocState({
-    this.messages,
+    this.messageRooms,
   });
 
-  MessageBlocState copyWith({Map<MessageRoom, List<Message?>?>? messages}) {
+  MessageBlocState copyWith({Map<String, MessageRoom>? messageRooms}) {
     return MessageBlocState(
-      messages: messages ?? this.messages,
+      messageRooms: messageRooms ?? this.messageRooms,
     );
   }
 }

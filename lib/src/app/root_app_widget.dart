@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     injector<AppBloc>().add(AppStarted());
-    injector<MessageBloc>().add(GetMessages());
+    injector<MessageBloc>().add(GetMessagesRoom());
   }
 
   @override

@@ -1,17 +1,17 @@
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 
 abstract class Storage {
-  Future<void> saveMessage(Message message);
+  Future<void> saveMessage(MessageRoom messageRoom);
 
-  Future<List<Message>?> getMessages();
+  Future<Map<String, MessageRoom>?> getMessages();
 }
 
 class MessageStorageImpl extends Storage {
   @override
-  Future<void> saveMessage(Message message) async {}
+  Future<void> saveMessage(MessageRoom messageRoom) async {}
 
   @override
-  Future<List<Message>?> getMessages() async {
+  Future<Map<String, MessageRoom>?> getMessages() async {
     return null;
   }
 }
