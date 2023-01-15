@@ -19,9 +19,9 @@ class RoomWidget extends StatelessWidget {
         );
       },
       child: SizedBox(
-        height: 85,
+        height: 90,
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           child: Row(
             children: [
               UserAvatar(imageUrl: messageRoom.imageUrl, isOnline: true),
@@ -39,7 +39,7 @@ class RoomWidget extends StatelessWidget {
                                   fontSize: 18,
                                 ),
                       ),
-                      const SizedBox(height: 7),
+                      const SizedBox(height: 6),
                       Expanded(
                         child: Text(
                           "hi how are you .I am looking for something can you help me ? ... ",

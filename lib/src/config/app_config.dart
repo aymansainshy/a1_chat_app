@@ -6,6 +6,7 @@ import '../modules/auth/model/user.dart';
 
 class Application {
   static bool debug = true;
+  static String userId = '1';
   static String version = '1.0.0';
   static String domain = 'Domain.com';
   static SharedPreferences? preferences;

@@ -10,13 +10,15 @@ abstract class MessageBlocEvent extends Equatable {
 class GetMessagesRoom extends MessageBlocEvent {}
 
 class SendMessage extends MessageBlocEvent {
-  // final Message message;
+  final String? roomId;
+  final Message message;
 
-  // const SendMessage([this.message);
+  const SendMessage({required this.message, this.roomId});
 }
 
 class ReceiveMessage extends MessageBlocEvent {
+  final String? roomId;
   final Message message;
 
-  const ReceiveMessage(this.message);
+  const ReceiveMessage({required this.message, this.roomId});
 }

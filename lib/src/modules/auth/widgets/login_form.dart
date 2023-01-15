@@ -228,7 +228,6 @@ class _LoginFormState extends State<LoginForm> {
                 return SharedElevatedButton(
                   onPressed: () {
                     BlocProvider.of<AuthCubit>(context).tryLogin();
-                    BlocProvider.of<MessageBloc>(context).add(SendMessage());
                     context.go('/otp');
                   },
                   child: SizedBox(

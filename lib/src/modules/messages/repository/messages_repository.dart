@@ -34,7 +34,7 @@ class MessageRepositoryImpl extends MessageRepository {
     ),
     '2': MessageRoom(
       id: '2',
-      name: 'sohaip',
+      name: 'Sainshy',
       phoneNumber: '+249922222222',
       imageUrl: 'https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1',
       messages: [

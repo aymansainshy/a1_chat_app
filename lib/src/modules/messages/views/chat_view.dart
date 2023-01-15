@@ -20,7 +20,7 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -120,14 +120,10 @@ class _ChatViewState extends State<ChatView> {
                     ),
                     child: ListView.builder(
                       reverse: true,
-                      itemCount: messageState
-                          .messageRooms?[widget.messageRoom.id]
-                          ?.messages
-                          .length,
+                      itemCount: messageState.messageRooms[widget.messageRoom.id]?.messages.length,
                       itemBuilder: (context, i) {
-                        final message = messageState
-                            .messageRooms?[widget.messageRoom.id]?.messages[i];
-                        var isMe = message?.sender != '1';
+                        final message = messageState.messageRooms[widget.messageRoom.id]?.messages[i];
+                        var isMe = message?.sender != Application.userId;
                         return MessageWidget(
                           isMe: isMe,
                           message: message,
@@ -209,14 +205,15 @@ class _ChatViewState extends State<ChatView> {
                           ),
                         ),
                         onTap: () async {
-                          var newMassege = Message(
+
+                          var newMessage = Message(
                             id: DateTime.now().toString(),
                             sender: Application.user?.toString(),
-                            receiver: Application.user?.toString(),
+                            receiver: widget.messageRoom.id,
                             content: messageText,
                           );
 
-                          // AppBlocs.chatMessagesBloc.add(SendMessage(chatMessage: newMassege));
+                          BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage, roomId: widget.messageRoom.id));
                         },
                       ),
                     ],

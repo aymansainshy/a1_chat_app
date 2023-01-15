@@ -49,12 +49,12 @@ class Message extends Equatable {
   @override
   List<Object?> get props => [
         id,
-        sender,
-        receiver,
-        content,
-        isReceive,
-        isDelivered,
-        isRead,
+        // sender,
+        // receiver,
+        // content,
+        // isReceive,
+        // isDelivered,
+        // isRead,
       ];
 }
 

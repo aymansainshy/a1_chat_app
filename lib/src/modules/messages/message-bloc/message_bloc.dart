@@ -14,17 +14,31 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
   final SocketIO _socketIO;
 
   late bool isMe;
-  Map<String, MessageRoom>? _messageRooms = {};
+  Map<String, MessageRoom?>? _messageRooms = {};
 
-  MessageBloc(this._socketIO, this.messageRepository): super(MessageBlocState(messageRooms: {})) {
-    
+  MessageBloc(this._socketIO, this.messageRepository)
+      : super(MessageBlocState(messageRooms: {})) {
+
     on<GetMessagesRoom>((event, emit) async {
       final loadedMessageRooms = await messageRepository.getMessages();
-      _messageRooms = loadedMessageRooms;
+      _messageRooms = loadedMessageRooms!;
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
-    on<SendMessage>((event, emit) {});
+    on<SendMessage>((event, emit) {
+      if (!_messageRooms!.containsKey(event.roomId)) {
+        _messageRooms?[event.roomId]?.messages.add(event.message);
+
+        emit(state.copyWith(messageRooms: _messageRooms));
+      } else {
+        _messageRooms?.putIfAbsent(event.roomId!, () {
+          final createdRoom = MessageRoom(id: event.roomId);
+          createdRoom.messages.add(event.message);
+          return createdRoom;
+        });
+        emit(state.copyWith(messageRooms: _messageRooms));
+      }
+    });
 
     on<ReceiveMessage>((event, emit) {});
   }

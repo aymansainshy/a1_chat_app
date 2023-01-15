@@ -12,10 +12,10 @@ class MessagesRoomView extends StatelessWidget {
     return BlocBuilder<MessageBloc, MessageBlocState>(
       builder: (context, messagesState) {
         return ListView.builder(
-          itemCount: messagesState.messageRooms!.keys.length,
+          itemCount: messagesState.messageRooms.keys.length,
           itemBuilder: (context, i) {
-            final messageRoom = messagesState.messageRooms!.values.toList();
-            return RoomWidget(messageRoom: messageRoom[i]);
+            final messageRoom = messagesState.messageRooms.values.toList();
+            return RoomWidget(messageRoom: messageRoom[i]!);
           },
         );
       },

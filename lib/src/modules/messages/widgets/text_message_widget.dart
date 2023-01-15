@@ -14,13 +14,54 @@ class TextMessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      message!.content,
-      textAlign: isMe ? TextAlign.right : TextAlign.left,
-      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-            fontSize: 16,
-            color: isMe ? Colors.black : Colors.white,
+    var mediaQuery = MediaQuery.of(context).size;
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 2,
+        bottom: 2,
+        left: 8,
+        right: 8,
+      ),
+      constraints: BoxConstraints(
+        maxWidth: mediaQuery.width / 1.3,
+      ),
+      decoration: BoxDecoration(
+        color: isMe
+            ? Theme.of(context).backgroundColor
+            : Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.only(
+          topLeft: const Radius.circular(15),
+          topRight: const Radius.circular(15),
+          bottomLeft:
+              isMe ? const Radius.circular(15) : const Radius.circular(0),
+          bottomRight:
+              isMe ? const Radius.circular(0) : const Radius.circular(15),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const SizedBox(height: 5),
+          Text(
+            message!.content,
+            textAlign: isMe ? TextAlign.right : TextAlign.left,
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 16,
+                  color: isMe ? Colors.black : Colors.white,
+                ),
           ),
+          const SizedBox(height: 3),
+          Text(
+            "${DateTime.now().minute} min ",
+            textAlign: TextAlign.right,
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 10,
+                  color: isMe ? Colors.grey : Colors.grey,
+                ),
+          ),
+        ],
+      ),
     );
   }
 }
