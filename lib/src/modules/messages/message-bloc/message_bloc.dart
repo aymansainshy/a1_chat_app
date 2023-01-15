@@ -26,7 +26,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<SendMessage>((event, emit) {
-      if (!_messageRooms!.containsKey(event.roomId)) {
+      if (_messageRooms!.containsKey(event.roomId)) {
         _messageRooms?[event.roomId]?.messages.add(event.message);
 
         emit(state.copyWith(messageRooms: _messageRooms));
