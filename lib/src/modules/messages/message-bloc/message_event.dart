@@ -11,9 +11,9 @@ class GetMessagesRoom extends MessageBlocEvent {}
 
 class SendMessage extends MessageBlocEvent {
   final String? roomId;
-  final Message message;
+  final Message? message;
 
-  const SendMessage({required this.message, this.roomId});
+  const SendMessage({required this.message, required this.roomId});
 }
 
 class ReceiveMessage extends MessageBlocEvent {

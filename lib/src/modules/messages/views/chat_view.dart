@@ -61,6 +61,7 @@ class _ChatViewState extends State<ChatView> {
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
                           onPressed: () {
@@ -77,7 +78,7 @@ class _ChatViewState extends State<ChatView> {
                         ),
                         const SizedBox(width: 8),
                         Transform.translate(
-                          offset: const Offset(0, 4),
+                          offset: const Offset(0, 1),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,14 +121,14 @@ class _ChatViewState extends State<ChatView> {
                     ),
                     child: ListView.builder(
                       reverse: true,
-                      itemCount: messageState.messageRooms[widget.messageRoom.id]?.messages.length,
+                      itemCount: messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.length,
                       itemBuilder: (context, i) {
-                        final message = messageState.messageRooms[widget.messageRoom.id]?.messages[i];
-                        var isMe = message?.sender != Application.userId;
+                        final message = messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.reversed.toList()[i];
+                        var isMe = message?.sender == Application.myPhone;
                         return MessageWidget(
-                          isMe: isMe,
-                          message: message,
-                          avatar: widget.messageRoom.imageUrl,
+                            isMe: isMe,
+                            message: message,
+                            avatar: widget.messageRoom.imageUrl,
                         );
                       },
                     ),
@@ -150,7 +151,7 @@ class _ChatViewState extends State<ChatView> {
                             // autofocus: true,
                             textDirection: TextDirection.ltr,
                             decoration: InputDecoration(
-                              labelText: "Type your message ...",
+                              labelText: "  Message ...",
                               // labelStyle: TextStyle(
                               //   fontSize: screenUtil.setSp(30),
                               // ),
@@ -192,6 +193,19 @@ class _ChatViewState extends State<ChatView> {
                       ),
                       const SizedBox(width: 3),
                       InkWell(
+                        onTap: () async {
+                          _formKey.currentState?.save();
+                          print(messageText);
+                          var newMessage = Message(
+                            id: DateTime.now().toIso8601String(),
+                            sender: Application.myPhone,
+                            receiver: widget.messageRoom.phoneNumber,
+                            content: messageText,
+                          );
+                          _textEditingController.clear();
+                          BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage, roomId: widget.messageRoom.phoneNumber));
+                        },
+
                         child: Container(
                           height: 45,
                           width: 45,
@@ -204,17 +218,6 @@ class _ChatViewState extends State<ChatView> {
                             color: Theme.of(context).cardColor,
                           ),
                         ),
-                        onTap: () async {
-
-                          var newMessage = Message(
-                            id: DateTime.now().toString(),
-                            sender: Application.user?.toString(),
-                            receiver: widget.messageRoom.id,
-                            content: messageText,
-                          );
-
-                          BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage, roomId: widget.messageRoom.id));
-                        },
                       ),
                     ],
                   ),

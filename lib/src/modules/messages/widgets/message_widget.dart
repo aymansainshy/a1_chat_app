@@ -1,6 +1,7 @@
 import 'package:a1_chat_app/src/modules/messages/widgets/text_message_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/animations/slide_transition.dart';
 import '../models/message.dart';
 
 class MessageWidget extends StatelessWidget {

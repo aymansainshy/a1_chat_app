@@ -32,8 +32,6 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-
-
 class ButtonSwitcher extends StatelessWidget {
   const ButtonSwitcher({Key? key}) : super(key: key);
   final bool isTapping = false;
@@ -48,7 +46,7 @@ class ButtonSwitcher extends StatelessWidget {
             child: Container(
               height: ScreenUtil().setHeight(30),
               decoration: BoxDecoration(
-                color:Theme.of(context).primaryColor,
+                color: Theme.of(context).primaryColor,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(20),
                 ),
@@ -68,7 +66,7 @@ class ButtonSwitcher extends StatelessWidget {
             child: Container(
               height: ScreenUtil().setHeight(30),
               decoration: BoxDecoration(
-                color:  isTapping ? AppColors.blackGray : AppColors.borderColor,
+                color: isTapping ? AppColors.blackGray : AppColors.borderColor,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(20),
                 ),
@@ -89,12 +87,19 @@ class UserInformationWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const UserAvatar(imageUrl: 'https://spcfonline.com/wp-content/uploads/2021/11/profile-pic.jpg', radius: 30,),
+          Transform.translate(
+            offset: const Offset(5, 0),
+            child: const UserAvatar(
+              imageUrl:
+                  'https://spcfonline.com/wp-content/uploads/2021/11/profile-pic.jpg',
+              radius: 30,
+            ),
+          ),
           const SizedBox(width: 10),
           Transform.translate(
-            offset: const Offset(0, 5),
+            offset: const Offset(3, 2),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

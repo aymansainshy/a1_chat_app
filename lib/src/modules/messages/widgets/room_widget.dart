@@ -24,65 +24,68 @@ class RoomWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
           child: Row(
             children: [
-              UserAvatar(imageUrl: messageRoom.imageUrl, isOnline: true),
+              UserAvatar(imageUrl: messageRoom.imageUrl, isOnline: true, radius: 30),
               const SizedBox(width: 10),
               Expanded(
                 child: Transform.translate(
-                  offset: const Offset(0, 4),
+                  offset: const Offset(0, 4.5),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${messageRoom.name ?? messageRoom.phoneNumber}",
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontSize: 18,
-                                ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "${messageRoom.name ?? messageRoom.phoneNumber}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontSize: 18,
+                                  ),
+                            ),
+                          ),
+                          Text(
+                            "5 min",
+                            style:
+                                Theme.of(context).textTheme.caption?.copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 7),
-                      Expanded(
-                        child: Text(
-                          "hi how are you .I am looking for something can you help me ? ... ",
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption
-                              ?.copyWith(fontSize: 13),
-                        ),
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "hi how are you .I am looking for something can you help me ?... ",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption
+                                  // ?.copyWith(fontSize: 12),
+                            ),
+                          ),
+                          Container(
+                            height: 22,
+                            width: 22,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).primaryColor),
+                            child: Center(
+                              child: Text(
+                                '1',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(
+                                        color: Theme.of(context).cardColor),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-              ),
-              Transform.translate(
-                offset: const Offset(0, 4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "5 min",
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          ?.copyWith(fontSize: 13),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      height: 22,
-                      width: 22,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).primaryColor),
-                      child: Center(
-                        child: Text(
-                          '1',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              ?.copyWith(color: Theme.of(context).cardColor),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],

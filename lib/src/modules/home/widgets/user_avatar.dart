@@ -33,7 +33,7 @@ class UserAvatar extends StatelessWidget {
             bottom: pos1,
             right: pos2,
             child: const CircleAvatar(
-              radius: 7,
+              radius: 6.5,
               backgroundColor: Colors.white,
               child: CircleAvatar(
                 radius: 4.5,

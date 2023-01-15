@@ -15,6 +15,7 @@ class TextMessageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
+
     return Container(
       padding: const EdgeInsets.only(
         top: 2,
@@ -53,7 +54,7 @@ class TextMessageItem extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            "${DateTime.now().minute} min ",
+            "${DateTime.now().hour}:${DateTime.now().minute } PM ",
             textAlign: TextAlign.right,
             style: Theme.of(context).textTheme.bodyText2?.copyWith(
                   fontSize: 10,
@@ -66,6 +67,17 @@ class TextMessageItem extends StatelessWidget {
   }
 }
 
+
+DateTime newDate = DateTime.now();
+DateTime formatedDate = newDate.subtract(
+  Duration(
+    hours: newDate.hour,
+    minutes: newDate.minute,
+    seconds: newDate.second,
+    milliseconds: newDate.millisecond,
+    microseconds: newDate.microsecond,
+  ),
+);
 // if (message.messageContent.lat != null &&
 // message.messageContent.log != null)
 // GestureDetector(

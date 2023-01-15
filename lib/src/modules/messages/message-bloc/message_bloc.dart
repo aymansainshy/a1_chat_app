@@ -12,9 +12,8 @@ part 'message_state.dart';
 class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
   final MessageRepository messageRepository;
   final SocketIO _socketIO;
-
-  late bool isMe;
-  Map<String, MessageRoom?>? _messageRooms = {};
+  // late bool isMe;
+  Map<String, MessageRoom?> _messageRooms = {};
 
   MessageBloc(this._socketIO, this.messageRepository)
       : super(MessageBlocState(messageRooms: {})) {
@@ -23,17 +22,20 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       final loadedMessageRooms = await messageRepository.getMessages();
       _messageRooms = loadedMessageRooms!;
       emit(state.copyWith(messageRooms: _messageRooms));
+
+      print(_messageRooms.toString());
     });
 
     on<SendMessage>((event, emit) {
-      if (_messageRooms!.containsKey(event.roomId)) {
-        _messageRooms?[event.roomId]?.messages.add(event.message);
+      print(event.message.toString());
 
+      if (_messageRooms.containsKey(event.roomId!)) {
+        _messageRooms[event.roomId]!.messages?.add(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
       } else {
-        _messageRooms?.putIfAbsent(event.roomId!, () {
+        _messageRooms.putIfAbsent(event.roomId!, () {
           final createdRoom = MessageRoom(id: event.roomId);
-          createdRoom.messages.add(event.message);
+          createdRoom.messages?.add(event.message);
           return createdRoom;
         });
         emit(state.copyWith(messageRooms: _messageRooms));
