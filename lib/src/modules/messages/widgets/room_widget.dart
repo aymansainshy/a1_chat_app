@@ -39,7 +39,7 @@ class RoomWidget extends StatelessWidget {
                                   fontSize: 18,
                                 ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 7),
                       Expanded(
                         child: Text(
                           "hi how are you .I am looking for something can you help me ? ... ",
