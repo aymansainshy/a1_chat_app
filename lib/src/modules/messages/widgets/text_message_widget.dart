@@ -46,20 +46,31 @@ class TextMessageItem extends StatelessWidget {
           const SizedBox(height: 5),
           Text(
             message!.content,
-            textAlign: isMe ? TextAlign.right : TextAlign.left,
+            // textAlign: isMe ? TextAlign.left : TextAlign.right,
             style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                  fontSize: 16,
+                  fontSize: 14.5,
                   color: isMe ? Colors.black : Colors.white,
                 ),
           ),
           const SizedBox(height: 3),
-          Text(
-            "${DateTime.now().hour}:${DateTime.now().minute } PM ",
-            textAlign: TextAlign.right,
-            style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                  fontSize: 10,
-                  color: isMe ? Colors.grey : Colors.grey,
+          SizedBox(
+            width: 60,
+            height: 13,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "${DateTime.now().hour}:${DateTime.now().minute} PM ",
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        fontSize: 10,
+                        color: isMe ? Colors.grey : Colors.grey,
+                      ),
                 ),
+                if (isMe) const Spacer(),
+                if (isMe) const ReadBlueCheck()
+              ],
+            ),
           ),
         ],
       ),
@@ -67,6 +78,32 @@ class TextMessageItem extends StatelessWidget {
   }
 }
 
+class ReadBlueCheck extends StatelessWidget {
+  const ReadBlueCheck({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: const [
+        Icon(
+          Icons.check,
+          size: 14,
+          color: Colors.blue,
+        ),
+        Positioned(
+          bottom: -1,
+          right: 4,
+          child: Icon(
+            Icons.check,
+            size: 14,
+            color: Colors.blue,
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 DateTime newDate = DateTime.now();
 DateTime formatedDate = newDate.subtract(

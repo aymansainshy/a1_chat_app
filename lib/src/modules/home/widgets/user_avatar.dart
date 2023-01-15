@@ -6,8 +6,8 @@ class UserAvatar extends StatelessWidget {
     required this.imageUrl,
     this.radius = 35,
     this.isOnline = false,
-    this.pos1 = 5,
-    this.pos2 = 3,
+    this.pos1 = 3,
+    this.pos2 = 1,
   }) : super(key: key);
 
   final String? imageUrl;

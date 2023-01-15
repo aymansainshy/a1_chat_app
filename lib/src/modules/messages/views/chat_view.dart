@@ -73,8 +73,6 @@ class _ChatViewState extends State<ChatView> {
                           imageUrl: widget.messageRoom.imageUrl,
                           radius: 28,
                           isOnline: true,
-                          pos1: 0,
-                          pos2: 0,
                         ),
                         const SizedBox(width: 8),
                         Transform.translate(
@@ -123,11 +121,11 @@ class _ChatViewState extends State<ChatView> {
                       reverse: true,
                       itemCount: messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.length,
                       itemBuilder: (context, i) {
-                        final message = messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.reversed.toList()[i];
-                        var isMe = message?.sender == Application.myPhone;
+                        final message = messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.reversed.toList();
+                        var isMe = message?[i]?.sender == Application.myPhone;
                         return MessageWidget(
                             isMe: isMe,
-                            message: message,
+                            message: message?[i],
                             avatar: widget.messageRoom.imageUrl,
                         );
                       },
