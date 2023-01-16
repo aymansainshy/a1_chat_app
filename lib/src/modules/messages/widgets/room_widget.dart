@@ -25,7 +25,7 @@ class RoomWidget extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        context.go('/chat', extra: messageRoom);
+        context.go('chat', extra: messageRoom);
       },
       child: SizedBox(
         height: 80,
@@ -105,3 +105,5 @@ class RoomWidget extends StatelessWidget {
     );
   }
 }
+
+

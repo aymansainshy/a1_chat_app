@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
 import '../../home/widgets/user_avatar.dart';
-import '../widgets/message_widget.dart';
+import '../widgets/text_message_widget.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({
@@ -124,7 +124,7 @@ class _ChatViewState extends State<ChatView> {
                       itemBuilder: (context, i) {
                         final message = messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.reversed.toList();
                         var isMe = message?[i]?.sender == Application.myPhone;
-                        return MessageWidget(
+                        return TextMessageWidget(
                             isMe: isMe,
                             message: message?[i],
                             avatar: widget.messageRoom.imageUrl,

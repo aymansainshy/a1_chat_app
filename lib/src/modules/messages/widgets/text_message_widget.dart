@@ -4,75 +4,114 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../models/message.dart';
 
-class TextMessageItem extends StatelessWidget {
-  const TextMessageItem({
+class TextMessageWidget extends StatelessWidget {
+  const TextMessageWidget({
     Key? key,
     required this.isMe,
     required this.message,
+    this.avatar,
   }) : super(key: key);
 
-  final Message? message;
   final bool isMe;
+  final Message? message;
+  final String? avatar;
 
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context).size;
-
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 4,
-        bottom: 2,
-        left: 10,
-        right: 10,
-      ),
-      constraints: BoxConstraints(
-        maxWidth: mediaQuery.width / 1.3,
-      ),
-      decoration: BoxDecoration(
-        color: isMe
-            ? Theme.of(context).backgroundColor
-            : Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(18),
-          topRight: const Radius.circular(18),
-          bottomLeft:
-              isMe ? const Radius.circular(18) : const Radius.circular(0),
-          bottomRight:
-              isMe ? const Radius.circular(0) : const Radius.circular(18),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Column(
-        crossAxisAlignment:  isMe ? CrossAxisAlignment.end :CrossAxisAlignment.start,
+        mainAxisAlignment:
+            isMe ? MainAxisAlignment.start : MainAxisAlignment.end,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 5),
-          Text(
-            message!.content,
-            // textAlign: isMe ? TextAlign.left : TextAlign.right,
-            style: GoogleFonts.rubik(
-              textStyle: Theme.of(context).textTheme.caption?.copyWith(
-                    color: isMe ? Colors.black : Colors.white,
-                    fontSize: ScreenUtil().setSp(15),
+          Row(
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            crossAxisAlignment:
+                isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            children: [
+              if (!isMe)
+                Container(
+                  height: 25,
+                  width: 25,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                   ),
-            ),
-          ),
-          const SizedBox(height: 3),
-          SizedBox(
-            width:isMe ? 60 : 40,
-            height: 13,
-            child: Row(
-              children: [
-                Text(
-                  "${DateTime.now().hour}:${DateTime.now().minute} PM ",
-                  textAlign: TextAlign.right,
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        fontSize: 10,
-                        color: isMe ? Colors.grey : Colors.grey,
-                      ),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage("$avatar"),
+                  ),
                 ),
-                if (isMe) const Spacer(),
-                if (isMe) const ReadBlueCheck()
-              ],
-            ),
+              const SizedBox(width: 2),
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 4,
+                  bottom: 2,
+                  left: 10,
+                  right: 10,
+                ),
+                constraints: BoxConstraints(
+                  maxWidth: mediaQuery.width / 1.3,
+                ),
+                decoration: BoxDecoration(
+                  color: isMe
+                      ? Theme.of(context).backgroundColor
+                      : Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(18),
+                    topRight: const Radius.circular(18),
+                    bottomLeft: isMe
+                        ? const Radius.circular(18)
+                        : const Radius.circular(0),
+                    bottomRight: isMe
+                        ? const Radius.circular(0)
+                        : const Radius.circular(18),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment:
+                      isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5),
+                    Text(
+                      message!.content,
+                      // textAlign: isMe ? TextAlign.left : TextAlign.right,
+                      style: GoogleFonts.rubik(
+                        textStyle:
+                            Theme.of(context).textTheme.caption?.copyWith(
+                                  color: isMe ? Colors.black : Colors.white,
+                                  fontSize: ScreenUtil().setSp(15),
+                                ),
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    SizedBox(
+                      width: isMe ? 60 : 40,
+                      height: 13,
+                      child: Row(
+                        children: [
+                          Text(
+                            "${DateTime.now().hour}:${DateTime.now().minute} PM ",
+                            textAlign: TextAlign.right,
+                            style:
+                                Theme.of(context).textTheme.bodyText2?.copyWith(
+                                      fontSize: 10,
+                                      color: isMe ? Colors.grey : Colors.grey,
+                                    ),
+                          ),
+                          if (isMe) const Spacer(),
+                          if (isMe) const ReadBlueCheck()
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // TextMessageItem(isMe: isMe, message: message),
+            ],
           ),
         ],
       ),
@@ -117,6 +156,7 @@ DateTime formatedDate = newDate.subtract(
     microseconds: newDate.microsecond,
   ),
 );
+
 // if (message.messageContent.lat != null &&
 // message.messageContent.log != null)
 // GestureDetector(
