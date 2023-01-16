@@ -28,9 +28,9 @@ class RoomWidget extends StatelessWidget {
         context.go('/chat', extra: messageRoom);
       },
       child: SizedBox(
-        height: 88,
+        height: 80,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

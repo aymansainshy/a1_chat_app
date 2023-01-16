@@ -1,8 +1,11 @@
 import 'package:a1_chat_app/src/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../messages/views/rooms_view.dart';
+import '../../online-users/views/online_user_view.dart';
+import '../button_switcher_cubit.dart';
 import '../widgets/user_avatar.dart';
 
 class HomeView extends StatefulWidget {
@@ -19,11 +22,19 @@ class _HomeViewState extends State<HomeView> {
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
         child: Column(
-          children: const [
-            UserInformationWidget(),
-            ButtonSwitcher(),
+          children: [
+            const UserInformationWidget(),
+            const ButtonSwitcher(),
             Expanded(
-              child: MessagesRoomView(),
+              child: BlocBuilder<ButtonSwitcherCubit, ButtonSwitcherState>(
+                builder: (context, state) {
+                  if (state.index == 0) {
+                    return const MessagesRoomView();
+                  } else {
+                    return const OnlineUserView();
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -38,43 +49,71 @@ class ButtonSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              height: ScreenUtil().setHeight(30),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  "Messages",
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                        color: Theme.of(context).cardColor,
+    return BlocBuilder<ButtonSwitcherCubit, ButtonSwitcherState>(
+      builder: (context, bState) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    BlocProvider.of<ButtonSwitcherCubit>(context)
+                        .toggleButton(0);
+                  },
+                  child: Container(
+                    height: ScreenUtil().setHeight(30),
+                    decoration: BoxDecoration(
+                      color: bState.index == 0
+                          ? Theme.of(context).primaryColor
+                          : AppColors.borderColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
                       ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Messages",
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                              color: Theme.of(context).cardColor,
+                            ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Container(
-              height: ScreenUtil().setHeight(30),
-              decoration: BoxDecoration(
-                color: isTapping ? AppColors.blackGray : AppColors.borderColor,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
+              const SizedBox(width: 15),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    BlocProvider.of<ButtonSwitcherCubit>(context)
+                        .toggleButton(1);
+                  },
+                  child: Container(
+                    height: ScreenUtil().setHeight(30),
+                    decoration: BoxDecoration(
+                      color: bState.index == 1
+                          ? Theme.of(context).primaryColor
+                          : AppColors.borderColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Online Users",
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                              color: Theme.of(context).cardColor,
+                            ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

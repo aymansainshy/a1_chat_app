@@ -11,6 +11,8 @@ import 'package:a1_chat_app/src/modules/auth/auth-bloc/auth_cubit.dart';
 import 'package:a1_chat_app/src/modules/auth/auth-bloc/otp_bloc.dart';
 import 'package:a1_chat_app/src/app/app-bloc/app_bloc.dart';
 
+import 'src/modules/home/button_switcher_cubit.dart';
+
 final injector = GetIt.instance;
 
 void setup() {
@@ -20,6 +22,7 @@ void setup() {
   injector.registerLazySingleton<AuthCubit>(() => AuthCubit());
   injector.registerLazySingleton<MessageBloc>(() => MessageBloc(injector(), injector()));
   injector.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
+  injector.registerLazySingleton<ButtonSwitcherCubit>(() => ButtonSwitcherCubit());
 
   // Repositories
   injector.registerLazySingleton<MessageRepository>(() => MessageRepositoryImpl(injector()));

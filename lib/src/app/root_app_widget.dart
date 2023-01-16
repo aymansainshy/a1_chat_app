@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../modules/auth/auth-bloc/otp_bloc.dart';
+import '../modules/home/button_switcher_cubit.dart';
 import 'app-bloc/app_bloc.dart';
 import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../core/constan/const.dart';
@@ -38,6 +39,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<AuthCubit>(create: (context) => injector<AuthCubit>()),
         BlocProvider<MessageBloc>(create: (context) => injector<MessageBloc>()),
         BlocProvider<ThemeCubit>(create: (context) => injector<ThemeCubit>()),
+        BlocProvider<ButtonSwitcherCubit>(create: (context) => injector<ButtonSwitcherCubit>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
