@@ -281,6 +281,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                       SharedElevatedButton(
                         onPressed: () {
                           formKey.currentState?.save();
+                          context.go('/');
                         },
                         child: SizedBox(
                           height: _kbuttonHeight,

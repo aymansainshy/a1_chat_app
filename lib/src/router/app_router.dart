@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:a1_chat_app/src/modules/auth/views/login_view.dart';
+import 'package:a1_chat_app/src/modules/messages/models/message.dart';
+import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +15,7 @@ class RouteName {
   static const home = "home";
   static const login = "login";
   static const otp = "otp";
+  static const chat = "chat-view";
 }
 
 class AppRouter {
@@ -33,6 +36,15 @@ class AppRouter {
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               FadeTransition(opacity: animation, child: child),
         ),
+        routes: [
+          GoRoute(
+            path: 'chat',
+            name: RouteName.chat,
+            builder: (context, state) {
+              return ChatView(messageRoom: state.extra! as MessageRoom);
+            },
+          ),
+        ]
       ),
       GoRoute(
         path: '/login',
@@ -47,14 +59,7 @@ class AppRouter {
           name: "Ayman",
         ),
       ),
-      // GoRoute(
-      //   path: '/splash',
-      //   name: RouteName.splash,
-      //   builder: (context, state) => AnimatedSplashView(
-      //     duration: 3000,
-      //     imagePath: AssetsUtils.chatLogo,
-      //   ),
-      // ),
+
     ],
     redirect: ((BuildContext context, GoRouterState state) {
       bool isTryLogin = authCubit.state.status == AuthStatus.isTryLogin;
@@ -81,7 +86,8 @@ class AppRouter {
 
       if (!isAuthenticated) {
         // return isLoginView ? null : '/login';
-        return isLoginView ? null : '/';
+        // return isLoginView ? null : '/';
+        return null;
       }
 
       return null;

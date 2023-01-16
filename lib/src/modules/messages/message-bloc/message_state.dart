@@ -8,7 +8,7 @@ class MessageBlocState {
     required this.messageRooms,
   });
 
-  MessageBlocState copyWith({Map<String, MessageRoom?>? messageRooms}) {
+  MessageBlocState copyWith({Map<String, MessageRoom?>? messageRooms, MessageRoom? room}) {
     return MessageBlocState(
       messageRooms: messageRooms ?? this.messageRooms,
     );

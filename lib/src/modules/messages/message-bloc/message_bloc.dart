@@ -26,6 +26,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       print(_messageRooms.toString());
     });
 
+
+
     on<SendMessage>((event, emit) {
       print(event.message.toString());
 

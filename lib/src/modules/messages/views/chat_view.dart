@@ -2,6 +2,7 @@ import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart'
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
 import '../../home/widgets/user_avatar.dart';
@@ -65,7 +66,7 @@ class _ChatViewState extends State<ChatView> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            context.go('/');
                           },
                           icon: const Icon(Icons.arrow_back),
                         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/message.dart';
 
@@ -18,10 +20,10 @@ class TextMessageItem extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.only(
-        top: 2,
+        top: 4,
         bottom: 2,
-        left: 8,
-        right: 8,
+        left: 10,
+        right: 10,
       ),
       constraints: BoxConstraints(
         maxWidth: mediaQuery.width / 1.3,
@@ -31,33 +33,33 @@ class TextMessageItem extends StatelessWidget {
             ? Theme.of(context).backgroundColor
             : Theme.of(context).primaryColor,
         borderRadius: BorderRadius.only(
-          topLeft: const Radius.circular(15),
-          topRight: const Radius.circular(15),
+          topLeft: const Radius.circular(18),
+          topRight: const Radius.circular(18),
           bottomLeft:
-              isMe ? const Radius.circular(15) : const Radius.circular(0),
+              isMe ? const Radius.circular(18) : const Radius.circular(0),
           bottomRight:
-              isMe ? const Radius.circular(0) : const Radius.circular(15),
+              isMe ? const Radius.circular(0) : const Radius.circular(18),
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:  isMe ? CrossAxisAlignment.end :CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 5),
           Text(
             message!.content,
             // textAlign: isMe ? TextAlign.left : TextAlign.right,
-            style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                  fontSize: 14.5,
-                  color: isMe ? Colors.black : Colors.white,
-                ),
+            style: GoogleFonts.rubik(
+              textStyle: Theme.of(context).textTheme.caption?.copyWith(
+                    color: isMe ? Colors.black : Colors.white,
+                    fontSize: ScreenUtil().setSp(15),
+                  ),
+            ),
           ),
           const SizedBox(height: 3),
           SizedBox(
-            width: 60,
+            width:isMe ? 60 : 40,
             height: 13,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
                   "${DateTime.now().hour}:${DateTime.now().minute} PM ",
