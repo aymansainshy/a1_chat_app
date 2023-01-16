@@ -26,13 +26,6 @@ class _ChatViewState extends State<ChatView> {
   final _formKey = GlobalKey<FormState>();
 
   String messageText = '';
-  String? messageImage;
-
-  @override
-  void initState() {
-    super.initState();
-    // BlocProvider.of<MessageBloc>(context).
-  }
 
   @override
   void dispose() {
@@ -52,6 +45,7 @@ class _ChatViewState extends State<ChatView> {
           // }
         },
         builder: (context, messageState) {
+          final messages = messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.reversed.toList();
           return SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,10 +78,7 @@ class _ChatViewState extends State<ChatView> {
                             children: [
                               Text(
                                 "${widget.messageRoom.name ?? widget.messageRoom.phoneNumber}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(fontSize: 20),
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20),
                               ),
                               const SizedBox(height: 8),
                               Transform.translate(
@@ -120,14 +111,13 @@ class _ChatViewState extends State<ChatView> {
                     ),
                     child: ListView.builder(
                       reverse: true,
-                      itemCount: messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.length,
+                      itemCount: messages?.length,
                       itemBuilder: (context, i) {
-                        final message = messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.reversed.toList();
-                        var isMe = message?[i]?.sender == Application.myPhone;
+                        var isMe = messages?[i]?.sender == Application.myPhone;
                         return TextMessageWidget(
-                            isMe: isMe,
-                            message: message?[i],
-                            avatar: widget.messageRoom.imageUrl,
+                          isMe: isMe,
+                          message: messages?[i],
+                          avatar: widget.messageRoom.imageUrl,
                         );
                       },
                     ),
@@ -202,9 +192,10 @@ class _ChatViewState extends State<ChatView> {
                             content: messageText,
                           );
                           _textEditingController.clear();
-                          BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage, roomId: widget.messageRoom.phoneNumber));
+                          BlocProvider.of<MessageBloc>(context).add(SendMessage(
+                              message: newMessage,
+                              roomId: widget.messageRoom.phoneNumber));
                         },
-
                         child: Container(
                           height: 45,
                           width: 45,
