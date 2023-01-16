@@ -22,10 +22,9 @@ class RoomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
       onTap: () {
-        context.go('chat', extra: messageRoom);
+        context.go('/chat', extra: messageRoom);
       },
       child: SizedBox(
         height: 80,
@@ -37,9 +36,9 @@ class RoomWidget extends StatelessWidget {
               UserAvatar(
                 imageUrl: messageRoom.imageUrl,
                 isOnline: true,
-                radius: 28,
+                radius: 26,
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -49,10 +48,12 @@ class RoomWidget extends StatelessWidget {
                         Expanded(
                           child: Text(
                             "${messageRoom.name ?? messageRoom.phoneNumber}",
-                            style:
-                                Theme.of(context).textTheme.titleMedium?.copyWith(
-                                      fontSize: ScreenUtil().setSp(20),
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontSize: ScreenUtil().setSp(20),
+                                ),
                           ),
                         ),
                         Text(
@@ -63,18 +64,23 @@ class RoomWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 1),
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
-                              getMessageContent(messageRoom.messages!.last!),
-                              style: GoogleFonts.rubik(
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .caption
-                                    ?.copyWith(fontSize: ScreenUtil().setSp(14)),
-                              )),
+                          child: MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                              textScaleFactor: 0.9,
+                            ),
+                            child: Text(
+                                getMessageContent(messageRoom.messages!.last!),
+                                style: GoogleFonts.rubik(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .caption
+                                      ?.copyWith(
+                                          fontSize: ScreenUtil().setSp(14)),
+                                )),
+                          ),
                         ),
                         const SizedBox(width: 3),
                         Container(
@@ -84,12 +90,18 @@ class RoomWidget extends StatelessWidget {
                               shape: BoxShape.circle,
                               color: Theme.of(context).primaryColor),
                           child: Center(
-                            child: Text(
-                              '1',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(color: Theme.of(context).cardColor),
+                            child: MediaQuery(
+                              data: MediaQuery.of(context).copyWith(
+                                textScaleFactor: 1,
+                              ),
+                              child: Text(
+                                '1',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    ?.copyWith(
+                                        color: Theme.of(context).cardColor),
+                              ),
                             ),
                           ),
                         ),
@@ -105,5 +117,3 @@ class RoomWidget extends StatelessWidget {
     );
   }
 }
-
-

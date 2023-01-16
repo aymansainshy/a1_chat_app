@@ -88,18 +88,25 @@ class TextMessageWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     SizedBox(
-                      width: isMe ? 60 : 40,
+                      width: 70,
                       height: 13,
                       child: Row(
                         children: [
-                          Text(
-                            "${DateTime.now().hour}:${DateTime.now().minute} PM ",
-                            textAlign: TextAlign.right,
-                            style:
-                                Theme.of(context).textTheme.bodyText2?.copyWith(
-                                      fontSize: 10,
-                                      color: isMe ? Colors.grey : Colors.grey,
-                                    ),
+                          MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                              textScaleFactor: 1,
+                            ),
+                            child: Text(
+                              "${DateTime.now().hour}:${DateTime.now().minute} PM ",
+                              textAlign: TextAlign.right,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(
+                                    fontSize: 10,
+                                    color: isMe ? Colors.grey : Colors.grey,
+                                  ),
+                            ),
                           ),
                           if (isMe) const Spacer(),
                           if (isMe) const ReadBlueCheck()

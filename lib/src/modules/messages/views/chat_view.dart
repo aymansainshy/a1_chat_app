@@ -52,7 +52,7 @@ class _ChatViewState extends State<ChatView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 90,
+                  height: 80,
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Row(
@@ -66,7 +66,7 @@ class _ChatViewState extends State<ChatView> {
                         ),
                         UserAvatar(
                           imageUrl: widget.messageRoom.imageUrl,
-                          radius: 28,
+                          radius: 26,
                           isOnline: true,
                         ),
                         const SizedBox(width: 8),
