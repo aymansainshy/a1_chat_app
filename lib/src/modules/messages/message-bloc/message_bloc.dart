@@ -25,22 +25,27 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       final loadedMessageRooms = await messageRepository.getMessages();
       _messageRooms = loadedMessageRooms!;
       emit(state.copyWith(messageRooms: _messageRooms));
-
-      print(_messageRooms.toString());
     });
 
     on<SendMessage>((event, emit) {
       print(event.message.toString());
 
-      if (_messageRooms.containsKey(event.roomId!)) {
-        _messageRooms[event.roomId]!.messages?.add(event.message);
+      if (_messageRooms.containsKey(event.room?.phoneNumber)) {
+        _messageRooms[event.room?.phoneNumber]?.messages?.add(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
+
       } else {
-        _messageRooms.putIfAbsent(event.roomId!, () {
-          final createdRoom = MessageRoom(id: event.roomId);
-          createdRoom.messages?.add(event.message);
+        _messageRooms.putIfAbsent(event.room!.phoneNumber!, () {
+          final createdRoom = MessageRoom(
+            id: event.room?.id,
+            phoneNumber: event.room?.phoneNumber,
+            imageUrl: event.room?.imageUrl,
+            messages: [event.message],
+            name: event.room?.name,
+          );
           return createdRoom;
         });
+
         emit(state.copyWith(messageRooms: _messageRooms));
       }
     });

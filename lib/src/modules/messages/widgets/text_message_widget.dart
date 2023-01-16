@@ -76,7 +76,7 @@ class TextMessageWidget extends StatelessWidget {
                   children: [
                     const SizedBox(height: 5),
                     Text(
-                      message!.content,
+                      message?.content?? '',
                       // textAlign: isMe ? TextAlign.left : TextAlign.right,
                       style: GoogleFonts.rubik(
                         textStyle:

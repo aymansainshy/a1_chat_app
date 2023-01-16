@@ -12,7 +12,6 @@ class RoomWidget extends StatelessWidget {
   final MessageRoom messageRoom;
 
   String getMessageContent(Message message) {
-    print(message.content.length);
     if (message.content.length > 70) {
       return "${message.content.substring(0, 70)} ...";
     } else {
@@ -44,6 +43,7 @@ class RoomWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
+                       crossAxisAlignment : CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Text(

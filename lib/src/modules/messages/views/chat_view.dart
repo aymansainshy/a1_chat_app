@@ -14,7 +14,7 @@ class ChatView extends StatefulWidget {
     required this.messageRoom,
   }) : super(key: key);
 
-  final MessageRoom messageRoom;
+  final MessageRoom? messageRoom;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -45,7 +45,9 @@ class _ChatViewState extends State<ChatView> {
           // }
         },
         builder: (context, messageState) {
-          final messages = messageState.messageRooms[widget.messageRoom.phoneNumber]?.messages?.reversed.toList();
+          final List<Message?>? messages = messageState
+              .messageRooms[widget.messageRoom!.phoneNumber]?.messages?.reversed
+              .toList();
           return SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +67,7 @@ class _ChatViewState extends State<ChatView> {
                           icon: const Icon(Icons.arrow_back),
                         ),
                         UserAvatar(
-                          imageUrl: widget.messageRoom.imageUrl,
+                          imageUrl: widget.messageRoom?.imageUrl,
                           radius: 26,
                           isOnline: true,
                         ),
@@ -77,8 +79,11 @@ class _ChatViewState extends State<ChatView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${widget.messageRoom.name ?? widget.messageRoom.phoneNumber}",
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20),
+                                "${widget.messageRoom?.name ?? widget.messageRoom?.phoneNumber}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(fontSize: 20),
                               ),
                               const SizedBox(height: 8),
                               Transform.translate(
@@ -109,18 +114,23 @@ class _ChatViewState extends State<ChatView> {
                         topRight: Radius.circular(45),
                       ),
                     ),
-                    child: ListView.builder(
-                      reverse: true,
-                      itemCount: messages?.length,
-                      itemBuilder: (context, i) {
-                        var isMe = messages?[i]?.sender == Application.myPhone;
-                        return TextMessageWidget(
-                          isMe: isMe,
-                          message: messages?[i],
-                          avatar: widget.messageRoom.imageUrl,
-                        );
-                      },
-                    ),
+                    child: messages == null || messages.isEmpty
+                        ? const Center(
+                            child: Text('Start messaging '),
+                          )
+                        : ListView.builder(
+                            reverse: true,
+                            itemCount: messages.length,
+                            itemBuilder: (context, i) {
+                              var isMe =
+                                  messages[i]?.sender == Application.myPhone;
+                              return TextMessageWidget(
+                                isMe: isMe,
+                                message: messages[i],
+                                avatar: widget.messageRoom?.imageUrl,
+                              );
+                            },
+                          ),
                   ),
                 ),
                 // const SizedBox(height: 5),
@@ -184,17 +194,19 @@ class _ChatViewState extends State<ChatView> {
                       InkWell(
                         onTap: () async {
                           _formKey.currentState?.save();
-                          print(messageText);
                           var newMessage = Message(
                             id: DateTime.now().toIso8601String(),
                             sender: Application.myPhone,
-                            receiver: widget.messageRoom.phoneNumber,
+                            receiver: widget.messageRoom?.phoneNumber,
                             content: messageText,
                           );
                           _textEditingController.clear();
-                          BlocProvider.of<MessageBloc>(context).add(SendMessage(
+                          BlocProvider.of<MessageBloc>(context).add(
+                            SendMessage(
                               message: newMessage,
-                              roomId: widget.messageRoom.phoneNumber));
+                              room: widget.messageRoom,
+                            ),
+                          );
                         },
                         child: Container(
                           height: 45,
