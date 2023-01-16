@@ -1,6 +1,5 @@
 part of 'message_bloc.dart';
 
-
 class MessageBlocState {
   final Map<String, MessageRoom?> messageRooms;
 

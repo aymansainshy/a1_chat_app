@@ -51,6 +51,8 @@ dependencies:
   socket_io_client: ^2.0.0
   hive: ^2.2.3
   google_fonts: ^3.0.1
+  hydrated_bloc: ^9.0.0
+  path_provider: ^2.0.11
 
 dev_dependencies:
   flutter_lints: ^2.0.0
