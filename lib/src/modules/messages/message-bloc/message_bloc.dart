@@ -50,6 +50,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       }
     });
 
-    on<ReceiveMessage>((event, emit) {});
+    on<ReceiveMessage>((event, emit) {
+      // Room should be with sender
+    });
   }
 }

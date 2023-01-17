@@ -11,6 +11,7 @@ class MessageRoom extends Equatable {
   late String? imageUrl;
   late String? phoneNumber;
   late bool? isTyping;
+  late bool? isOnline;
   late Message? lastMessage;
   late List<Message?>? messages;
 
@@ -21,7 +22,8 @@ class MessageRoom extends Equatable {
     this.lastMessage,
     this.name,
     this.imageUrl,
-    this.phoneNumber,
+    this.isOnline = false,
+    required this.phoneNumber,
   });
 
   @override
@@ -128,4 +130,18 @@ class Message extends Equatable {
         isDelivered,
         isRead,
       ];
+}
+
+class MessageUser {
+  late String? id;
+  late String? name;
+  late String? imageUrl;
+  late String? phoneNumber;
+
+  MessageUser({
+    required this.id,
+    this.name,
+    this.imageUrl,
+    required this.phoneNumber,
+  });
 }
