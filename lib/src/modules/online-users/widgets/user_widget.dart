@@ -1,4 +1,5 @@
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
+import 'package:a1_chat_app/src/modules/online-users/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,11 +12,15 @@ class OnlineUserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        // Create Room on the fly .........
         final messageRoom = MessageRoom(
           id: "+249912345678",
-          phoneNumber:"+249912345678",
-          imageUrl:
-              "https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1",
+          user: User(
+            id: '20',
+            phoneNumber: "+249912345678",
+            imageUrl:
+                "https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1",
+          ),
         );
         context.go('/chat', extra: messageRoom);
       },
@@ -39,7 +44,7 @@ class OnlineUserWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Ayman Sainshy",
+                      "Jhone Cena",
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium

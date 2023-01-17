@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import '../../online-users/models/user_model.dart';
+
 @immutable
 // ignore: must_be_immutable
 class MessageRoom extends Equatable {
   late String? id;
-  late String? name;
-  late String? imageUrl;
-  late String? phoneNumber;
+  late User? user;
   late bool? isTyping;
   late bool? isOnline;
   late Message? lastMessage;
@@ -20,11 +20,11 @@ class MessageRoom extends Equatable {
     this.isTyping = false,
     this.messages = const [],
     this.lastMessage,
-    this.name,
-    this.imageUrl,
+    required this.user,
     this.isOnline = false,
-    required this.phoneNumber,
   });
+
+
 
   @override
   List<Object?> get props => [messages];
@@ -32,9 +32,6 @@ class MessageRoom extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'imageUrl': imageUrl,
-      'phoneNumber': phoneNumber,
       'isTyping': isTyping,
       'lastMessage': {
         'id': lastMessage?.id,
@@ -66,11 +63,11 @@ class MessageRoom extends Equatable {
 // ignore: must_be_immutable
 class Message extends Equatable {
   late String? id;
-  late String? sender;
-  late String? receiver;
+  late User? sender;
+  late User? receiver;
   late String content;
 
-  // final DateTime createdAt;
+  late DateTime createdAt;
   late bool isRead;
   late bool isReceive;
   late bool isDelivered;
@@ -80,7 +77,7 @@ class Message extends Equatable {
     required this.sender,
     required this.receiver,
     required this.content,
-    // required this.createdAt,
+    required this.createdAt,
     this.isRead = false,
     this.isDelivered = false,
     this.isReceive = false,

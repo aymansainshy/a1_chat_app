@@ -15,6 +15,7 @@ class MessagesRoomView extends StatelessWidget {
           itemCount: messagesState.messageRooms.keys.length,
           itemBuilder: (context, i) {
             final messageRoom = messagesState.messageRooms.values.toList();
+
             return RoomWidget(messageRoom: messageRoom[i]!);
           },
         );

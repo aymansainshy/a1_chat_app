@@ -1,7 +1,8 @@
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
-import '../auth/model/user.dart';
+
 import '../messages/models/message.dart';
+import '../online-users/models/user_model.dart';
 
 abstract class SocketIO {
   void connectAndListen();

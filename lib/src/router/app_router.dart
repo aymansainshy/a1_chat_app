@@ -27,25 +27,25 @@ class AppRouter {
     initialLocation: '/', // Splash screen
     routes: <RouteBase>[
       GoRoute(
-        path: '/',
-        name: RouteName.home,
-        pageBuilder: (context, state) => CustomTransitionPage<void>(
-          key: state.pageKey,
-          restorationId: state.pageKey.value,
-          child: const HomeView(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-              FadeTransition(opacity: animation, child: child),
-        ),
-        routes: [
-          GoRoute(
-            path: 'chat',
-            name: RouteName.chat,
-            builder: (context, state) {
-              return ChatView(messageRoom: state.extra! as MessageRoom);
-            },
-          ),
-        ]
-      ),
+          path: '/',
+          name: RouteName.home,
+          pageBuilder: (context, state) => CustomTransitionPage<void>(
+                key: state.pageKey,
+                restorationId: state.pageKey.value,
+                child: const HomeView(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) =>
+                        FadeTransition(opacity: animation, child: child),
+              ),
+          routes: [
+            GoRoute(
+              path: 'chat',
+              name: RouteName.chat,
+              builder: (context, state) {
+                return ChatView(messageRoom: state.extra! as MessageRoom);
+              },
+            ),
+          ]),
       GoRoute(
         path: '/login',
         name: RouteName.login,
@@ -59,7 +59,6 @@ class AppRouter {
           name: "Ayman",
         ),
       ),
-
     ],
     redirect: ((BuildContext context, GoRouterState state) {
       bool isTryLogin = authCubit.state.status == AuthStatus.isTryLogin;
@@ -81,13 +80,14 @@ class AppRouter {
       }
 
       if (isAuthenticated) {
-        return '/';
+        // return '/';
+        return null;
       }
 
       if (!isAuthenticated) {
-        // return isLoginView ? null : '/login';
+        return isLoginView ? null : '/login';
         // return isLoginView ? null : '/';
-        return null;
+        // return null;
       }
 
       return null;

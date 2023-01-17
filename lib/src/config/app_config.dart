@@ -2,11 +2,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/language/app_lang.dart';
-import '../modules/auth/model/user.dart';
+import '../modules/online-users/models/user_model.dart';
 
 class Application {
   static bool debug = true;
-  static String myPhone = '+249924081893';
   static String version = '1.0.0';
   static String domain = 'Domain.com';
   static SharedPreferences? preferences;

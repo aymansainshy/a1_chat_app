@@ -46,7 +46,7 @@ class _ChatViewState extends State<ChatView> {
         },
         builder: (context, messageState) {
           final List<Message?>? messages = messageState
-              .messageRooms[widget.messageRoom!.phoneNumber]?.messages?.reversed
+              .messageRooms[widget.messageRoom!.user?.phoneNumber]?.messages?.reversed
               .toList();
           return SafeArea(
             child: Column(
@@ -67,7 +67,7 @@ class _ChatViewState extends State<ChatView> {
                           icon: const Icon(Icons.arrow_back),
                         ),
                         UserAvatar(
-                          imageUrl: widget.messageRoom?.imageUrl,
+                          imageUrl: widget.messageRoom?.user?.imageUrl,
                           radius: 26,
                           isOnline: true,
                         ),
@@ -79,7 +79,7 @@ class _ChatViewState extends State<ChatView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${widget.messageRoom?.name ?? widget.messageRoom?.phoneNumber}",
+                                "${widget.messageRoom?.user?.name ?? widget.messageRoom?.user?.phoneNumber}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -122,12 +122,11 @@ class _ChatViewState extends State<ChatView> {
                             reverse: true,
                             itemCount: messages.length,
                             itemBuilder: (context, i) {
-                              var isMe =
-                                  messages[i]?.sender == Application.myPhone;
+                              var isMe = messages[i]?.sender == Application.user;
                               return TextMessageWidget(
                                 isMe: isMe,
                                 message: messages[i],
-                                avatar: widget.messageRoom?.imageUrl,
+                                avatar: widget.messageRoom?.user?.imageUrl,
                               );
                             },
                           ),
@@ -194,13 +193,17 @@ class _ChatViewState extends State<ChatView> {
                       InkWell(
                         onTap: () async {
                           _formKey.currentState?.save();
+
                           var newMessage = Message(
                             id: DateTime.now().toIso8601String(),
-                            sender: Application.myPhone,
-                            receiver: widget.messageRoom?.phoneNumber,
+                            sender: Application.user,
+                            receiver: widget.messageRoom?.user,
                             content: messageText,
+                            createdAt: DateTime.now(),
                           );
+
                           _textEditingController.clear();
+
                           BlocProvider.of<MessageBloc>(context).add(
                             SendMessage(
                               message: newMessage,

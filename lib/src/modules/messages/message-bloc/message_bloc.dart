@@ -21,6 +21,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
   MessageBloc(this._socketIO, this.messageRepository)
       : super(MessageBlocState(messageRooms: {})) {
+
     on<GetMessagesRoom>((event, emit) async {
       final loadedMessageRooms = await messageRepository.getMessages();
       _messageRooms = loadedMessageRooms!;
@@ -30,18 +31,16 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     on<SendMessage>((event, emit) {
       print(event.message.toString());
 
-      if (_messageRooms.containsKey(event.room?.phoneNumber)) {
-        _messageRooms[event.room?.phoneNumber]?.messages?.add(event.message);
+      if (_messageRooms.containsKey(event.room?.user?.phoneNumber)) {
+        _messageRooms[event.room?.user?.phoneNumber]?.messages?.add(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
 
       } else {
-        _messageRooms.putIfAbsent(event.room!.phoneNumber!, () {
+        _messageRooms.putIfAbsent(event.room!.user!.phoneNumber!, () {
           final createdRoom = MessageRoom(
             id: event.room?.id,
-            phoneNumber: event.room?.phoneNumber,
-            imageUrl: event.room?.imageUrl,
+            user: event.room?.user,
             messages: [event.message],
-            name: event.room?.name,
           );
           return createdRoom;
         });
