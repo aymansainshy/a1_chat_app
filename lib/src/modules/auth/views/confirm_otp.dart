@@ -16,14 +16,13 @@ import '../auth-bloc/otp_bloc.dart';
 
 const double _kbuttonHeight = 45.0;
 
+
 class PinCodeVerificationView extends StatefulWidget {
-  final String? phoneNumber;
-  final String? name;
+ final String? phoneNumber;
 
   const PinCodeVerificationView({
     Key? key,
     required this.phoneNumber,
-    required this.name,
   }) : super(key: key);
 
   @override

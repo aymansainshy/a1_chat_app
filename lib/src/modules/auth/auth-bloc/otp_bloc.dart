@@ -35,6 +35,7 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
     on<SendOtp>((event, emit) {
       try {
         emit(SendOtpInProgress());
+        print("Tring login ....  ${event.phoneNumber}");
         // await authRepository.sendOtp(event.phoneNumber, event.name);
         emit(SendOtpSuccess());
       } catch (error) {

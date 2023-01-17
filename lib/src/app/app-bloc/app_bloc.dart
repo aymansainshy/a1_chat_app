@@ -74,25 +74,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               type: ios.utsname.machine,
             );
           }
-
-          // print("Device ${device.name}");
         } catch (e) {
           // print("Device setup error $e");
         }
 
         Application.device = device;
 
-        Application.user = User(
-          id: '1',
-          phoneNumber: '+249924081893',
-          name: "Ayman Sainshy",
-          imageUrl:
-              'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png',
-        );
+        // Application.user = User(
+        //   id: '1',
+        //   phoneNumber: '+249924081893',
+        //   name: "Ayman Sainshy",
+        //   imageUrl:
+        //       'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png',
+        // );
 
         socket.connectAndListen();
 
-        await Future.delayed(const Duration(milliseconds: 2000));
+        // await Future.delayed(const Duration(milliseconds: 2000));
 
         injector<AuthCubit>().checkAuth();
 

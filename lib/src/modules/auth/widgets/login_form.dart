@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class LoginForm extends StatefulWidget {
     this.screenUtil, {
     Key? key,
   }) : super(key: key);
+
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
@@ -45,11 +47,6 @@ class _LoginFormState extends State<LoginForm> {
     super.initState();
   }
 
-  var logInData = {
-    'name': '',
-    'phoneNumber': '',
-  };
-
   @override
   void dispose() {
     _phoneNumberFocusNode.dispose();
@@ -57,27 +54,22 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _saveForm() async {
-    if (isPhoneValide && phoneNumber!.length >= 8) {
-      setState(() {
-        logInData['phoneNumber'] = phoneNumber!;
-      });
+    if (!isPhoneValide && phoneNumber!.length < 8) {
+      return;
     }
-
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState!.save();
 
-    // AppBlocs.otpBloc.add(SendOtp(logInData['phoneNumber'], logInData['name']));
+    injector<OtpBloc>().add(SendOtp(phoneNumber));
 
-    // _formKey.currentState.reset();
+    _formKey.currentState?.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final isArabic = Application.isEnglish(langugeProvider.appLocal);
-
     return Form(
       key: _formKey,
       child: Padding(
@@ -214,21 +206,14 @@ class _LoginFormState extends State<LoginForm> {
                 }
 
                 if (otpState is SendOtpSuccess) {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PinCodeVerificationView(
-                  //       name: logInData['name'],
-                  //       phoneNumber: logInData['phoneNumber'],
-                  //     ),
-                  //   ),
-                  // );
+                  BlocProvider.of<AuthCubit>(context).tryLogin();
+                  context.go('/login/otp', extra: phoneNumber);
                 }
               },
               builder: (context, otpState) {
                 return SharedElevatedButton(
                   onPressed: () {
-                    BlocProvider.of<AuthCubit>(context).tryLogin();
-                    context.go('/otp');
+                    _saveForm();
                   },
                   child: SizedBox(
                     height: _kbuttonHeight,
@@ -273,4 +258,3 @@ class _LoginFormState extends State<LoginForm> {
 //                                     AppColors.greenColor,
 //                                     AppColors.scondryColor),
 //                               )
-
