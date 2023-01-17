@@ -60,40 +60,6 @@ class MessageRoom extends Equatable {
       ),
     };
   }
-
-  String toJson() => jsonEncode(toMap());
-
-  factory MessageRoom.fromJson(Map<String, dynamic> json) {
-    return MessageRoom(
-      id: json['id'],
-      name: json['name'],
-      imageUrl: json['imageUrl'],
-      phoneNumber: json['phoneNumber'],
-      isTyping: json['isTyping'],
-      lastMessage: Message(
-        id: json['lastMessage']['id'],
-        sender: json['lastMessage']['sender'],
-        receiver: json['lastMessage']['receiver'],
-        content: json['lastMessage']['content'],
-        isRead: json['lastMessage']['isRead'],
-        isReceive: json['lastMessage']['isReceive'],
-        isDelivered: json['lastMessage']['isDelivered'],
-      ),
-      messages: List<Message>.from(
-        json['messages'].map(
-          (m) => Message(
-            id: m['id'],
-            sender: m['sender'],
-            receiver: m['receiver'],
-            content: m['content'],
-            isRead: m['isRead'],
-            isReceive: m['isReceive'],
-            isDelivered: m['isDelivered'],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 @immutable
