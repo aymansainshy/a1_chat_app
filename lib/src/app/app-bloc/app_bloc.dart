@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../config/app_config.dart';
 import '../../modules/auth/auth-bloc/auth_cubit.dart';
+import '../../modules/online-users/models/user_model.dart';
 
 abstract class AppEvent extends Equatable {
   const AppEvent();
@@ -81,12 +82,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
         Application.device = device;
 
+        Application.user = User(
+          id: '1',
+          phoneNumber: '+249924081893',
+          name: "Ayman Sainshy",
+          imageUrl:
+              'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png',
+        );
+
         socket.connectAndListen();
 
         await Future.delayed(const Duration(milliseconds: 2000));
 
         injector<AuthCubit>().checkAuth();
-        // emit(AppSetupInFailer("dkdkd".toString()));
+
         emit(AppSetupInComplete());
       } catch (e) {
         emit(AppSetupInFailure(e.toString()));

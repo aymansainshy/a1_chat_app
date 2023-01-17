@@ -1,5 +1,7 @@
+import '../../../config/app_config.dart';
 import '../../../modules/messages/models/message.dart';
 import '../../../modules/storage/storage.dart';
+import '../../online-users/models/user_model.dart';
 
 abstract class MessageRepository {
   Future<Map<String, MessageRoom?>?> getMessages();
@@ -13,47 +15,78 @@ class MessageRepositoryImpl extends MessageRepository {
   MessageRepositoryImpl(this.messageStorage);
 
   final Map<String, MessageRoom?> messagesWithRooms = {
-    '+24992222222':  MessageRoom(
-      id: '1',
-      name: 'Sainshy',
-      phoneNumber: '+24992222222',
-      imageUrl:
-          'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
-      messages:  [
-        Message(
-          id: '1',
-          sender: '+249924081893',
-          receiver: '+24992222222',
-          content: 'Hello',
-        ),
-        Message(
-          id: '3',
-          sender: '+24992222222',
-          receiver: '+249924081893',
-          content: 'Hello, whats up',
-        ),
-      ],
-    ),
-    '+249911111111': MessageRoom(
-      id: '2',
-      name: 'Mohammed',
-      phoneNumber: '+249911111111',
-      imageUrl: 'https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1',
+    '+24992222222': MessageRoom(
+      id: '+24992222222',
+      user: User(
+        id: '2',
+        imageUrl:
+            'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+        phoneNumber: '+24992222222',
+      ),
+
+
       messages: [
         Message(
-          id: '2',
-          sender: '+249911111111',
-          receiver: '+249924081893',
+          id: DateTime.now().toIso8601String(),
+          sender: Application.user,
+          receiver: User(
+            id: '2',
+            imageUrl:
+                'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+            phoneNumber: '+24992222222',
+          ),
           content: 'Hello',
+          createdAt: DateTime.now(),
         ),
+
         Message(
-          id: '5',
-          sender: '+249924081893',
-          receiver: '+249911111111',
-          content: 'Hi',
+          id: DateTime.now().toIso8601String(),
+          sender: User(
+            id: '2',
+            imageUrl:
+                'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+            phoneNumber: '+24992222222',
+          ),
+          receiver: Application.user,
+          createdAt: DateTime.now(),
+          content: 'Hello, whats up , I am doing well! ',
+        ),
+
+        Message(
+          id: DateTime.now().toIso8601String(),
+          sender: User(
+            id: '2',
+            imageUrl:
+                'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+            phoneNumber: '+24992222222',
+          ),
+          receiver: Application.user,
+          createdAt: DateTime.now(),
+          content:
+              'Most of us are familiar with the concept of constructors ,They allow us to create different instances of our classes. ',
         ),
       ],
     ),
+    // '+249911111111': MessageRoom(
+    //   id: '2',
+    //   name: 'Mohammed',
+    //   phoneNumber: '+249911111111',
+    //   imageUrl: 'https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1',
+    //   messages: [
+    //     Message(
+    //       id: '2',
+    //       sender: '+249911111111',
+    //       receiver: '+249924081893',
+    //       content: 'Hello',
+    //     ),
+    //     Message(
+    //       id: '5',
+    //       sender: '+249924081893',
+    //       receiver: '+249911111111',
+    //       content: 'Hi',
+    //     ),
+    //   ],
+    // ),
   };
 
   @override

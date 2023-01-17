@@ -1,7 +1,7 @@
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
-import '../auth/model/user.dart';
 import '../messages/models/message.dart';
+import '../online-users/models/user_model.dart';
 
 abstract class SocketIO {
   void connectAndListen();
@@ -54,13 +54,8 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void sendMessage(Message message) {
-    final messageData = {
-      'id': message.id,
-      'sender': message.sender,
-      'receiver': message.receiver,
-      'content': message.content,
-    };
-    _socket.emit('sendMessage', messageData);
+    final messageData = messageConverter(message);
+    _socket.emit('send-message', messageData);
   }
 
   @override
@@ -89,4 +84,23 @@ class SocketIoImpl extends SocketIO {
     _socket.disconnect();
     _socket.dispose();
   }
+}
+
+Map<String, dynamic> messageConverter(Message message) {
+  return {
+    'id': message.id,
+    'sender': {
+      'id': message.sender?.id,
+      'name': message.sender?.name,
+      'phoneNumber': message.sender?.phoneNumber,
+      'imageUrl': message.sender?.imageUrl,
+    },
+    'receiver': {
+      'id': message.receiver?.id,
+      'name': message.receiver?.name,
+      'phoneNumber': message.receiver?.phoneNumber,
+      'imageUrl': message.receiver?.imageUrl,
+    },
+    'content': message.content,
+  };
 }

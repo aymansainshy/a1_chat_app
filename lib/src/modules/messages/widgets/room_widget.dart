@@ -1,4 +1,3 @@
-import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +32,7 @@ class RoomWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               UserAvatar(
-                imageUrl: messageRoom.imageUrl,
+                imageUrl: messageRoom.user?.imageUrl ?? "",
                 isOnline: true,
                 radius: 26,
               ),
@@ -47,7 +46,7 @@ class RoomWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            "${messageRoom.name ?? messageRoom.phoneNumber}",
+                            messageRoom.user?.name ?? messageRoom.user?.phoneNumber?? "No name",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium

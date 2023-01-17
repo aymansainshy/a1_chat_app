@@ -3,14 +3,15 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
+import '../../online-users/models/user_model.dart';
+
 @immutable
 // ignore: must_be_immutable
 class MessageRoom extends Equatable {
   late String? id;
-  late String? name;
-  late String? imageUrl;
-  late String? phoneNumber;
+  late User? user;
   late bool? isTyping;
+  late bool? isOnline;
   late Message? lastMessage;
   late List<Message?>? messages;
 
@@ -19,10 +20,11 @@ class MessageRoom extends Equatable {
     this.isTyping = false,
     this.messages = const [],
     this.lastMessage,
-    this.name,
-    this.imageUrl,
-    this.phoneNumber,
+    required this.user,
+    this.isOnline = false,
   });
+
+
 
   @override
   List<Object?> get props => [messages];
@@ -30,9 +32,6 @@ class MessageRoom extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'imageUrl': imageUrl,
-      'phoneNumber': phoneNumber,
       'isTyping': isTyping,
       'lastMessage': {
         'id': lastMessage?.id,
@@ -58,51 +57,17 @@ class MessageRoom extends Equatable {
       ),
     };
   }
-
-  String toJson() => jsonEncode(toMap());
-
-  factory MessageRoom.fromJson(Map<String, dynamic> json) {
-    return MessageRoom(
-      id: json['id'],
-      name: json['name'],
-      imageUrl: json['imageUrl'],
-      phoneNumber: json['phoneNumber'],
-      isTyping: json['isTyping'],
-      lastMessage: Message(
-        id: json['lastMessage']['id'],
-        sender: json['lastMessage']['sender'],
-        receiver: json['lastMessage']['receiver'],
-        content: json['lastMessage']['content'],
-        isRead: json['lastMessage']['isRead'],
-        isReceive: json['lastMessage']['isReceive'],
-        isDelivered: json['lastMessage']['isDelivered'],
-      ),
-      messages: List<Message>.from(
-        json['messages'].map(
-          (m) => Message(
-            id: m['id'],
-            sender: m['sender'],
-            receiver: m['receiver'],
-            content: m['content'],
-            isRead: m['isRead'],
-            isReceive: m['isReceive'],
-            isDelivered: m['isDelivered'],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 @immutable
 // ignore: must_be_immutable
 class Message extends Equatable {
   late String? id;
-  late String? sender;
-  late String? receiver;
+  late User? sender;
+  late User? receiver;
   late String content;
 
-  // final DateTime createdAt;
+  late DateTime createdAt;
   late bool isRead;
   late bool isReceive;
   late bool isDelivered;
@@ -112,7 +77,7 @@ class Message extends Equatable {
     required this.sender,
     required this.receiver,
     required this.content,
-    // required this.createdAt,
+    required this.createdAt,
     this.isRead = false,
     this.isDelivered = false,
     this.isReceive = false,
@@ -128,4 +93,18 @@ class Message extends Equatable {
         isDelivered,
         isRead,
       ];
+}
+
+class MessageUser {
+  late String? id;
+  late String? name;
+  late String? imageUrl;
+  late String? phoneNumber;
+
+  MessageUser({
+    required this.id,
+    this.name,
+    this.imageUrl,
+    required this.phoneNumber,
+  });
 }
