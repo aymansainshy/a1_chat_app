@@ -29,10 +29,9 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<SendMessage>((event, emit) {
-      print(event.message.toString());
-
       if (_messageRooms.containsKey(event.room?.user?.phoneNumber)) {
         _messageRooms[event.room?.user?.phoneNumber]?.messages?.add(event.message);
+        _socketIO.sendMessage(event.message!);
         emit(state.copyWith(messageRooms: _messageRooms));
 
       } else {
@@ -45,6 +44,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           return createdRoom;
         });
 
+        _socketIO.sendMessage(event.message!);
         emit(state.copyWith(messageRooms: _messageRooms));
       }
     });
