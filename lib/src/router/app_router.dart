@@ -52,7 +52,7 @@ class AppRouter {
           builder: (context, state) => const LoginView(),
           routes: [
             GoRoute(
-              path: '/otp',
+              path: 'otp',
               name: RouteName.otp,
               builder: (context, state) => PinCodeVerificationView(
                 phoneNumber: state.extra! as String,
@@ -74,9 +74,9 @@ class AppRouter {
         return null;
       }
 
-      if (isTryLogin) {
-        return '/login/otp';
-        // return null;
+      if (!isAuthenticated && isTryLogin) {
+        // return '/login/otp';
+        return null;
       }
 
       if (!isAuthenticated) {

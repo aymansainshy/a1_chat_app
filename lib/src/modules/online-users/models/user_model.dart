@@ -16,6 +16,16 @@ class User extends Equatable {
     this.isOnline = false,
   });
 
+  toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'phoneNumber': phoneNumber,
+      'imageUrl': imageUrl,
+      'isOnline': isOnline,
+    };
+  }
+
   @override
   List<Object?> get props => [id, name, phoneNumber, imageUrl, isOnline];
 }

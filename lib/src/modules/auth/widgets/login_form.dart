@@ -1,6 +1,5 @@
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
-import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +10,7 @@ import '../../../core/animations/fade_transition.dart';
 import '../../../core/constan/const.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/hellper_methods.dart';
 import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 
@@ -154,7 +154,7 @@ class _LoginFormState extends State<LoginForm> {
                       return null;
                     },
                     onInputChanged: (PhoneNumber number) {
-                      phoneNumber = number.toString();
+                      phoneNumber = number.phoneNumber;
                     },
                     onInputValidated: (bool value) {
                       if (value) {
@@ -198,9 +198,9 @@ class _LoginFormState extends State<LoginForm> {
                 if (otpState is SendOtpFaliure) {
                   customeAlertDialoge(
                     context: context,
-                    title: "errorOccurred",
+                    title: "Error Occurred",
                     sendOtptitle: "ok",
-                    errorMessage: "anErrorOccured",
+                    errorMessage: "An Error Occured",
                     fun: () {},
                   );
                 }
@@ -212,49 +212,40 @@ class _LoginFormState extends State<LoginForm> {
               },
               builder: (context, otpState) {
                 return SharedElevatedButton(
-                  onPressed: () {
-                    _saveForm();
-                  },
-                  child: SizedBox(
-                    height: _kbuttonHeight,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Text(
-                        "Login",
-                        style: Theme.of(context).textTheme.button?.copyWith(
-                              color: AppColors.textButtomColor,
+                  onPressed: otpState is SendOtpInProgress
+                      ? null
+                      : () {
+                          _saveForm();
+                        },
+
+                  child: otpState is SendOtpInProgress
+                      ? Center(
+                          child: sleekCircularSlider(
+                            context,
+                            widget.screenUtil.setSp(30),
+                            AppColors.primaryColor,
+                            AppColors.borderColor,
+                          ),
+                        )
+                      : SizedBox(
+                          height: _kbuttonHeight,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(
+                            child: Text(
+                              "Login",
+                              style:
+                                  Theme.of(context).textTheme.button?.copyWith(
+                                        color: AppColors.textButtomColor,
+                                      ),
                             ),
-                      ),
-                    ),
-                  ),
+                          ),
+                        ),
                 );
               },
             ),
-
-            // const SizedBox(height: 20),
-            // Padding(
-            //   padding: const EdgeInsets.only(right: 10),
-            //   child: GestureDetector(
-            //     onTap: () {},
-            //     child: const Text(
-            //       "Skip",
-            //       style: TextStyle(
-            //         color: Colors.black,
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
     );
   }
 }
-
-// Center(
-//                                 child: sleekCircularSlider(
-//                                     context,
-//                                     widget.screenUtil.setSp(30),
-//                                     AppColors.greenColor,
-//                                     AppColors.scondryColor),
-//                               )

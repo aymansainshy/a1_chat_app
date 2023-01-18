@@ -7,7 +7,7 @@ import '../modules/online-users/models/user_model.dart';
 class Application {
   static bool debug = true;
   static String version = '1.0.0';
-  static String domain = 'Domain.com';
+  static String domain = 'http://192.168.43.104:3333';
   static SharedPreferences? preferences;
   static bool isEnglish = AppLanguage.defaultLanguage.languageCode == 'en';
   static UserDevice? device;
