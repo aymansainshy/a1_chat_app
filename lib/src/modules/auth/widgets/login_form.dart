@@ -217,20 +217,19 @@ class _LoginFormState extends State<LoginForm> {
                       : () {
                           _saveForm();
                         },
-
-                  child: otpState is SendOtpInProgress
-                      ? Center(
-                          child: sleekCircularSlider(
-                            context,
-                            widget.screenUtil.setSp(30),
-                            AppColors.primaryColor,
-                            AppColors.borderColor,
-                          ),
-                        )
-                      : SizedBox(
-                          height: _kbuttonHeight,
-                          width: MediaQuery.of(context).size.width,
-                          child: Center(
+                  child: SizedBox(
+                    height: _kbuttonHeight,
+                    width: MediaQuery.of(context).size.width,
+                    child: otpState is SendOtpInProgress
+                        ? Center(
+                            child: sleekCircularSlider(
+                              context,
+                              widget.screenUtil.setSp(30),
+                              AppColors.primaryColor,
+                              AppColors.borderColor,
+                            ),
+                          )
+                        : Center(
                             child: Text(
                               "Login",
                               style:
@@ -239,7 +238,7 @@ class _LoginFormState extends State<LoginForm> {
                                       ),
                             ),
                           ),
-                        ),
+                  ),
                 );
               },
             ),

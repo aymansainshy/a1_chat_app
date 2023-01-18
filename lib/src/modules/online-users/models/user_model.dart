@@ -6,26 +6,34 @@ class User extends Equatable {
   late String? name;
   late String? phoneNumber;
   late String? imageUrl;
-  late bool? isOnline;
+  late String? token;
 
   User({
     required this.id,
     required this.phoneNumber,
     this.name,
     this.imageUrl,
-    this.isOnline = false,
+    this.token,
   });
 
-  toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
       'phoneNumber': phoneNumber,
       'imageUrl': imageUrl,
-      'isOnline': isOnline,
+      'token': token,
     };
   }
 
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["id"],
+        name: json["name"],
+        phoneNumber: json["phoneNumber"],
+        imageUrl: json["imageUrl"],
+        token: json["token"],
+      );
+
   @override
-  List<Object?> get props => [id, name, phoneNumber, imageUrl, isOnline];
+  List<Object?> get props => [id, name, phoneNumber, imageUrl, token];
 }

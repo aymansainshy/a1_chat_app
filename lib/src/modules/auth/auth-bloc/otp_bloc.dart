@@ -52,12 +52,12 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
       try {
         emit(VarifyOtpInProgress());
         final User? user =  await authRepository.confirmOtp(event.otp!,event.phoneNumber!);
-
-        // if (PreferencesUtils.containsKey(Preferences.user)!) {
-        //   PreferencesUtils.remove(Preferences.user);
-        // }
         //
-        // PreferencesUtils.setString(Preferences.user, jsonEncode(user?.toJson()));
+        if (PreferencesUtils.containsKey(Preferences.user)!) {
+          PreferencesUtils.remove(Preferences.user);
+        }
+
+        PreferencesUtils.setString(Preferences.user, jsonEncode(user?.toJson()));
 
         Application.user = user;
 

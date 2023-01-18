@@ -13,6 +13,7 @@ import '../../../core/animations/fade_transition.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/hellper_methods.dart';
+import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 
 const double _kbuttonHeight = 45.0;
@@ -78,7 +79,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
           listener: (context, otpState) {
             if (otpState is VarifyOtpSuccess) {
               snackBar("varify Done Successfully");
-
+              // BlocProvider.of<AuthCubit>(context).checkAuth();
               context.go('/');
             }
 
