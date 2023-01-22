@@ -1,4 +1,5 @@
 import 'package:a1_chat_app/src/core/theme/theme_cubit.dart';
+import 'package:a1_chat_app/src/modules/auth/repository/auth_repository.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/repository/messages_repository.dart';
 import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
@@ -18,7 +19,7 @@ final injector = GetIt.instance;
 void setup() {
   // Blocs
   injector.registerLazySingleton<AppBloc>(() => AppBloc(injector(), injector()));
-  injector.registerLazySingleton<OtpBloc>(() => OtpBloc());
+  injector.registerLazySingleton<OtpBloc>(() => OtpBloc(injector()));
   injector.registerLazySingleton<AuthCubit>(() => AuthCubit());
   injector.registerLazySingleton<MessageBloc>(() => MessageBloc(injector(), injector()));
   injector.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
@@ -26,6 +27,7 @@ void setup() {
 
   // Repositories
   injector.registerLazySingleton<MessageRepository>(() => MessageRepositoryImpl(injector()));
+  injector.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
 
   // Storage 
   injector.registerLazySingleton<Storage>(() => MessageStorageImpl());

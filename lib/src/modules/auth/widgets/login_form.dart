@@ -1,5 +1,5 @@
+import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
-import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +10,7 @@ import '../../../core/animations/fade_transition.dart';
 import '../../../core/constan/const.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/hellper_methods.dart';
 import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 
@@ -24,6 +25,7 @@ class LoginForm extends StatefulWidget {
     this.screenUtil, {
     Key? key,
   }) : super(key: key);
+
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
@@ -45,11 +47,6 @@ class _LoginFormState extends State<LoginForm> {
     super.initState();
   }
 
-  var logInData = {
-    'name': '',
-    'phoneNumber': '',
-  };
-
   @override
   void dispose() {
     _phoneNumberFocusNode.dispose();
@@ -57,27 +54,22 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _saveForm() async {
-    if (isPhoneValide && phoneNumber!.length >= 8) {
-      setState(() {
-        logInData['phoneNumber'] = phoneNumber!;
-      });
+    if (!isPhoneValide && phoneNumber!.length < 8) {
+      return;
     }
-
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState!.save();
 
-    // AppBlocs.otpBloc.add(SendOtp(logInData['phoneNumber'], logInData['name']));
+    injector<OtpBloc>().add(SendOtp(phoneNumber));
 
-    // _formKey.currentState.reset();
+    _formKey.currentState?.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final isArabic = Application.isEnglish(langugeProvider.appLocal);
-
     return Form(
       key: _formKey,
       child: Padding(
@@ -162,7 +154,7 @@ class _LoginFormState extends State<LoginForm> {
                       return null;
                     },
                     onInputChanged: (PhoneNumber number) {
-                      phoneNumber = number.toString();
+                      phoneNumber = number.phoneNumber;
                     },
                     onInputValidated: (bool value) {
                       if (value) {
@@ -206,71 +198,53 @@ class _LoginFormState extends State<LoginForm> {
                 if (otpState is SendOtpFaliure) {
                   customeAlertDialoge(
                     context: context,
-                    title: "errorOccurred",
+                    title: "Error Occurred",
                     sendOtptitle: "ok",
-                    errorMessage: "anErrorOccured",
+                    errorMessage: "An Error Occured",
                     fun: () {},
                   );
                 }
 
                 if (otpState is SendOtpSuccess) {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PinCodeVerificationView(
-                  //       name: logInData['name'],
-                  //       phoneNumber: logInData['phoneNumber'],
-                  //     ),
-                  //   ),
-                  // );
+                  BlocProvider.of<AuthCubit>(context).tryLogin();
+                  context.go('/login/otp', extra: phoneNumber);
                 }
               },
               builder: (context, otpState) {
                 return SharedElevatedButton(
-                  onPressed: () {
-                    BlocProvider.of<AuthCubit>(context).tryLogin();
-                    context.go('/otp');
-                  },
+                  onPressed: otpState is SendOtpInProgress
+                      ? null
+                      : () {
+                          _saveForm();
+                        },
                   child: SizedBox(
                     height: _kbuttonHeight,
                     width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Text(
-                        "Login",
-                        style: Theme.of(context).textTheme.button?.copyWith(
-                              color: AppColors.textButtomColor,
+                    child: otpState is SendOtpInProgress
+                        ? Center(
+                            child: sleekCircularSlider(
+                              context,
+                              widget.screenUtil.setSp(30),
+                              AppColors.primaryColor,
+                              AppColors.borderColor,
                             ),
-                      ),
-                    ),
+                          )
+                        : Center(
+                            child: Text(
+                              "Login",
+                              style:
+                                  Theme.of(context).textTheme.button?.copyWith(
+                                        color: AppColors.textButtomColor,
+                                      ),
+                            ),
+                          ),
                   ),
                 );
               },
             ),
-
-            // const SizedBox(height: 20),
-            // Padding(
-            //   padding: const EdgeInsets.only(right: 10),
-            //   child: GestureDetector(
-            //     onTap: () {},
-            //     child: const Text(
-            //       "Skip",
-            //       style: TextStyle(
-            //         color: Colors.black,
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
     );
   }
 }
-
-// Center(
-//                                 child: sleekCircularSlider(
-//                                     context,
-//                                     widget.screenUtil.setSp(30),
-//                                     AppColors.greenColor,
-//                                     AppColors.scondryColor),
-//                               )
-

@@ -4,6 +4,7 @@ import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -12,18 +13,17 @@ import '../../../core/animations/fade_transition.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/hellper_methods.dart';
+import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 
 const double _kbuttonHeight = 45.0;
 
 class PinCodeVerificationView extends StatefulWidget {
   final String? phoneNumber;
-  final String? name;
 
   const PinCodeVerificationView({
     Key? key,
     required this.phoneNumber,
-    required this.name,
   }) : super(key: key);
 
   @override
@@ -79,8 +79,8 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
           listener: (context, otpState) {
             if (otpState is VarifyOtpSuccess) {
               snackBar("varify Done Successfully");
-
-              // Navigator.of(context).pushReplacementNamed(TapScreen.routeName);
+              // BlocProvider.of<AuthCubit>(context).checkAuth();
+              context.go('/');
             }
 
             if (otpState is VarifyOtpFaliure) {
@@ -186,7 +186,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                                   shape: PinCodeFieldShape.box,
                                   borderRadius: BorderRadius.circular(5),
                                   // inactiveColor: Colors.black,
-                                  borderWidth:1.0,
+                                  borderWidth: 1.0,
                                   selectedFillColor: Colors.white,
                                   inactiveFillColor: Colors.white,
                                   activeColor: Colors.blue,
@@ -281,22 +281,34 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                       SharedElevatedButton(
                         onPressed: () {
                           formKey.currentState?.save();
-                          context.go('/');
+                          BlocProvider.of<OtpBloc>(context)
+                              .add(VarifyOtp(widget.phoneNumber, currentText));
                         },
                         child: SizedBox(
                           height: _kbuttonHeight,
                           width: MediaQuery.of(context).size.width,
-                          child: Center(
-                            child: Text(
-                              "Varify",
-                              style:
-                                  Theme.of(context).textTheme.button?.copyWith(
-                                        color: AppColors.textButtomColor,
-                                      ),
-                            ),
-                          ),
+                          child: otpState is VarifyOtpInProgress
+                              ? Center(
+                                  child: sleekCircularSlider(
+                                    context,
+                                    ScreenUtil().setSp(30),
+                                    AppColors.primaryColor,
+                                    AppColors.borderColor,
+                                  ),
+                                )
+                              : Center(
+                                  child: Text(
+                                    "Varify",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        ?.copyWith(
+                                          color: AppColors.textButtomColor,
+                                        ),
+                                  ),
+                                ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

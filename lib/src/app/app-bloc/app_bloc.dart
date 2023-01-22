@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -6,8 +8,12 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/app_config.dart';
+import '../../config/preferences_config.dart';
+import '../../core/utils/preference_utils.dart';
 import '../../modules/auth/auth-bloc/auth_cubit.dart';
 import '../../modules/online-users/models/user_model.dart';
 
@@ -48,6 +54,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   AppBloc(this.deviceInfoPlugin, this.socket) : super(AppInitial()) {
     on<AppStarted>((event, emit) async {
+      Application.preferences = await SharedPreferences.getInstance();
+      // PreferencesUtils.clear();
+
+      ///Setting local storage path
+      Application.storagePath = (await getApplicationDocumentsDirectory()).path;
+
       // Read Save Device Information
       try {
         emit(AppSetupInProgress());
@@ -74,25 +86,24 @@ class AppBloc extends Bloc<AppEvent, AppState> {
               type: ios.utsname.machine,
             );
           }
-
-          // print("Device ${device.name}");
         } catch (e) {
           // print("Device setup error $e");
         }
 
         Application.device = device;
 
-        Application.user = User(
-          id: '1',
-          phoneNumber: '+249924081893',
-          name: "Ayman Sainshy",
-          imageUrl:
-              'https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png',
-        );
+        //Setup user if Exist ......
+        if (PreferencesUtils.containsKey(Preferences.user)!) {
+          String? userData = PreferencesUtils.getString(Preferences.user);
+
+          if (userData != null) {
+            Application.user = User.fromJson(jsonDecode(userData));
+          }
+        }
 
         socket.connectAndListen();
 
-        await Future.delayed(const Duration(milliseconds: 2000));
+        // await Future.delayed(const Duration(milliseconds: 2000));
 
         injector<AuthCubit>().checkAuth();
 

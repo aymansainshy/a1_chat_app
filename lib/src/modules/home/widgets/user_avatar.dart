@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
     Key? key,
-    required this.imageUrl,
+    this.imageUrl,
     this.radius = 35,
     this.isOnline = false,
     this.pos1 = 3,
@@ -20,16 +20,23 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CircleAvatar(
-          radius: radius,
-          backgroundColor: Theme.of(context).primaryColor,
-          backgroundImage: NetworkImage(
-            imageUrl ?? "",
-            // scale: 10.0,
+        if (imageUrl == null || imageUrl == "")
+          CircleAvatar(
+            radius: radius,
+            backgroundColor: Theme.of(context).primaryColor,
+            child: const Icon(Icons.person_add ),
           ),
-        ),
+        if (imageUrl != null && imageUrl != "")
+          CircleAvatar(
+            radius: radius,
+            backgroundColor: Theme.of(context).primaryColor,
+            backgroundImage: NetworkImage(
+              imageUrl!
+              // scale: 10.0,
+            ),
+          ),
         if (isOnline)
-           Positioned(
+          Positioned(
             bottom: pos1,
             right: pos2,
             child: const CircleAvatar(

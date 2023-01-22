@@ -47,40 +47,35 @@ class AppRouter {
             ),
           ]),
       GoRoute(
-        path: '/login',
-        name: RouteName.login,
-        builder: (context, state) => const LoginView(),
-      ),
-      GoRoute(
-        path: '/otp',
-        name: RouteName.otp,
-        builder: (context, state) => const PinCodeVerificationView(
-          phoneNumber: "0924081893",
-          name: "Ayman",
-        ),
-      ),
+          path: '/login',
+          name: RouteName.login,
+          builder: (context, state) => const LoginView(),
+          routes: [
+            GoRoute(
+              path: 'otp',
+              name: RouteName.otp,
+              builder: (context, state) => PinCodeVerificationView(
+                phoneNumber: state.extra! as String,
+              ),
+            ),
+          ]),
     ],
     redirect: ((BuildContext context, GoRouterState state) {
       bool isTryLogin = authCubit.state.status == AuthStatus.isTryLogin;
       bool isAuthenticated = authCubit.state.status == AuthStatus.authenticated;
-      // bool isSplash = authCubit.state.status == AuthStatus.splash;
 
-      // print("isAuthenticated $isAuthenticated");
-      // print('isTryLogin $isTryLogin');
-      // print('isSplash $isSplash');
+      print("isAuthenticated $isAuthenticated");
+      print('isTryLogin $isTryLogin');
 
       final bool isLoginView = state.subloc == '/login';
 
-      // if (isSplash) {
-      //   return '/splash';
-      // }
-
-      if (isTryLogin) {
+      if (isAuthenticated) {
+        // return '/';
         return null;
       }
 
-      if (isAuthenticated) {
-        // return '/';
+      if (!isAuthenticated && isTryLogin) {
+        // return '/login/otp';
         return null;
       }
 

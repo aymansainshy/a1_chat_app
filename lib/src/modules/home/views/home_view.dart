@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/config/app_config.dart';
 import 'package:a1_chat_app/src/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -130,9 +131,8 @@ class UserInformationWidget extends StatelessWidget {
         children: [
           Transform.translate(
             offset: const Offset(5, 0),
-            child: const UserAvatar(
-              imageUrl:
-                  'https://spcfonline.com/wp-content/uploads/2021/11/profile-pic.jpg',
+            child: UserAvatar(
+              imageUrl: "${Application.domain}/uploads/${Application.user?.imageUrl}" ?? "",
               radius: 30,
             ),
           ),
@@ -143,7 +143,7 @@ class UserInformationWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Ayman Sainshy",
+                  '${Application.user?.name ?? Application.user?.phoneNumber} ',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 10),
