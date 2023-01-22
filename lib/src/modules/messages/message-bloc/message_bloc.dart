@@ -21,7 +21,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
   MessageBloc(this._socketIO, this.messageRepository)
       : super(MessageBlocState(messageRooms: {})) {
-
     on<GetMessagesRoom>((event, emit) async {
       final loadedMessageRooms = await messageRepository.getMessages();
       _messageRooms = loadedMessageRooms!;
@@ -30,10 +29,13 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
     on<SendMessage>((event, emit) {
       if (_messageRooms.containsKey(event.room?.user?.phoneNumber)) {
-        _messageRooms[event.room?.user?.phoneNumber]?.messages?.add(event.message);
-        _socketIO.sendMessage(event.message!);
-        emit(state.copyWith(messageRooms: _messageRooms));
+        _messageRooms[event.room?.user?.phoneNumber]
+            ?.messages
+            ?.add(event.message);
 
+        _socketIO.sendMessage(event.message!);
+
+        emit(state.copyWith(messageRooms: _messageRooms));
       } else {
         _messageRooms.putIfAbsent(event.room!.user!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -50,7 +52,24 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<ReceiveMessage>((event, emit) {
-      // Room should be with sender
+      if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
+        _messageRooms[event.message.sender?.phoneNumber]
+            ?.messages
+            ?.add(event.message);
+
+        _socketIO.sendMessage(event.message);
+        emit(state.copyWith(messageRooms: _messageRooms));
+      } else {
+        _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {
+          final createdRoom = MessageRoom(
+            id: event.message.sender?.id,
+            user: event.message.sender,
+            messages: [event.message],
+          );
+          return createdRoom;
+        });
+        emit(state.copyWith(messageRooms: _messageRooms));
+      }
     });
   }
 }

@@ -1,3 +1,5 @@
+import 'package:a1_chat_app/injector.dart';
+import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 import '../messages/models/message.dart';
@@ -39,7 +41,26 @@ class SocketIoImpl extends SocketIO {
 
     _socket.on('send', (data) => print(data));
 
-    _socket.on('recieve-message', (data) => print(data));
+    _socket.on(
+        'recieve-message',
+        (data) => injector<MessageBloc>().add(ReceiveMessage(
+                message: Message(
+              id: DateTime.now().toIso8601String(),
+              content: "dhhddhddhddh",
+              createdAt: DateTime.now(),
+              sender: User(
+                id: "1",
+                name: 'Ayman',
+                phoneNumber: '0928238373387',
+              ),
+              receiver: User(
+                id: "3",
+                name: 'Dddd',
+                phoneNumber: '0928238373387',
+              ),
+            ))));
+
+
 
     _socket.onDisconnect((_) => print('disconnect'));
   }
