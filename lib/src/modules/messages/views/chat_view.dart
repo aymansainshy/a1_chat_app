@@ -206,8 +206,7 @@ class _ChatViewState extends State<ChatView> {
 
                           BlocProvider.of<MessageBloc>(context).add(
                             SendMessage(
-                              message: newMessage,
-                              room: widget.messageRoom,
+                              message: newMessage
                             ),
                           );
                         },
