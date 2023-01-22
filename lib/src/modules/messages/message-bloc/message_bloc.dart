@@ -28,8 +28,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<SendMessage>((event, emit) {
-      if (_messageRooms.containsKey(event.room?.user?.phoneNumber)) {
-        _messageRooms[event.room?.user?.phoneNumber]
+      if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
+        _messageRooms[event.message?.receiver?.phoneNumber]
             ?.messages
             ?.add(event.message);
 
@@ -37,10 +37,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
         emit(state.copyWith(messageRooms: _messageRooms));
       } else {
-        _messageRooms.putIfAbsent(event.room!.user!.phoneNumber!, () {
+        _messageRooms.putIfAbsent(event.message!.receiver!.phoneNumber!, () {
           final createdRoom = MessageRoom(
-            id: event.room?.id,
-            user: event.room?.user,
+            id: event.message?.receiver?.id,
+            user: event.message?.receiver,
             messages: [event.message],
           );
           return createdRoom;
