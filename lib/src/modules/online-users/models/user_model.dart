@@ -22,7 +22,6 @@ class User extends Equatable {
       'name': name,
       'phoneNumber': phoneNumber,
       'imageUrl': imageUrl,
-      'token': token,
     };
   }
 
