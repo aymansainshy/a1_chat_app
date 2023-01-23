@@ -68,7 +68,7 @@ class _ChatViewState extends State<ChatView> {
                           icon: const Icon(Icons.arrow_back),
                         ),
                         UserAvatar(
-                          imageUrl: widget.messageRoom?.user?.imageUrl,
+                          imageUrl:  "${Application.domain}/uploads/${widget.messageRoom?.user?.imageUrl}",
                           radius: 26,
                           isOnline: true,
                         ),

@@ -1,6 +1,7 @@
 import 'package:a1_chat_app/src/core/theme/theme_cubit.dart';
 import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
+import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<MessageBloc>(create: (context) => injector<MessageBloc>()),
         BlocProvider<ThemeCubit>(create: (context) => injector<ThemeCubit>()),
         BlocProvider<ButtonSwitcherCubit>(create: (context) => injector<ButtonSwitcherCubit>()),
+        BlocProvider<OnlineUsersBloc>(create: (context) => injector<OnlineUsersBloc>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),
@@ -86,7 +88,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    injector<AppBloc>().socket.dispose();
+    injector<AuthCubit>().socket.dispose();
     super.dispose();
   }
 }

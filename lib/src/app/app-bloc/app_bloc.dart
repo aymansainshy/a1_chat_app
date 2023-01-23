@@ -48,11 +48,11 @@ class AppSetupInFailure extends AppState {
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final DeviceInfoPlugin deviceInfoPlugin;
-  final SocketIO socket;
+
 
   late UserDevice device;
 
-  AppBloc(this.deviceInfoPlugin, this.socket) : super(AppInitial()) {
+  AppBloc(this.deviceInfoPlugin) : super(AppInitial()) {
     on<AppStarted>((event, emit) async {
       Application.preferences = await SharedPreferences.getInstance();
       // PreferencesUtils.clear();
@@ -101,7 +101,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           }
         }
 
-        socket.connectAndListen();
 
         // await Future.delayed(const Duration(milliseconds: 2000));
 

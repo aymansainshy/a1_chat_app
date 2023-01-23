@@ -24,8 +24,6 @@ class MessageRoom extends Equatable {
     this.isOnline = false,
   });
 
-
-
   @override
   List<Object?> get props => [messages];
 
@@ -82,6 +80,16 @@ class Message extends Equatable {
     this.isDelivered = false,
     this.isReceive = false,
   });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      id: json['id'],
+      content: json['content'],
+      createdAt: json['createdAt'],
+      sender: User.fromJson(json['sender']),
+      receiver: User.fromJson(json['receiver']),
+    );
+  }
 
   @override
   List<Object?> get props => [

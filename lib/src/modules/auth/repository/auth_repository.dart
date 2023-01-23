@@ -66,6 +66,7 @@ class AuthRepositoryImpl extends AuthRepository {
         name: responseData['data']['name'],
         imageUrl: responseData['data']['image_Url'],
         phoneNumber: responseData['data']['phone_number'],
+        token: responseData['data']['token'],
       );
       print(responseData.toString());
       return user;

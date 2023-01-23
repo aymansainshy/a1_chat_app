@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../config/app_config.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../models/message.dart';
 
@@ -32,7 +33,7 @@ class RoomWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               UserAvatar(
-                imageUrl: messageRoom.user?.imageUrl ?? "",
+                imageUrl: "${Application.domain}/uploads/${messageRoom.user?.imageUrl?? ""}",
                 isOnline: true,
                 radius: 26,
               ),
