@@ -59,6 +59,7 @@ class SocketIoImpl extends SocketIO {
             )));
 
     _socket.onDisconnect((_) => print('disconnect'));
+    // _socket.emit('disconnected-user-data', {'user': Application.user?.toJson()});}
   }
 
   @override
