@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:a1_chat_app/src/modules/online-users/repository/user_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../config/app_config.dart';
 import '../models/user_model.dart';
 
 part 'online_users_event.dart';
@@ -10,11 +12,24 @@ part 'online_users_event.dart';
 part 'online_users_state.dart';
 
 class OnlineUsersBloc extends Bloc<OnlineUsersEvent, OnlineUsersState> {
-  final List<User> onlineUsers = [];
+  final OnlineUserRepository onlineUserRepository;
+  final List<User>? onlineUsers = [];
 
-  OnlineUsersBloc() : super(const OnlineUsersState(users: [])) {
+  OnlineUsersBloc(this.onlineUserRepository)
+      : super(const OnlineUsersState(users: [])) {
+    on<GetOnlineUser>((event, emit) async {
+      final onlineUsers = await onlineUserRepository.getOnlineUsers();
+      if (onlineUsers!.contains(Application.user)) {
+        onlineUsers.remove(Application.user);
+      }
+      emit(state.copyWith(users: onlineUsers));
+    });
+
     on<NewUser>((event, emit) {
-      onlineUsers.add(event.user);
+      if (onlineUsers!.contains(event.user)) {
+        return;
+      }
+      onlineUsers?.add(event.user);
       emit(state.copyWith(users: onlineUsers));
     });
   }

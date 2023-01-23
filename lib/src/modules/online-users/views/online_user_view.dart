@@ -2,7 +2,6 @@ import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_us
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../home/widgets/user_avatar.dart';
 import '../widgets/user_widget.dart';
 
 class OnlineUserView extends StatelessWidget {
