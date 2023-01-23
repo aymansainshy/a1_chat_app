@@ -81,11 +81,31 @@ class Message extends Equatable {
     this.isReceive = false,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'sender': {
+        'id': sender?.id,
+        'name': sender?.name,
+        'phoneNumber': sender?.phoneNumber,
+        'imageUrl': sender?.imageUrl,
+      },
+      'receiver': {
+        'id': receiver?.id,
+        'name': receiver?.name,
+        'phoneNumber': receiver?.phoneNumber,
+        'imageUrl': receiver?.imageUrl,
+      },
+      'content': content,
+      'createdAt' : createdAt.toIso8601String(),
+    };
+  }
+
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       id: json['id'],
       content: json['content'],
-      createdAt: json['createdAt'],
+      createdAt: json['createdAt']?? DateTime.now(),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
     );
@@ -115,4 +135,13 @@ class MessageUser {
     this.imageUrl,
     required this.phoneNumber,
   });
+
+  factory MessageUser.fromJson(Map<String, dynamic> json) {
+    return MessageUser(
+      id: json['id'],
+      name: json['name'],
+      imageUrl: json['imageUrl'],
+      phoneNumber: json['phoneNumber'],
+    );
+  }
 }

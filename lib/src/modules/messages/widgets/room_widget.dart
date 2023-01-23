@@ -35,7 +35,7 @@ class RoomWidget extends StatelessWidget {
               UserAvatar(
                 imageUrl: "${Application.domain}/uploads/${messageRoom.user?.imageUrl?? ""}",
                 isOnline: true,
-                radius: 26,
+                radius: ScreenUtil().setSp(27),
               ),
               const SizedBox(width: 12),
               Expanded(

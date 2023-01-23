@@ -56,8 +56,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _messageRooms[event.message.sender?.phoneNumber]
             ?.messages
             ?.add(event.message);
-
-        _socketIO.sendMessage(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
       } else {
         _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {

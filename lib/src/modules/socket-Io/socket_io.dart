@@ -45,18 +45,19 @@ class SocketIoImpl extends SocketIO {
       return _socket.emit('user-data', {'user': Application.user?.toJson()});
     });
 
-    // _socket.emit('user-data' , {'user': Application.user?.toJson()});
-    // _socket.emit('sendData', data);
-
     _socket.on('online-user', (data) {
       injector<OnlineUsersBloc>().add(NewUser(User.fromJson(data)));
     });
 
-    _socket.on(
-        'recieve-message',
-        (data) => injector<MessageBloc>().add(ReceiveMessage(
-              message: Message.fromJson(jsonDecode(data)),
-            )));
+
+    _socket.on('message', (data) {
+
+      print(data.toString());
+
+      injector<MessageBloc>().add(ReceiveMessage(
+        message: Message.fromJson(data),
+      ));
+    });
 
     _socket.onDisconnect((_) => print('disconnect'));
     // _socket.emit('disconnected-user-data', {'user': Application.user?.toJson()});}
@@ -72,8 +73,8 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void sendMessage(Message message) {
-    final messageData = messageConverter(message);
-    _socket.emit('send-message', messageData);
+    // final messageData = messageConverter(message);
+    _socket.emit('send-message', message.toJson());
   }
 
   @override
