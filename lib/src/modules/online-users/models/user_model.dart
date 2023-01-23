@@ -34,5 +34,5 @@ class User extends Equatable {
       );
 
   @override
-  List<Object?> get props => [id, name, phoneNumber, imageUrl, token];
+  List<Object?> get props => [id, phoneNumber];
 }
