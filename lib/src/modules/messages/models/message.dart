@@ -26,35 +26,6 @@ class MessageRoom extends Equatable {
 
   @override
   List<Object?> get props => [messages];
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'isTyping': isTyping,
-      'lastMessage': {
-        'id': lastMessage?.id,
-        'sender': lastMessage?.sender,
-        'receiver': lastMessage?.receiver,
-        'content': lastMessage?.content,
-        'isRead': lastMessage?.isRead,
-        'isReceive': lastMessage?.isReceive,
-        'isDelivered': lastMessage?.isDelivered,
-      },
-      'messages': List<Message>.from(
-        messages!.map(
-          (m) => {
-            'id': m?.id,
-            'sender': m?.sender,
-            'receiver': m?.receiver,
-            'content': m?.content,
-            'isRead': m?.isRead,
-            'isReceive': m?.isReceive,
-            'isDelivered': m?.isDelivered,
-          },
-        ),
-      ),
-    };
-  }
 }
 
 @immutable
@@ -97,7 +68,7 @@ class Message extends Equatable {
         'imageUrl': receiver?.imageUrl,
       },
       'content': content,
-      'createdAt' : createdAt.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
@@ -105,7 +76,7 @@ class Message extends Equatable {
     return Message(
       id: json['id'],
       content: json['content'],
-      createdAt: json['createdAt']?? DateTime.now(),
+      createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
     );

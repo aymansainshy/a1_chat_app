@@ -51,7 +51,6 @@ class SocketIoImpl extends SocketIO {
 
 
     _socket.on('message', (data) {
-
       print(data.toString());
 
       injector<MessageBloc>().add(ReceiveMessage(
@@ -73,7 +72,6 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void sendMessage(Message message) {
-    // final messageData = messageConverter(message);
     _socket.emit('send-message', message.toJson());
   }
 
@@ -105,21 +103,3 @@ class SocketIoImpl extends SocketIO {
   }
 }
 
-Map<String, dynamic> messageConverter(Message message) {
-  return {
-    'id': message.id,
-    'sender': {
-      'id': message.sender?.id,
-      'name': message.sender?.name,
-      'phoneNumber': message.sender?.phoneNumber,
-      'imageUrl': message.sender?.imageUrl,
-    },
-    'receiver': {
-      'id': message.receiver?.id,
-      'name': message.receiver?.name,
-      'phoneNumber': message.receiver?.phoneNumber,
-      'imageUrl': message.receiver?.imageUrl,
-    },
-    'content': message.content,
-  };
-}
