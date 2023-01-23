@@ -8,8 +8,9 @@ import '../../home/widgets/user_avatar.dart';
 import '../models/message.dart';
 
 class RoomWidget extends StatelessWidget {
-  const RoomWidget({Key? key, required this.messageRoom}) : super(key: key);
+  const RoomWidget({Key? key, required this.messageRoom, required this.messageCount}) : super(key: key);
   final MessageRoom messageRoom;
+  final int messageCount;
 
   String getMessageContent(Message message) {
     if (message.content.length > 70) {
@@ -95,7 +96,7 @@ class RoomWidget extends StatelessWidget {
                                 textScaleFactor: 1,
                               ),
                               child: Text(
-                                '1',
+                                '$messageCount',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText2
