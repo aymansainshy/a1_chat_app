@@ -9,9 +9,12 @@ import '../../home/widgets/user_avatar.dart';
 import '../models/message.dart';
 
 class RoomWidget extends StatelessWidget {
-  const RoomWidget(
-      {Key? key, required this.messageRoom, required this.newMessageCount})
-      : super(key: key);
+  const RoomWidget({
+    Key? key,
+    required this.messageRoom,
+    required this.newMessageCount,
+  }) : super(key: key);
+
   final MessageRoom messageRoom;
   final int newMessageCount;
 
@@ -27,7 +30,7 @@ class RoomWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.go('/chat', extra: messageRoom);
+        context.go('/chat', extra: messageRoom.user);
       },
       child: SizedBox(
         height: 80,
@@ -90,11 +93,13 @@ class RoomWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 3),
-                        if (messageRoom.messages!.last!.sender == Application.user)
+                        if (messageRoom.messages!.last!.sender ==
+                            Application.user)
                           SizedBox(
                             width: 24,
                             height: 14,
-                            child: ReadBlueCheck(message: messageRoom.messages!.last!),
+                            child: ReadBlueCheck(
+                                message: messageRoom.messages!.last!),
                           ),
                         if (newMessageCount != 0)
                           Container(

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:a1_chat_app/src/modules/auth/views/login_view.dart';
-import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +9,7 @@ import 'package:a1_chat_app/src/modules/home/views/home_view.dart';
 
 import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../modules/auth/views/confirm_otp.dart';
+import '../modules/online-users/models/user_model.dart';
 
 class RouteName {
   static const home = "home";
@@ -42,7 +42,7 @@ class AppRouter {
               path: 'chat',
               name: RouteName.chat,
               builder: (context, state) {
-                return ChatView(messageRoom: state.extra! as MessageRoom);
+                return ChatView(user: state.extra! as User);
               },
             ),
           ]),

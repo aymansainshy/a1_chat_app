@@ -7,15 +7,16 @@ import 'package:go_router/go_router.dart';
 import '../../../config/app_config.dart';
 import '../../../core/utils/hellper_methods.dart';
 import '../../home/widgets/user_avatar.dart';
+import '../../online-users/models/user_model.dart';
 import '../widgets/text_message_widget.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({
     Key? key,
-    required this.messageRoom,
+    required this.user,
   }) : super(key: key);
 
-  final MessageRoom? messageRoom;
+  final User? user;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -28,13 +29,13 @@ class _ChatViewState extends State<ChatView> {
 
   String messageText = '';
 
-
- @override
+  @override
   void initState() {
     super.initState();
-
-    BlocProvider.of<MessageBloc>(context).add(IReadMessage(reciverPhone: widget.messageRoom!.user!.phoneNumber!));
+    BlocProvider.of<MessageBloc>(context)
+        .add(IReadMessage(reciverPhone: widget.user!.phoneNumber!));
   }
+
   @override
   void dispose() {
     _textEditingController.dispose();
@@ -54,7 +55,7 @@ class _ChatViewState extends State<ChatView> {
         },
         builder: (context, messageState) {
           final List<Message?>? messages = messageState
-              .messageRooms[widget.messageRoom!.user?.phoneNumber]?.messages?.reversed
+              .messageRooms[widget.user?.phoneNumber]?.messages?.reversed
               .toList();
           return SafeArea(
             child: Column(
@@ -75,7 +76,8 @@ class _ChatViewState extends State<ChatView> {
                           icon: const Icon(Icons.arrow_back),
                         ),
                         UserAvatar(
-                          imageUrl:  "${Application.domain}/uploads/${widget.messageRoom?.user?.imageUrl}",
+                          imageUrl:
+                              "${Application.domain}/uploads/${widget.user?.imageUrl}",
                           radius: 26,
                           isOnline: true,
                         ),
@@ -87,7 +89,7 @@ class _ChatViewState extends State<ChatView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${widget.messageRoom?.user?.name ?? widget.messageRoom?.user?.phoneNumber}",
+                                "${widget.user?.name ?? widget.user?.phoneNumber}",
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -130,11 +132,11 @@ class _ChatViewState extends State<ChatView> {
                             reverse: true,
                             itemCount: messages?.length,
                             itemBuilder: (context, i) {
-                              var isMe = isMeCheck(messages?[i]);   // messages?[i]?.sender == Application.user;
+                              var isMe = isMeCheck(messages?[i]);
                               return TextMessageWidget(
                                 isMe: isMe,
                                 message: messages?[i],
-                                avatar: widget.messageRoom?.user?.imageUrl,
+                                avatar: widget.user?.imageUrl,
                               );
                             },
                           ),
@@ -205,7 +207,7 @@ class _ChatViewState extends State<ChatView> {
                           var newMessage = Message(
                             id: DateTime.now().toIso8601String(),
                             sender: Application.user,
-                            receiver: widget.messageRoom?.user,
+                            receiver: widget.user,
                             content: messageText,
                             createdAt: DateTime.now(),
                           );
@@ -213,9 +215,7 @@ class _ChatViewState extends State<ChatView> {
                           _textEditingController.clear();
 
                           BlocProvider.of<MessageBloc>(context).add(
-                            SendMessage(
-                              message: newMessage
-                            ),
+                            SendMessage(message: newMessage),
                           );
                         },
                         child: Container(
