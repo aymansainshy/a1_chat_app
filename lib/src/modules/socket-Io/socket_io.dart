@@ -28,8 +28,6 @@ abstract class SocketIO {
 class SocketIoImpl extends SocketIO {
   late io.Socket _socket;
 
-  Map<String, String> data = {"data": 'Data from cleint'};
-
   @override
   void connectAndListen() {
     _socket = io.io(
@@ -41,7 +39,6 @@ class SocketIoImpl extends SocketIO {
     );
 
     _socket.onConnect((_) {
-      print('Socket connected...');
       return _socket.emit('user-data', {'user': Application.user?.toJson()});
     });
 
@@ -49,14 +46,21 @@ class SocketIoImpl extends SocketIO {
       injector<OnlineUsersBloc>().add(NewUser(User.fromJson(data)));
     });
 
+    _socket.on('message-success', (data) {
+      print("Success Data .............");
+      print(data);
+      injector<MessageBloc>().add(MessageSuccess(
+        message: Message.fromJson(data),
+      ));
+    });
 
     _socket.on('message', (data) {
-      print(data.toString());
-
       injector<MessageBloc>().add(ReceiveMessage(
         message: Message.fromJson(data),
       ));
     });
+
+
 
     _socket.onDisconnect((_) => print('disconnect'));
     // _socket.emit('disconnected-user-data', {'user': Application.user?.toJson()});}

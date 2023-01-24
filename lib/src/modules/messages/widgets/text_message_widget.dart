@@ -42,7 +42,8 @@ class TextMessageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage("${Application.domain}/uploads/$avatar"),
+                    backgroundImage:
+                        NetworkImage("${Application.domain}/uploads/$avatar"),
                   ),
                 ),
               const SizedBox(width: 2),
@@ -77,7 +78,7 @@ class TextMessageWidget extends StatelessWidget {
                   children: [
                     const SizedBox(height: 5),
                     Text(
-                      message?.content?? '',
+                      message?.content ?? '',
                       // textAlign: isMe ? TextAlign.left : TextAlign.right,
                       style: GoogleFonts.rubik(
                         textStyle:
@@ -110,7 +111,10 @@ class TextMessageWidget extends StatelessWidget {
                             ),
                           ),
                           if (isMe) const Spacer(),
-                          if (isMe) const ReadBlueCheck()
+                          if (isMe)
+                            ReadBlueCheck(
+                              message: message!,
+                            )
                         ],
                       ),
                     ),
@@ -128,28 +132,66 @@ class TextMessageWidget extends StatelessWidget {
 }
 
 class ReadBlueCheck extends StatelessWidget {
-  const ReadBlueCheck({Key? key}) : super(key: key);
+  const ReadBlueCheck({required this.message, Key? key}) : super(key: key);
+
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: const [
-        Icon(
-          Icons.check,
-          size: 14,
-          color: Colors.blue,
-        ),
-        Positioned(
-          bottom: -1,
-          right: 4,
-          child: Icon(
+    if (message.isRead) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: const [
+          Icon(
             Icons.check,
             size: 14,
             color: Colors.blue,
           ),
-        ),
-      ],
+          Positioned(
+            bottom: -1,
+            right: 4,
+            child: Icon(
+              Icons.check,
+              size: 14,
+              color: Colors.blue,
+            ),
+          ),
+        ],
+      );
+    }
+    if (message.isDelivered) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: const [
+          Icon(
+            Icons.check,
+            size: 14,
+            color: Colors.grey,
+          ),
+          Positioned(
+            bottom: -1,
+            right: 4,
+            child: Icon(
+              Icons.check,
+              size: 14,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      );
+    }
+    if (message.isReceive) {
+      return const Icon(
+        Icons.check,
+        size: 14,
+        color: Colors.grey,
+      );
+    }
+
+    return const Icon(
+      Icons.access_time_filled,
+      size: 14,
+      color: Colors.grey,
     );
   }
 }

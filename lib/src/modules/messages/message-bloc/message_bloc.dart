@@ -21,6 +21,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
   MessageBloc(this._socketIO, this.messageRepository)
       : super(MessageBlocState(messageRooms: {})) {
+
     on<GetMessagesRoom>((event, emit) async {
       final loadedMessageRooms = await messageRepository.getMessages();
       _messageRooms = loadedMessageRooms!;
@@ -49,6 +50,18 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _socketIO.sendMessage(event.message!);
         emit(state.copyWith(messageRooms: _messageRooms));
       }
+    });
+
+    on<MessageSuccess>((event, emit) {
+      final messages =  _messageRooms[event.message.receiver?.phoneNumber]?.messages;
+      final message = messages?.firstWhere((message) => message?.id == event.message.id);
+      final messageIndex  = messages?.indexOf(message);
+      message?.isReceive = true;
+
+      messages?.removeAt(messageIndex!);
+      messages?.insert(messageIndex!, message);
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
+      emit(state.copyWith(messageRooms: _messageRooms));
     });
 
     on<ReceiveMessage>((event, emit) {

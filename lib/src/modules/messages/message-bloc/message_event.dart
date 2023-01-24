@@ -21,3 +21,9 @@ class ReceiveMessage extends MessageBlocEvent {
 
   const ReceiveMessage({required this.message});
 }
+
+class MessageSuccess extends MessageBlocEvent {
+  final Message message;
+
+  const MessageSuccess({required this.message});
+}
