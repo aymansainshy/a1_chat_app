@@ -113,7 +113,7 @@ class TextMessageWidget extends StatelessWidget {
                           if (isMe) const Spacer(),
                           if (isMe)
                             ReadBlueCheck(
-                              message: message!,
+                              message: message!
                             )
                         ],
                       ),
@@ -144,15 +144,15 @@ class ReadBlueCheck extends StatelessWidget {
         children: const [
           Icon(
             Icons.check,
-            size: 14,
+            size: 15,
             color: Colors.blue,
           ),
           Positioned(
-            bottom: -1,
-            right: 4,
+            bottom: -2,
+            right: 5,
             child: Icon(
               Icons.check,
-              size: 14,
+              size: 15,
               color: Colors.blue,
             ),
           ),
@@ -165,15 +165,15 @@ class ReadBlueCheck extends StatelessWidget {
         children: const [
           Icon(
             Icons.check,
-            size: 14,
+            size: 15,
             color: Colors.grey,
           ),
           Positioned(
-            bottom: -1,
-            right: 4,
+            bottom: -2,
+            right: 5,
             child: Icon(
               Icons.check,
-              size: 14,
+              size: 15,
               color: Colors.grey,
             ),
           ),
@@ -183,7 +183,7 @@ class ReadBlueCheck extends StatelessWidget {
     if (message.isReceive) {
       return const Icon(
         Icons.check,
-        size: 14,
+        size: 15,
         color: Colors.grey,
       );
     }

@@ -28,6 +28,13 @@ class _ChatViewState extends State<ChatView> {
 
   String messageText = '';
 
+
+ @override
+  void initState() {
+    super.initState();
+
+    BlocProvider.of<MessageBloc>(context).add(IReadMessage(reciverPhone: widget.messageRoom!.user!.phoneNumber!));
+  }
   @override
   void dispose() {
     _textEditingController.dispose();

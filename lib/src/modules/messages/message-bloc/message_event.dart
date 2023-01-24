@@ -33,3 +33,15 @@ class MessageDelivered extends MessageBlocEvent {
 
   const MessageDelivered({required this.message});
 }
+
+class MessageRead extends MessageBlocEvent {
+  final String senderPhone;
+
+  const MessageRead({required this.senderPhone});
+}
+
+class IReadMessage extends MessageBlocEvent {
+  final String reciverPhone;
+
+  const IReadMessage({required this.reciverPhone});
+}

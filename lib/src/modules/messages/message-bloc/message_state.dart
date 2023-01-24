@@ -3,12 +3,13 @@ part of 'message_bloc.dart';
 class MessageBlocState {
   final Map<String, MessageRoom?> messageRooms;
 
-  int unReadedMessage(MessageRoom room) {
+  int newMessages(MessageRoom room) {
     final messages = messageRooms[room.user?.phoneNumber]
         ?.messages
-        ?.where((message) => !message!.isRead);
+        ?.where((message) => message!.isNew && message.receiver  == Application.user);
     return messages?.length ?? 0;
   }
+
 
   MessageBlocState({
     required this.messageRooms,

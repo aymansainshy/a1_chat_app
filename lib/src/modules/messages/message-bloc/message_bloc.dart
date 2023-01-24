@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../config/app_config.dart';
 import '../../socket-Io/socket_io.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
@@ -64,17 +65,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
-    on<MessageDelivered>((event, emit) {
-      final messages =  _messageRooms[event.message.receiver?.phoneNumber]?.messages;
-      final message = messages?.firstWhere((message) => message?.id == event.message.id);
-      final messageIndex  = messages?.indexOf(message);
-      message?.isDelivered = true;
-
-      messages?.removeAt(messageIndex!);
-      messages?.insert(messageIndex!, message);
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
-      emit(state.copyWith(messageRooms: _messageRooms));
-    });
 
     on<ReceiveMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
@@ -96,5 +86,49 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         emit(state.copyWith(messageRooms: _messageRooms));
       }
     });
+
+
+    on<MessageDelivered>((event, emit) {
+      final messages =  _messageRooms[event.message.receiver?.phoneNumber]?.messages;
+      final message = messages?.firstWhere((message) => message?.id == event.message.id);
+      final messageIndex  = messages?.indexOf(message);
+      message?.isDelivered = true;
+
+      messages?.removeAt(messageIndex!);
+      messages?.insert(messageIndex!, message);
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
+      emit(state.copyWith(messageRooms: _messageRooms));
+    });
+
+
+    on<MessageRead>((event, emit) {
+      final messages =  _messageRooms[event.senderPhone]?.messages;
+      final List<Message?> updatedMessages = [];
+
+      messages?.forEach((message) {
+        message?.isRead = true;
+        updatedMessages.add(message);
+      });
+
+      _messageRooms[event.senderPhone]?.messages = updatedMessages;
+      emit(state.copyWith(messageRooms: _messageRooms));
+    });
+
+
+    on<IReadMessage>((event, emit) {
+      _socketIO.iReadMessages(Application.user!.phoneNumber!, event.reciverPhone);
+
+      final messages =  _messageRooms[event.reciverPhone]?.messages;
+      final List<Message?> updatedMessages = [];
+
+      messages?.forEach((message) {
+        message?.isNew = false;
+        updatedMessages.add(message);
+      });
+
+      _messageRooms[event.reciverPhone]?.messages = updatedMessages;
+      emit(state.copyWith(messageRooms: _messageRooms));
+    });
+
   }
 }

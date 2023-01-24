@@ -16,7 +16,7 @@ abstract class SocketIO {
 
   void messageDelivered(Message message);
 
-  void messageRead(String messageId, String recieverId);
+  void iReadMessages(String senderPhone, String recieverPhone);
 
   void typing(String senderId, String recieverId);
 
@@ -68,7 +68,12 @@ class SocketIoImpl extends SocketIO {
       injector<MessageBloc>().add(ReceiveMessage(
         message: Message.fromJson(data),
       ));
+    });
 
+    _socket.on('message-read', (senderPhone) {
+      injector<MessageBloc>().add( MessageRead(
+        senderPhone: senderPhone
+        ));
     });
 
 
@@ -78,10 +83,10 @@ class SocketIoImpl extends SocketIO {
   }
 
   @override
-  void messageRead(String messageId, String recieverId) {
-    _socket.emit('message-read', {
-      'messageId': messageId,
-      'recieverId': recieverId,
+  void iReadMessages(String senderPhone, String recieverPhone) {
+    _socket.emit('iread-message', {
+      'senderPhone': senderPhone,
+      'recieverPhone': recieverPhone,
     });
   }
 

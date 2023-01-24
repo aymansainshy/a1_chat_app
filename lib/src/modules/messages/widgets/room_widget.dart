@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/modules/messages/widgets/text_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -8,13 +9,15 @@ import '../../home/widgets/user_avatar.dart';
 import '../models/message.dart';
 
 class RoomWidget extends StatelessWidget {
-  const RoomWidget({Key? key, required this.messageRoom, required this.messageCount}) : super(key: key);
+  const RoomWidget(
+      {Key? key, required this.messageRoom, required this.newMessageCount})
+      : super(key: key);
   final MessageRoom messageRoom;
-  final int messageCount;
+  final int newMessageCount;
 
   String getMessageContent(Message message) {
     if (message.content.length > 70) {
-      return "${message.content.substring(0, 70)} ...";
+      return "${message.content.substring(0, 65)} ...";
     } else {
       return "${message.content} ...";
     }
@@ -34,7 +37,8 @@ class RoomWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               UserAvatar(
-                imageUrl: "${Application.domain}/uploads/${messageRoom.user?.imageUrl?? ""}",
+                imageUrl:
+                    "${Application.domain}/uploads/${messageRoom.user?.imageUrl ?? ""}",
                 isOnline: true,
                 radius: ScreenUtil().setSp(27),
               ),
@@ -44,11 +48,13 @@ class RoomWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
-                       crossAxisAlignment : CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Text(
-                            messageRoom.user?.name ?? messageRoom.user?.phoneNumber?? "No name",
+                            messageRoom.user?.name ??
+                                messageRoom.user?.phoneNumber ??
+                                "No name",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -84,28 +90,35 @@ class RoomWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 3),
-                        Container(
-                          height: 22,
-                          width: 22,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Theme.of(context).primaryColor),
-                          child: Center(
-                            child: MediaQuery(
-                              data: MediaQuery.of(context).copyWith(
-                                textScaleFactor: 1,
-                              ),
-                              child: Text(
-                                '$messageCount',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(
-                                        color: Theme.of(context).cardColor),
+                        if (messageRoom.messages!.last!.sender == Application.user)
+                          SizedBox(
+                            width: 24,
+                            height: 14,
+                            child: ReadBlueCheck(message: messageRoom.messages!.last!),
+                          ),
+                        if (newMessageCount != 0)
+                          Container(
+                            height: 22,
+                            width: 22,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).primaryColor),
+                            child: Center(
+                              child: MediaQuery(
+                                data: MediaQuery.of(context).copyWith(
+                                  textScaleFactor: 1,
+                                ),
+                                child: Text(
+                                  '$newMessageCount',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      ?.copyWith(
+                                          color: Theme.of(context).cardColor),
+                                ),
                               ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ],
