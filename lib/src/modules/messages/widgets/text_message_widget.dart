@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,7 +42,7 @@ class TextMessageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage("$avatar"),
+                    backgroundImage: NetworkImage("${Application.domain}/uploads/$avatar"),
                   ),
                 ),
               const SizedBox(width: 2),

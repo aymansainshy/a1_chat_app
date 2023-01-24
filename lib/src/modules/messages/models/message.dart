@@ -24,39 +24,8 @@ class MessageRoom extends Equatable {
     this.isOnline = false,
   });
 
-
-
   @override
   List<Object?> get props => [messages];
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'isTyping': isTyping,
-      'lastMessage': {
-        'id': lastMessage?.id,
-        'sender': lastMessage?.sender,
-        'receiver': lastMessage?.receiver,
-        'content': lastMessage?.content,
-        'isRead': lastMessage?.isRead,
-        'isReceive': lastMessage?.isReceive,
-        'isDelivered': lastMessage?.isDelivered,
-      },
-      'messages': List<Message>.from(
-        messages!.map(
-          (m) => {
-            'id': m?.id,
-            'sender': m?.sender,
-            'receiver': m?.receiver,
-            'content': m?.content,
-            'isRead': m?.isRead,
-            'isReceive': m?.isReceive,
-            'isDelivered': m?.isDelivered,
-          },
-        ),
-      ),
-    };
-  }
 }
 
 @immutable
@@ -83,6 +52,36 @@ class Message extends Equatable {
     this.isReceive = false,
   });
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'sender': {
+        'id': sender?.id,
+        'name': sender?.name,
+        'phoneNumber': sender?.phoneNumber,
+        'imageUrl': sender?.imageUrl,
+      },
+      'receiver': {
+        'id': receiver?.id,
+        'name': receiver?.name,
+        'phoneNumber': receiver?.phoneNumber,
+        'imageUrl': receiver?.imageUrl,
+      },
+      'content': content,
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      id: json['id'],
+      content: json['content'],
+      createdAt: DateTime.parse(json['createdAt']),
+      sender: User.fromJson(json['sender']),
+      receiver: User.fromJson(json['receiver']),
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,
@@ -107,4 +106,13 @@ class MessageUser {
     this.imageUrl,
     required this.phoneNumber,
   });
+
+  factory MessageUser.fromJson(Map<String, dynamic> json) {
+    return MessageUser(
+      id: json['id'],
+      name: json['name'],
+      imageUrl: json['imageUrl'],
+      phoneNumber: json['phoneNumber'],
+    );
+  }
 }

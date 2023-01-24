@@ -3,12 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../config/app_config.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../models/message.dart';
 
 class RoomWidget extends StatelessWidget {
-  const RoomWidget({Key? key, required this.messageRoom}) : super(key: key);
+  const RoomWidget({Key? key, required this.messageRoom, required this.messageCount}) : super(key: key);
   final MessageRoom messageRoom;
+  final int messageCount;
 
   String getMessageContent(Message message) {
     if (message.content.length > 70) {
@@ -32,9 +34,9 @@ class RoomWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               UserAvatar(
-                imageUrl: messageRoom.user?.imageUrl ?? "",
+                imageUrl: "${Application.domain}/uploads/${messageRoom.user?.imageUrl?? ""}",
                 isOnline: true,
-                radius: 26,
+                radius: ScreenUtil().setSp(27),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -94,7 +96,7 @@ class RoomWidget extends StatelessWidget {
                                 textScaleFactor: 1,
                               ),
                               child: Text(
-                                '1',
+                                '$messageCount',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText2

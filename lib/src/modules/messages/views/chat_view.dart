@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
+import '../../../core/utils/hellper_methods.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../widgets/text_message_widget.dart';
 
@@ -67,7 +68,7 @@ class _ChatViewState extends State<ChatView> {
                           icon: const Icon(Icons.arrow_back),
                         ),
                         UserAvatar(
-                          imageUrl: widget.messageRoom?.user?.imageUrl,
+                          imageUrl:  "${Application.domain}/uploads/${widget.messageRoom?.user?.imageUrl}",
                           radius: 26,
                           isOnline: true,
                         ),
@@ -114,18 +115,18 @@ class _ChatViewState extends State<ChatView> {
                         topRight: Radius.circular(45),
                       ),
                     ),
-                    child: messages == null || messages.isEmpty
+                    child: isMessagesNullOrEmpty(messages)
                         ? const Center(
                             child: Text('Start messaging '),
                           )
                         : ListView.builder(
                             reverse: true,
-                            itemCount: messages.length,
+                            itemCount: messages?.length,
                             itemBuilder: (context, i) {
-                              var isMe = messages[i]?.sender == Application.user;
+                              var isMe = isMeCheck(messages?[i]);   // messages?[i]?.sender == Application.user;
                               return TextMessageWidget(
                                 isMe: isMe,
-                                message: messages[i],
+                                message: messages?[i],
                                 avatar: widget.messageRoom?.user?.imageUrl,
                               );
                             },
@@ -233,4 +234,8 @@ class _ChatViewState extends State<ChatView> {
       ),
     );
   }
+}
+
+bool isMessagesNullOrEmpty(List<Message?>? messages) {
+  return messages == null || messages.isEmpty;
 }

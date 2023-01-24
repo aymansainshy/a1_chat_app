@@ -3,10 +3,13 @@ import 'package:a1_chat_app/src/modules/online-users/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../config/app_config.dart';
 import '../../home/widgets/user_avatar.dart';
 
 class OnlineUserWidget extends StatelessWidget {
-  const OnlineUserWidget({Key? key}) : super(key: key);
+  const OnlineUserWidget({required this.user, Key? key}) : super(key: key);
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +17,12 @@ class OnlineUserWidget extends StatelessWidget {
       onTap: () {
         // Create Room on the fly .........
         final messageRoom = MessageRoom(
-          id: "+249912345678",
+          id: user.phoneNumber,
           user: User(
-            id: '20',
-            phoneNumber: "+249912345678",
-            imageUrl:
-                "https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1",
+            id: user.id,
+            name: user.name,
+            phoneNumber: user.phoneNumber,
+            imageUrl: user.imageUrl,
           ),
         );
         context.go('/chat', extra: messageRoom);
@@ -30,9 +33,8 @@ class OnlineUserWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
           child: Row(
             children: [
-              const UserAvatar(
-                imageUrl:
-                    "https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1",
+              UserAvatar(
+                imageUrl: "${Application.domain}/uploads/${user.imageUrl}",
                 isOnline: true,
                 radius: 26,
               ),
@@ -44,7 +46,7 @@ class OnlineUserWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Jhone Cena",
+                      user.name ?? user.phoneNumber!,
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/core/constan/const.dart';
 import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
@@ -80,6 +81,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
             if (otpState is VarifyOtpSuccess) {
               snackBar("varify Done Successfully");
               // BlocProvider.of<AuthCubit>(context).checkAuth();
+              BlocProvider.of<AuthCubit>(context).socket.connectAndListen();
               context.go('/');
             }
 

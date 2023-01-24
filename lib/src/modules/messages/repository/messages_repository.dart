@@ -19,45 +19,37 @@ class MessageRepositoryImpl extends MessageRepository {
       id: '+24992222222',
       user: User(
         id: '2',
-        imageUrl:
-            'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+        imageUrl: 'clcow8vds0001ialq2gy652v6.png',
         phoneNumber: '+24992222222',
       ),
-
-
       messages: [
         Message(
           id: DateTime.now().toIso8601String(),
           sender: Application.user,
           receiver: User(
             id: '2',
-            imageUrl:
-                'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+            imageUrl: 'clcow8vds0001ialq2gy652v6.png',
             phoneNumber: '+24992222222',
           ),
           content: 'Hello',
           createdAt: DateTime.now(),
         ),
-
         Message(
           id: DateTime.now().toIso8601String(),
           sender: User(
             id: '2',
-            imageUrl:
-                'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+            imageUrl: 'clcow8vds0001ialq2gy652v6.png',
             phoneNumber: '+24992222222',
           ),
           receiver: Application.user,
           createdAt: DateTime.now(),
           content: 'Hello, whats up , I am doing well! ',
         ),
-
         Message(
           id: DateTime.now().toIso8601String(),
           sender: User(
             id: '2',
-            imageUrl:
-                'https://i.kinja-img.com/gawker-media/image/upload/t_original/ijsi5fzb1nbkbhxa2gc1.png',
+            imageUrl: 'clcow8vds0001ialq2gy652v6.png',
             phoneNumber: '+24992222222',
           ),
           receiver: Application.user,

@@ -1,10 +1,15 @@
 part of 'online_users_bloc.dart';
 
-abstract class OnlineUsersState extends Equatable {
-  const OnlineUsersState();
-}
+class OnlineUsersState extends Equatable {
+  final List<User> users;
 
-class OnlineUsersInitial extends OnlineUsersState {
+  const OnlineUsersState({required this.users});
+
+  OnlineUsersState copyWith({List<User>? users}) {
+    return OnlineUsersState(users: users ?? this.users);
+  }
+
   @override
-  List<Object> get props => [];
+  // TODO: implement props
+  List<Object?> get props => [users];
 }

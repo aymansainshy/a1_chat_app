@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:a1_chat_app/injector.dart';
+import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:async';
@@ -48,11 +49,11 @@ class AppSetupInFailure extends AppState {
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final DeviceInfoPlugin deviceInfoPlugin;
-  final SocketIO socket;
+
 
   late UserDevice device;
 
-  AppBloc(this.deviceInfoPlugin, this.socket) : super(AppInitial()) {
+  AppBloc(this.deviceInfoPlugin) : super(AppInitial()) {
     on<AppStarted>((event, emit) async {
       Application.preferences = await SharedPreferences.getInstance();
       // PreferencesUtils.clear();
@@ -101,11 +102,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           }
         }
 
-        socket.connectAndListen();
 
         // await Future.delayed(const Duration(milliseconds: 2000));
 
         injector<AuthCubit>().checkAuth();
+        injector<OnlineUsersBloc>().add(GetOnlineUser());
 
         emit(AppSetupInComplete());
       } catch (e) {

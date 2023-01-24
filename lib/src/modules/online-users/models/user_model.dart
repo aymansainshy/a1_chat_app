@@ -22,7 +22,6 @@ class User extends Equatable {
       'name': name,
       'phoneNumber': phoneNumber,
       'imageUrl': imageUrl,
-      'token': token,
     };
   }
 
@@ -35,5 +34,5 @@ class User extends Equatable {
       );
 
   @override
-  List<Object?> get props => [id, name, phoneNumber, imageUrl, token];
+  List<Object?> get props => [id, phoneNumber];
 }
