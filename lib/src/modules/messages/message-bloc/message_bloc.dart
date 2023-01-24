@@ -64,11 +64,24 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
+    on<MessageDelivered>((event, emit) {
+      final messages =  _messageRooms[event.message.receiver?.phoneNumber]?.messages;
+      final message = messages?.firstWhere((message) => message?.id == event.message.id);
+      final messageIndex  = messages?.indexOf(message);
+      message?.isDelivered = true;
+
+      messages?.removeAt(messageIndex!);
+      messages?.insert(messageIndex!, message);
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
+      emit(state.copyWith(messageRooms: _messageRooms));
+    });
+
     on<ReceiveMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
         _messageRooms[event.message.sender?.phoneNumber]
             ?.messages
             ?.add(event.message);
+        _socketIO.messageDelivered(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
       } else {
         _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {
@@ -79,6 +92,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           );
           return createdRoom;
         });
+        _socketIO.messageDelivered(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
       }
     });

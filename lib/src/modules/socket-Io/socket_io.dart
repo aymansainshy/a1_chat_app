@@ -14,6 +14,8 @@ abstract class SocketIO {
 
   void sendMessage(Message message);
 
+  void messageDelivered(Message message);
+
   void messageRead(String messageId, String recieverId);
 
   void typing(String senderId, String recieverId);
@@ -54,10 +56,19 @@ class SocketIoImpl extends SocketIO {
       ));
     });
 
+    _socket.on('message-delivered', (data) {
+      print("Delivered Data .............");
+      print(data);
+      injector<MessageBloc>().add(MessageDelivered(
+        message: Message.fromJson(data),
+      ));
+    });
+
     _socket.on('message', (data) {
       injector<MessageBloc>().add(ReceiveMessage(
         message: Message.fromJson(data),
       ));
+
     });
 
 
@@ -77,6 +88,11 @@ class SocketIoImpl extends SocketIO {
   @override
   void sendMessage(Message message) {
     _socket.emit('send-message', message.toJson());
+  }
+
+  @override
+  void messageDelivered(Message message) {
+    _socket.emit('message-delivered', message.toJson());
   }
 
   @override
@@ -105,5 +121,7 @@ class SocketIoImpl extends SocketIO {
     _socket.disconnect();
     _socket.dispose();
   }
+
+
 }
 
