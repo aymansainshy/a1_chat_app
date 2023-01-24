@@ -99,7 +99,7 @@ class RoomWidget extends StatelessWidget {
                         if (messageRoom.messages!.last!.sender ==
                             Application.user)
                           SizedBox(
-                            width: 24,
+                            width: 25,
                             height: 14,
                             child: ReadBlueCheck(
                                 message: messageRoom.messages!.last!),

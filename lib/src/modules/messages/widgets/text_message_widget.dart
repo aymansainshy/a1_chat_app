@@ -149,7 +149,7 @@ class ReadBlueCheck extends StatelessWidget {
             color: Colors.blue,
           ),
           Positioned(
-            bottom: -2,
+            bottom: -1,
             right: 5,
             child: Icon(
               Icons.check,
@@ -170,7 +170,7 @@ class ReadBlueCheck extends StatelessWidget {
             color: Colors.grey,
           ),
           Positioned(
-            bottom: -2,
+            bottom: -1,
             right: 5,
             child: Icon(
               Icons.check,
