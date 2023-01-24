@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/utils/hellper_methods.dart';
 import '../models/message.dart';
 
 class TextMessageWidget extends StatelessWidget {
@@ -90,8 +91,8 @@ class TextMessageWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     SizedBox(
-                      width: 70,
-                      height: 13,
+                      width: 74,
+                      height: 14,
                       child: Row(
                         children: [
                           MediaQuery(
@@ -99,7 +100,7 @@ class TextMessageWidget extends StatelessWidget {
                               textScaleFactor: 1,
                             ),
                             child: Text(
-                              "${DateTime.now().hour}:${DateTime.now().minute} PM ",
+                              getMessageTime(message!),
                               textAlign: TextAlign.right,
                               style: Theme.of(context)
                                   .textTheme
@@ -196,16 +197,6 @@ class ReadBlueCheck extends StatelessWidget {
   }
 }
 
-DateTime newDate = DateTime.now();
-DateTime formatedDate = newDate.subtract(
-  Duration(
-    hours: newDate.hour,
-    minutes: newDate.minute,
-    seconds: newDate.second,
-    milliseconds: newDate.millisecond,
-    microseconds: newDate.microsecond,
-  ),
-);
 
 // if (message.messageContent.lat != null &&
 // message.messageContent.log != null)

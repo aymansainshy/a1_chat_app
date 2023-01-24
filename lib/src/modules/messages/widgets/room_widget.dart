@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../config/app_config.dart';
+import '../../../core/utils/hellper_methods.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../models/message.dart';
 
@@ -67,9 +68,11 @@ class RoomWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "5 min",
+                          getMessageTime(messageRoom.messages!.last!),
                           style: Theme.of(context).textTheme.caption?.copyWith(
-                                color: Theme.of(context).primaryColor,
+                                color: newMessageCount == 0
+                                    ? Colors.grey
+                                    : Theme.of(context).primaryColor,
                               ),
                         ),
                       ],
