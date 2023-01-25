@@ -21,3 +21,27 @@ class ReceiveMessage extends MessageBlocEvent {
 
   const ReceiveMessage({required this.message});
 }
+
+class MessageSuccess extends MessageBlocEvent {
+  final Message message;
+
+  const MessageSuccess({required this.message});
+}
+
+class MessageDelivered extends MessageBlocEvent {
+  final Message message;
+
+  const MessageDelivered({required this.message});
+}
+
+class MessageRead extends MessageBlocEvent {
+  final String senderPhone;
+
+  const MessageRead({required this.senderPhone});
+}
+
+class IReadMessage extends MessageBlocEvent {
+  final String reciverPhone;
+
+  const IReadMessage({required this.reciverPhone});
+}

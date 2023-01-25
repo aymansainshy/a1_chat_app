@@ -14,7 +14,9 @@ abstract class SocketIO {
 
   void sendMessage(Message message);
 
-  void messageRead(String messageId, String recieverId);
+  void messageDelivered(Message message);
+
+  void iReadMessages(String senderPhone, String recieverPhone);
 
   void typing(String senderId, String recieverId);
 
@@ -28,8 +30,6 @@ abstract class SocketIO {
 class SocketIoImpl extends SocketIO {
   late io.Socket _socket;
 
-  Map<String, String> data = {"data": 'Data from cleint'};
-
   @override
   void connectAndListen() {
     _socket = io.io(
@@ -41,7 +41,6 @@ class SocketIoImpl extends SocketIO {
     );
 
     _socket.onConnect((_) {
-      print('Socket connected...');
       return _socket.emit('user-data', {'user': Application.user?.toJson()});
     });
 
@@ -49,30 +48,56 @@ class SocketIoImpl extends SocketIO {
       injector<OnlineUsersBloc>().add(NewUser(User.fromJson(data)));
     });
 
+    _socket.on('message-success', (data) {
+      print("Success Data .............");
+      print(data);
+      injector<MessageBloc>().add(MessageSuccess(
+        message: Message.fromJson(data),
+      ));
+    });
+
+    _socket.on('message-delivered', (data) {
+      print("Delivered Data .............");
+      print(data);
+      injector<MessageBloc>().add(MessageDelivered(
+        message: Message.fromJson(data),
+      ));
+    });
 
     _socket.on('message', (data) {
-      print(data.toString());
-
       injector<MessageBloc>().add(ReceiveMessage(
         message: Message.fromJson(data),
       ));
     });
+
+    _socket.on('message-read', (senderPhone) {
+      injector<MessageBloc>().add( MessageRead(
+        senderPhone: senderPhone
+        ));
+    });
+
+
 
     _socket.onDisconnect((_) => print('disconnect'));
     // _socket.emit('disconnected-user-data', {'user': Application.user?.toJson()});}
   }
 
   @override
-  void messageRead(String messageId, String recieverId) {
-    _socket.emit('message-read', {
-      'messageId': messageId,
-      'recieverId': recieverId,
+  void iReadMessages(String senderPhone, String recieverPhone) {
+    _socket.emit('iread-message', {
+      'senderPhone': senderPhone,
+      'recieverPhone': recieverPhone,
     });
   }
 
   @override
   void sendMessage(Message message) {
     _socket.emit('send-message', message.toJson());
+  }
+
+  @override
+  void messageDelivered(Message message) {
+    _socket.emit('message-delivered', message.toJson());
   }
 
   @override
@@ -101,5 +126,7 @@ class SocketIoImpl extends SocketIO {
     _socket.disconnect();
     _socket.dispose();
   }
+
+
 }
 

@@ -15,8 +15,8 @@ class MessagesRoomView extends StatelessWidget {
           itemCount: messagesState.messageRooms.keys.length,
           itemBuilder: (context, i) {
             final messageRoom = messagesState.messageRooms.values.toList();
-              final unReadedMessage = messagesState.unReadedMessage(messageRoom[i]!);
-            return RoomWidget(messageRoom: messageRoom[i]!, messageCount: unReadedMessage);
+              final newMessageCount = messagesState.newMessages(messageRoom[i]!);
+            return RoomWidget(messageRoom: messageRoom[i]!, newMessageCount: newMessageCount);
           },
         );
       },

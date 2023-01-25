@@ -40,6 +40,7 @@ class Message extends Equatable {
   late bool isRead;
   late bool isReceive;
   late bool isDelivered;
+  late bool isNew;
 
   Message({
     required this.id,
@@ -50,6 +51,7 @@ class Message extends Equatable {
     this.isRead = false,
     this.isDelivered = false,
     this.isReceive = false,
+    this.isNew = true,
   });
 
   Map<String, dynamic> toJson() {

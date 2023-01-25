@@ -1,6 +1,6 @@
-import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:a1_chat_app/src/modules/online-users/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
@@ -15,17 +15,7 @@ class OnlineUserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Create Room on the fly .........
-        final messageRoom = MessageRoom(
-          id: user.phoneNumber,
-          user: User(
-            id: user.id,
-            name: user.name,
-            phoneNumber: user.phoneNumber,
-            imageUrl: user.imageUrl,
-          ),
-        );
-        context.go('/chat', extra: messageRoom);
+        context.go('/chat', extra: user);
       },
       child: SizedBox(
         height: 80,
@@ -36,7 +26,7 @@ class OnlineUserWidget extends StatelessWidget {
               UserAvatar(
                 imageUrl: "${Application.domain}/uploads/${user.imageUrl}",
                 isOnline: true,
-                radius: 26,
+                radius: ScreenUtil().setSp(25),
               ),
               const SizedBox(width: 8),
               Transform.translate(
@@ -52,14 +42,6 @@ class OnlineUserWidget extends StatelessWidget {
                           .titleMedium
                           ?.copyWith(fontSize: 20),
                     ),
-                    // const SizedBox(height: 8),
-                    // Transform.translate(
-                    //   offset: const Offset(0, -5),
-                    //   child: Text(
-                    //     "Online",
-                    //     style: Theme.of(context).textTheme.bodyText2,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

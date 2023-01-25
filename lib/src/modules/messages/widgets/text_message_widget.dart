@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/utils/hellper_methods.dart';
 import '../models/message.dart';
 
 class TextMessageWidget extends StatelessWidget {
@@ -42,7 +43,8 @@ class TextMessageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage("${Application.domain}/uploads/$avatar"),
+                    backgroundImage:
+                        NetworkImage("${Application.domain}/uploads/$avatar"),
                   ),
                 ),
               const SizedBox(width: 2),
@@ -77,7 +79,7 @@ class TextMessageWidget extends StatelessWidget {
                   children: [
                     const SizedBox(height: 5),
                     Text(
-                      message?.content?? '',
+                      message?.content ?? '',
                       // textAlign: isMe ? TextAlign.left : TextAlign.right,
                       style: GoogleFonts.rubik(
                         textStyle:
@@ -89,8 +91,8 @@ class TextMessageWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     SizedBox(
-                      width: 70,
-                      height: 13,
+                      width: 74,
+                      height: 14,
                       child: Row(
                         children: [
                           MediaQuery(
@@ -98,7 +100,7 @@ class TextMessageWidget extends StatelessWidget {
                               textScaleFactor: 1,
                             ),
                             child: Text(
-                              "${DateTime.now().hour}:${DateTime.now().minute} PM ",
+                              getMessageTime(message!),
                               textAlign: TextAlign.right,
                               style: Theme.of(context)
                                   .textTheme
@@ -110,7 +112,10 @@ class TextMessageWidget extends StatelessWidget {
                             ),
                           ),
                           if (isMe) const Spacer(),
-                          if (isMe) const ReadBlueCheck()
+                          if (isMe)
+                            ReadBlueCheck(
+                              message: message!
+                            )
                         ],
                       ),
                     ),
@@ -128,42 +133,70 @@ class TextMessageWidget extends StatelessWidget {
 }
 
 class ReadBlueCheck extends StatelessWidget {
-  const ReadBlueCheck({Key? key}) : super(key: key);
+  const ReadBlueCheck({required this.message, Key? key}) : super(key: key);
+
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: const [
-        Icon(
-          Icons.check,
-          size: 14,
-          color: Colors.blue,
-        ),
-        Positioned(
-          bottom: -1,
-          right: 4,
-          child: Icon(
+    if (message.isRead) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: const [
+          Icon(
             Icons.check,
-            size: 14,
+            size: 15,
             color: Colors.blue,
           ),
-        ),
-      ],
+          Positioned(
+            bottom: -1,
+            right: 5,
+            child: Icon(
+              Icons.check,
+              size: 15,
+              color: Colors.blue,
+            ),
+          ),
+        ],
+      );
+    }
+    if (message.isDelivered) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: const [
+          Icon(
+            Icons.check,
+            size: 15,
+            color: Colors.grey,
+          ),
+          Positioned(
+            bottom: -1,
+            right: 5,
+            child: Icon(
+              Icons.check,
+              size: 15,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      );
+    }
+    if (message.isReceive) {
+      return const Icon(
+        Icons.check,
+        size: 15,
+        color: Colors.grey,
+      );
+    }
+
+    return const Icon(
+      Icons.access_time_filled,
+      size: 14,
+      color: Colors.grey,
     );
   }
 }
 
-DateTime newDate = DateTime.now();
-DateTime formatedDate = newDate.subtract(
-  Duration(
-    hours: newDate.hour,
-    minutes: newDate.minute,
-    seconds: newDate.second,
-    milliseconds: newDate.millisecond,
-    microseconds: newDate.microsecond,
-  ),
-);
 
 // if (message.messageContent.lat != null &&
 // message.messageContent.log != null)
