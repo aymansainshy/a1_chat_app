@@ -48,9 +48,9 @@ class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         BlocProvider.of<MessageBloc>(context).add(const OpenMessagesRoom(''));
-        return Future(() => true);
+        return Future(() => false);
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
