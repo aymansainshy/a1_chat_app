@@ -9,6 +9,12 @@ abstract class MessageBlocEvent extends Equatable {
 
 class GetMessagesRoom extends MessageBlocEvent {}
 
+class OpenMessagesRoom extends MessageBlocEvent {
+  final String openedRoom;
+
+  const OpenMessagesRoom(this.openedRoom);
+}
+
 class SendMessage extends MessageBlocEvent {
   // final MessageRoom? room;
   final Message? message;
