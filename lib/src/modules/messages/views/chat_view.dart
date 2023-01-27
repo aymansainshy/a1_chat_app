@@ -32,11 +32,9 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<MessageBloc>(context)
-        .add(IReadMessage(reciverPhone: widget.user!.phoneNumber!));
+    BlocProvider.of<MessageBloc>(context).add(IReadMessage(reciverPhone: widget.user!.phoneNumber!));
 
-    BlocProvider.of<MessageBloc>(context)
-        .add(OpenMessagesRoom(widget.user!.phoneNumber!));
+    BlocProvider.of<MessageBloc>(context).add(OpenMessagesRoom(widget.user!.phoneNumber!));
   }
 
   @override
@@ -62,9 +60,8 @@ class _ChatViewState extends State<ChatView> {
             // }
           },
           builder: (context, messageState) {
-            final List<Message?>? messages = messageState
-                .messageRooms[widget.user?.phoneNumber]?.messages?.reversed
-                .toList();
+            final List<Message?>? messages = messageState.messageRooms[widget.user?.phoneNumber]?.messages?.reversed.toList();
+
             return SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,15 +76,13 @@ class _ChatViewState extends State<ChatView> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              BlocProvider.of<MessageBloc>(context)
-                                  .add(const OpenMessagesRoom(''));
+                              BlocProvider.of<MessageBloc>(context).add(const OpenMessagesRoom(''));
                               context.go('/');
                             },
                             icon: const Icon(Icons.arrow_back),
                           ),
                           UserAvatar(
-                            imageUrl:
-                                "${Application.domain}/uploads/${widget.user?.imageUrl}",
+                            imageUrl: "${Application.domain}/uploads/${widget.user?.imageUrl}",
                             radius: 26,
                             isOnline: true,
                           ),
@@ -100,18 +95,14 @@ class _ChatViewState extends State<ChatView> {
                               children: [
                                 Text(
                                   "${widget.user?.name ?? widget.user?.phoneNumber}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(fontSize: 20),
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20),
                                 ),
                                 const SizedBox(height: 8),
                                 Transform.translate(
                                   offset: const Offset(0, -5),
                                   child: Text(
                                     "Online",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
+                                    style: Theme.of(context).textTheme.bodyText2,
                                   ),
                                 ),
                               ],
@@ -155,8 +146,7 @@ class _ChatViewState extends State<ChatView> {
                   ),
                   // const SizedBox(height: 5),
                   Container(
-                    padding: const EdgeInsets.only(
-                        top: 15, bottom: 10, left: 15, right: 15),
+                    padding: const EdgeInsets.only(top: 15, bottom: 10, left: 15, right: 15),
                     color: Theme.of(context).cardColor,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,8 +184,7 @@ class _ChatViewState extends State<ChatView> {
                                 filled: true,
                                 fillColor: Colors.grey.shade300,
                                 focusColor: Theme.of(context).primaryColor,
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.never,
+                                floatingLabelBehavior: FloatingLabelBehavior.never,
                               ),
                               controller: _textEditingController,
                               // validator: (value) {
@@ -233,9 +222,7 @@ class _ChatViewState extends State<ChatView> {
                             height: 45,
                             width: 45,
                             padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                shape: BoxShape.circle),
+                            decoration: BoxDecoration(color: Theme.of(context).primaryColor, shape: BoxShape.circle),
                             child: Icon(
                               Icons.arrow_forward,
                               color: Theme.of(context).cardColor,
