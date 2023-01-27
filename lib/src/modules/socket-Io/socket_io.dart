@@ -49,14 +49,10 @@ class SocketIoImpl extends SocketIO {
     });
 
     _socket.on('message-success', (data) {
-      print("Success Data .............");
-      print(data);
       injector<MessageBloc>().add(MessageSuccess(message: Message.fromJson(data)));
     });
 
     _socket.on('message-delivered', (data) {
-      print("Delivered Data .............");
-      print(data);
       injector<MessageBloc>().add(MessageDelivered(message: Message.fromJson(data)));
     });
 
