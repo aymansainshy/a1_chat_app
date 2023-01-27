@@ -18,21 +18,16 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
   Map<String, MessageRoom?> _messageRooms = {};
 
-  MessageBloc(this._socketIO, this.messageRepository): super(MessageBlocState(messageRooms: {})) {
-
+  MessageBloc(this._socketIO, this.messageRepository) : super(MessageBlocState(messageRooms: {})) {
     on<OpenMessagesRoom>((event, emit) {
       openedRoom = event.openedRoom;
     });
-
-
 
     on<GetMessagesRoom>((event, emit) async {
       final loadedMessageRooms = await messageRepository.getMessages();
       _messageRooms = loadedMessageRooms!;
       emit(state.copyWith(messageRooms: _messageRooms));
     });
-
-
 
     on<SendMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
@@ -56,8 +51,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       }
     });
 
-
-
     on<MessageSuccess>((event, emit) {
       final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
       final message = messages?.firstWhere((message) => message?.id == event.message.id);
@@ -70,15 +63,12 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
-
-
     //Receive new message
     on<ReceiveMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
-
         if (openedRoom == event.message.sender?.phoneNumber) {
           event.message.isNew = false;
-          _socketIO.iReadMessages(Application.user!.phoneNumber!,event.message.sender!.phoneNumber!);
+          _socketIO.iReadMessages(Application.user!.phoneNumber!, event.message.sender!.phoneNumber!);
         }
 
         _messageRooms[event.message.sender?.phoneNumber]?.messages?.add(event.message);
@@ -98,11 +88,9 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       }
     });
 
-
-
     // Message Delivered to user
     on<MessageDelivered>((event, emit) {
-      final messages =_messageRooms[event.message.receiver?.phoneNumber]?.messages;
+      final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
       final message = messages?.firstWhere((message) => message?.id == event.message.id);
       final messageIndex = messages?.indexOf(message);
       message?.isDelivered = true;
@@ -112,8 +100,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
       emit(state.copyWith(messageRooms: _messageRooms));
     });
-
-
 
     on<IReadMessage>((event, emit) {
       _socketIO.iReadMessages(Application.user!.phoneNumber!, event.reciverPhone);
@@ -129,8 +115,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       _messageRooms[event.reciverPhone]?.messages = updatedMessages;
       emit(state.copyWith(messageRooms: _messageRooms));
     });
-
-
 
     on<MessageRead>((event, emit) {
       final messages = _messageRooms[event.senderPhone]?.messages;
