@@ -18,9 +18,9 @@ abstract class SocketIO {
 
   void iReadMessages(String senderPhone, String recieverPhone);
 
-  void typing(String senderId, String recieverId);
+  void typing(String senderPhone, String recieverPhone);
 
-  void stopTyping(String senderId, String recieverId);
+  void stopTyping(String senderPhone, String recieverPhone);
 
   void userDataChanged(User user);
 
