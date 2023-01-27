@@ -51,35 +51,24 @@ class SocketIoImpl extends SocketIO {
     _socket.on('message-success', (data) {
       print("Success Data .............");
       print(data);
-      injector<MessageBloc>().add(MessageSuccess(
-        message: Message.fromJson(data),
-      ));
+      injector<MessageBloc>().add(MessageSuccess(message: Message.fromJson(data)));
     });
 
     _socket.on('message-delivered', (data) {
       print("Delivered Data .............");
       print(data);
-      injector<MessageBloc>().add(MessageDelivered(
-        message: Message.fromJson(data),
-      ));
+      injector<MessageBloc>().add(MessageDelivered(message: Message.fromJson(data)));
     });
 
     _socket.on('message', (data) {
-      injector<MessageBloc>().add(ReceiveMessage(
-        message: Message.fromJson(data),
-      ));
+      injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJson(data)));
     });
 
     _socket.on('message-read', (senderPhone) {
-      injector<MessageBloc>().add( MessageRead(
-        senderPhone: senderPhone
-        ));
+      injector<MessageBloc>().add(MessageRead(senderPhone: senderPhone));
     });
 
-
-
     _socket.onDisconnect((_) => print('disconnect'));
-    // _socket.emit('disconnected-user-data', {'user': Application.user?.toJson()});}
   }
 
   @override
@@ -126,7 +115,4 @@ class SocketIoImpl extends SocketIO {
     _socket.disconnect();
     _socket.dispose();
   }
-
-
 }
-
