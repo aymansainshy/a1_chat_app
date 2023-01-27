@@ -59,26 +59,6 @@ class MessageRepositoryImpl extends MessageRepository {
         ),
       ],
     ),
-    // '+249911111111': MessageRoom(
-    //   id: '2',
-    //   name: 'Mohammed',
-    //   phoneNumber: '+249911111111',
-    //   imageUrl: 'https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=1200&h=900&cc=1',
-    //   messages: [
-    //     Message(
-    //       id: '2',
-    //       sender: '+249911111111',
-    //       receiver: '+249924081893',
-    //       content: 'Hello',
-    //     ),
-    //     Message(
-    //       id: '5',
-    //       sender: '+249924081893',
-    //       receiver: '+249911111111',
-    //       content: 'Hi',
-    //     ),
-    //   ],
-    // ),
   };
 
   @override

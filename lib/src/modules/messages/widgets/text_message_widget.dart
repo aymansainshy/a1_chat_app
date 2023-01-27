@@ -24,16 +24,12 @@ class TextMessageWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Column(
-        mainAxisAlignment:
-            isMe ? MainAxisAlignment.start : MainAxisAlignment.end,
-        crossAxisAlignment:
-            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        mainAxisAlignment: isMe ? MainAxisAlignment.start : MainAxisAlignment.end,
+        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment:
-                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-            crossAxisAlignment:
-                isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            crossAxisAlignment: isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
             children: [
               if (!isMe)
                 Container(
@@ -43,8 +39,7 @@ class TextMessageWidget extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage("${Application.domain}/uploads/$avatar"),
+                    backgroundImage: NetworkImage("${Application.domain}/uploads/$avatar"),
                   ),
                 ),
               const SizedBox(width: 2),
@@ -59,34 +54,26 @@ class TextMessageWidget extends StatelessWidget {
                   maxWidth: mediaQuery.width / 1.3,
                 ),
                 decoration: BoxDecoration(
-                  color: isMe
-                      ? Theme.of(context).backgroundColor
-                      : Theme.of(context).primaryColor,
+                  color: isMe ? Theme.of(context).backgroundColor : Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(18),
                     topRight: const Radius.circular(18),
-                    bottomLeft: isMe
-                        ? const Radius.circular(18)
-                        : const Radius.circular(0),
-                    bottomRight: isMe
-                        ? const Radius.circular(0)
-                        : const Radius.circular(18),
+                    bottomLeft: isMe ? const Radius.circular(18) : const Radius.circular(0),
+                    bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(18),
                   ),
                 ),
                 child: Column(
-                  crossAxisAlignment:
-                      isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                  crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 5),
                     Text(
                       message?.content ?? '',
                       // textAlign: isMe ? TextAlign.left : TextAlign.right,
                       style: GoogleFonts.rubik(
-                        textStyle:
-                            Theme.of(context).textTheme.caption?.copyWith(
-                                  color: isMe ? Colors.black : Colors.white,
-                                  fontSize: ScreenUtil().setSp(15),
-                                ),
+                        textStyle: Theme.of(context).textTheme.caption?.copyWith(
+                              color: isMe ? Colors.black : Colors.white,
+                              fontSize: ScreenUtil().setSp(15),
+                            ),
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -102,20 +89,14 @@ class TextMessageWidget extends StatelessWidget {
                             child: Text(
                               getMessageTime(message!),
                               textAlign: TextAlign.right,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2
-                                  ?.copyWith(
+                              style: Theme.of(context).textTheme.bodyText2?.copyWith(
                                     fontSize: 10,
                                     color: isMe ? Colors.grey : Colors.grey,
                                   ),
                             ),
                           ),
                           if (isMe) const Spacer(),
-                          if (isMe)
-                            ReadBlueCheck(
-                              message: message!
-                            )
+                          if (isMe) ReadBlueCheck(message: message!)
                         ],
                       ),
                     ),
@@ -196,7 +177,6 @@ class ReadBlueCheck extends StatelessWidget {
     );
   }
 }
-
 
 // if (message.messageContent.lat != null &&
 // message.messageContent.log != null)
