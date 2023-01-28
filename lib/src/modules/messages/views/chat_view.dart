@@ -39,7 +39,8 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
-    if(widget.chatData.messageToRead != null ) {
+
+    if (widget.chatData.messageToRead != null) {
       BlocProvider.of<MessageBloc>(context).add(IReadMessage(message: widget.chatData.messageToRead!));
     }
 
@@ -224,9 +225,7 @@ class _ChatViewState extends State<ChatView> {
 
                             _textEditingController.clear();
 
-                            BlocProvider.of<MessageBloc>(context).add(
-                              SendMessage(message: newMessage),
-                            );
+                            BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage));
                           },
                           child: Container(
                             height: 45,
