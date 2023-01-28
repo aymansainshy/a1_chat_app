@@ -16,7 +16,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
   final SocketIO _socketIO;
   late String? openedRoom = '';
 
-  Map<String, MessageRoom?> _messageRooms = {};
+  final Map<String, MessageRoom?> _messageRooms = {};
 
   MessageBloc(this._socketIO, this.messageRepository) : super(MessageBlocState(messageRooms: {})) {
     on<OpenMessagesRoom>((event, emit) {
@@ -25,8 +25,29 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
     on<GetMessagesRoom>((event, emit) async {
       final loadedMessageRooms = await messageRepository.getMessages();
-      _messageRooms = loadedMessageRooms!;
-      emit(state.copyWith(messageRooms: _messageRooms));
+
+      loadedMessageRooms?.forEach((message) {
+        final isMe = message?.sender == Application.user;
+
+        final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
+
+        if (_messageRooms.containsKey(roomKey)) {
+          _messageRooms[roomKey]?.messages?.add(message);
+
+          emit(state.copyWith(messageRooms: _messageRooms));
+        } else {
+          _messageRooms.putIfAbsent(roomKey, () {
+            final createdRoom = MessageRoom(
+              id: message.receiver?.id,
+              user: isMe ? message.receiver : message.sender,
+              messages: [message],
+            );
+            return createdRoom;
+          });
+
+          emit(state.copyWith(messageRooms: _messageRooms));
+        }
+      });
     });
 
     on<SendMessage>((event, emit) {
@@ -36,6 +57,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _socketIO.sendMessage(event.message!);
 
         emit(state.copyWith(messageRooms: _messageRooms));
+        messageRepository.saveMessage(event.message!);
       } else {
         _messageRooms.putIfAbsent(event.message!.receiver!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -48,6 +70,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
         _socketIO.sendMessage(event.message!);
         emit(state.copyWith(messageRooms: _messageRooms));
+        messageRepository.saveMessage(event.message!);
       }
     });
 
@@ -61,6 +84,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       messages?.insert(messageIndex!, message);
       _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
       emit(state.copyWith(messageRooms: _messageRooms));
+      messageRepository.saveMessage(message!);
     });
 
     //Receive new message
@@ -69,11 +93,13 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         if (openedRoom == event.message.sender?.phoneNumber) {
           event.message.isNew = false;
           _socketIO.iReadMessages(Application.user!.phoneNumber!, event.message.sender!.phoneNumber!);
+          messageRepository.saveMessage(event.message);
         }
 
         _messageRooms[event.message.sender?.phoneNumber]?.messages?.add(event.message);
         _socketIO.messageDelivered(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
+        messageRepository.saveMessage(event.message);
       } else {
         _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -85,6 +111,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         });
         _socketIO.messageDelivered(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
+        messageRepository.saveMessage(event.message);
       }
     });
 
@@ -99,6 +126,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       messages?.insert(messageIndex!, message);
       _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
       emit(state.copyWith(messageRooms: _messageRooms));
+      messageRepository.saveMessage(message!);
     });
 
     on<IReadMessage>((event, emit) {
@@ -110,6 +138,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       messages?.forEach((message) {
         message?.isNew = false;
         updatedMessages.add(message);
+        messageRepository.saveMessage(message!);
       });
 
       _messageRooms[event.reciverPhone]?.messages = updatedMessages;
@@ -123,6 +152,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       messages?.forEach((message) {
         message?.isRead = true;
         updatedMessages.add(message);
+        messageRepository.saveMessage(message!);
       });
 
       _messageRooms[event.senderPhone]?.messages = updatedMessages;

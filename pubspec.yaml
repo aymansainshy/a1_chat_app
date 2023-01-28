@@ -50,6 +50,7 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   socket_io_client: ^2.0.0
   hive: ^2.2.3
+  hive_flutter: ^1.1.0
   google_fonts: ^3.0.1
   hydrated_bloc: ^9.0.0
   path_provider: ^2.0.11

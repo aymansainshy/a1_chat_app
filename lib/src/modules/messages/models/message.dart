@@ -57,6 +57,10 @@ class Message extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'isRead': isRead,
+      'isReceive' : isReceive,
+      'isDelivered' : isDelivered,
+      'isNew': isNew,
       'sender': {
         'id': sender?.id,
         'name': sender?.name,
@@ -78,6 +82,10 @@ class Message extends Equatable {
     return Message(
       id: json['id'],
       content: json['content'],
+      isRead: json['isRead'],
+      isReceive: json['isReceive'],
+      isNew: json['isNew'],
+      isDelivered: json['isDelivered'],
       createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
