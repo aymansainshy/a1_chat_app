@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
 import 'package:a1_chat_app/src/modules/online-users/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +16,7 @@ class OnlineUserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.go('/chat', extra: user);
+        context.go('/chat', extra: ChatData(user: user));
       },
       child: SizedBox(
         height: 80,

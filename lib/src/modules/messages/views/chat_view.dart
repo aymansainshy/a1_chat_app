@@ -39,7 +39,9 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<MessageBloc>(context).add(IReadMessage(message: widget.chatData.messageToRead!));
+    if(widget.chatData.messageToRead != null ) {
+      BlocProvider.of<MessageBloc>(context).add(IReadMessage(message: widget.chatData.messageToRead!));
+    }
 
     BlocProvider.of<MessageBloc>(context).add(OpenMessagesRoom(widget.chatData.user.phoneNumber!));
   }

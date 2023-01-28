@@ -11,11 +11,10 @@ abstract class Storage {
 
 class MessageStorageImpl extends Storage {
   @override
-  Future<void> saveMessage(Message message) async {
+  Future<void> saveMessage(Message? message) async {
     var messageBox = await Hive.openBox('messages');
 
-    messageBox.delete(message.id);
-    messageBox.put(message.id, message.toJson());
+    messageBox.put(message?.id, message?.toJson());
 
     print('Saved messages ..... ${messageBox.values.toList()}');
     // messageBox.clear();

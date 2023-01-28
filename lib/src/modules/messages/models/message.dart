@@ -58,8 +58,8 @@ class Message extends Equatable {
     return {
       'id': id,
       'isRead': isRead,
-      'isReceive' : isReceive,
-      'isDelivered' : isDelivered,
+      'isReceive': isReceive,
+      'isDelivered': isDelivered,
       'isNew': isNew,
       'sender': {
         'id': sender?.id,
@@ -101,6 +101,7 @@ class Message extends Equatable {
         isReceive,
         isDelivered,
         isRead,
+        isNew,
       ];
 }
 

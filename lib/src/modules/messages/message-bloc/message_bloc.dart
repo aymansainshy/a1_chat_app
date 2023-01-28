@@ -27,12 +27,14 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       final loadedMessageRooms = await messageRepository.getMessages();
 
       loadedMessageRooms?.forEach((message) {
+        final indexOf = loadedMessageRooms.indexOf(message);
+        print(indexOf);
         final isMe = message?.sender == Application.user;
 
         final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
 
         if (_messageRooms.containsKey(roomKey)) {
-          _messageRooms[roomKey]?.messages?.add(message);
+          _messageRooms[roomKey]?.messages?.insert(indexOf, message);
 
           emit(state.copyWith(messageRooms: _messageRooms));
         } else {
@@ -82,9 +84,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
       messages?.removeAt(messageIndex!);
       messages?.insert(messageIndex!, message);
+
       _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
-      emit(state.copyWith(messageRooms: _messageRooms));
       messageRepository.saveMessage(message!);
+      emit(state.copyWith(messageRooms: _messageRooms));
     });
 
     //Receive new message
@@ -98,8 +101,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
         _messageRooms[event.message.sender?.phoneNumber]?.messages?.add(event.message);
         _socketIO.messageDelivered(event.message);
-        emit(state.copyWith(messageRooms: _messageRooms));
         messageRepository.saveMessage(event.message);
+        emit(state.copyWith(messageRooms: _messageRooms));
       } else {
         _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -110,8 +113,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           return createdRoom;
         });
         _socketIO.messageDelivered(event.message);
-        emit(state.copyWith(messageRooms: _messageRooms));
         messageRepository.saveMessage(event.message);
+        emit(state.copyWith(messageRooms: _messageRooms));
       }
     });
 
@@ -125,39 +128,30 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       messages?.removeAt(messageIndex!);
       messages?.insert(messageIndex!, message);
       _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
-      emit(state.copyWith(messageRooms: _messageRooms));
       messageRepository.saveMessage(message!);
+      emit(state.copyWith(messageRooms: _messageRooms));
     });
 
     on<IReadMessage>((event, emit) {
-      if (event.message.sender == Application.user) {
-        return;
-      }
+      // if (event.message.sender == Application.user) {
+      //   return;
+      // }
       _socketIO.iReadMessages(event.message);
 
-      final messages = _messageRooms[event.message.sender?.phoneNumber]?.messages;
-      final message = messages?.firstWhere((message) => message?.id == event.message.id);
-      final messageIndex = messages?.indexOf(message);
-      message?.isNew = false;
+      _messageRooms[event.message.sender?.phoneNumber]?.messages?.forEach((message) {
+        message?.isNew = false;
+        messageRepository.saveMessage(message!);
+      });
 
-      messages?.removeAt(messageIndex!);
-      messages?.insert(messageIndex!, message);
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
       emit(state.copyWith(messageRooms: _messageRooms));
-      messageRepository.saveMessage(message!);
     });
 
     on<MessageRead>((event, emit) {
-      final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
-      final message = messages?.firstWhere((message) => message?.id == event.message.id);
-      final messageIndex = messages?.indexOf(message);
-      message?.isRead = true;
-
-      messages?.removeAt(messageIndex!);
-      messages?.insert(messageIndex!, message);
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages?.forEach((message) {
+        message?.isRead = true;
+        messageRepository.saveMessage(message!);
+      });
       emit(state.copyWith(messageRooms: _messageRooms));
-      messageRepository.saveMessage(message!);
     });
   }
 }
