@@ -1,3 +1,4 @@
+import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
 import 'package:a1_chat_app/src/modules/messages/widgets/text_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +32,7 @@ class RoomWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.go('/chat', extra: messageRoom.user);
+        context.go('/chat', extra: ChatData(user: messageRoom.user!, messageToRead: messageRoom.messages!.last));
       },
       child: SizedBox(
         height: 80,

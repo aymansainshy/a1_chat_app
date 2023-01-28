@@ -92,7 +92,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
         if (openedRoom == event.message.sender?.phoneNumber) {
           event.message.isNew = false;
-          _socketIO.iReadMessages(Application.user!.phoneNumber!, event.message.sender!.phoneNumber!);
+          _socketIO.iReadMessages(event.message);
           messageRepository.saveMessage(event.message);
         }
 
@@ -130,33 +130,34 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<IReadMessage>((event, emit) {
-      _socketIO.iReadMessages(Application.user!.phoneNumber!, event.reciverPhone);
+      if (event.message.sender == Application.user) {
+        return;
+      }
+      _socketIO.iReadMessages(event.message);
 
-      final messages = _messageRooms[event.reciverPhone]?.messages;
-      final List<Message?> updatedMessages = [];
+      final messages = _messageRooms[event.message.sender?.phoneNumber]?.messages;
+      final message = messages?.firstWhere((message) => message?.id == event.message.id);
+      final messageIndex = messages?.indexOf(message);
+      message?.isNew = false;
 
-      messages?.forEach((message) {
-        message?.isNew = false;
-        updatedMessages.add(message);
-        messageRepository.saveMessage(message!);
-      });
-
-      _messageRooms[event.reciverPhone]?.messages = updatedMessages;
+      messages?.removeAt(messageIndex!);
+      messages?.insert(messageIndex!, message);
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
       emit(state.copyWith(messageRooms: _messageRooms));
+      messageRepository.saveMessage(message!);
     });
 
     on<MessageRead>((event, emit) {
-      final messages = _messageRooms[event.senderPhone]?.messages;
-      final List<Message?> updatedMessages = [];
+      final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
+      final message = messages?.firstWhere((message) => message?.id == event.message.id);
+      final messageIndex = messages?.indexOf(message);
+      message?.isRead = true;
 
-      messages?.forEach((message) {
-        message?.isRead = true;
-        updatedMessages.add(message);
-        messageRepository.saveMessage(message!);
-      });
-
-      _messageRooms[event.senderPhone]?.messages = updatedMessages;
+      messages?.removeAt(messageIndex!);
+      messages?.insert(messageIndex!, message);
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
       emit(state.copyWith(messageRooms: _messageRooms));
+      messageRepository.saveMessage(message!);
     });
   }
 }
