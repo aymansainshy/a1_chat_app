@@ -18,9 +18,9 @@ abstract class SocketIO {
 
   void iReadMessages(String senderPhone, String recieverPhone);
 
-  void typing(String senderId, String recieverId);
+  void typing(String senderPhone, String recieverPhone);
 
-  void stopTyping(String senderId, String recieverId);
+  void stopTyping(String senderPhone, String recieverPhone);
 
   void userDataChanged(User user);
 
@@ -49,37 +49,22 @@ class SocketIoImpl extends SocketIO {
     });
 
     _socket.on('message-success', (data) {
-      print("Success Data .............");
-      print(data);
-      injector<MessageBloc>().add(MessageSuccess(
-        message: Message.fromJson(data),
-      ));
+      injector<MessageBloc>().add(MessageSuccess(message: Message.fromJson(data)));
     });
 
     _socket.on('message-delivered', (data) {
-      print("Delivered Data .............");
-      print(data);
-      injector<MessageBloc>().add(MessageDelivered(
-        message: Message.fromJson(data),
-      ));
+      injector<MessageBloc>().add(MessageDelivered(message: Message.fromJson(data)));
     });
 
-    _socket.on('message', (data) {
-      injector<MessageBloc>().add(ReceiveMessage(
-        message: Message.fromJson(data),
-      ));
+    _socket.on('send-text-message', (data) {
+      injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJson(data)));
     });
 
     _socket.on('message-read', (senderPhone) {
-      injector<MessageBloc>().add( MessageRead(
-        senderPhone: senderPhone
-        ));
+      injector<MessageBloc>().add(MessageRead(senderPhone: senderPhone));
     });
 
-
-
     _socket.onDisconnect((_) => print('disconnect'));
-    // _socket.emit('disconnected-user-data', {'user': Application.user?.toJson()});}
   }
 
   @override
@@ -92,7 +77,7 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void sendMessage(Message message) {
-    _socket.emit('send-message', message.toJson());
+    _socket.emit('send-text-message', message.toJson());
   }
 
   @override
@@ -101,32 +86,30 @@ class SocketIoImpl extends SocketIO {
   }
 
   @override
-  void typing(String senderId, String recieverId) {
+  void typing(String senderPhone, String recieverPhone) {
     _socket.emit('typing', {
-      'senderId': senderId,
-      'recieverId': recieverId,
+      'senderPhone': senderPhone,
+      'recieverPhone': recieverPhone,
     });
   }
 
   @override
-  void stopTyping(String senderId, String recieverId) {
+  void stopTyping(String senderPhone, String recieverPhone) {
     _socket.emit('stop-typing', {
-      'senderId': senderId,
-      'recieverId': recieverId,
+      'senderPhone': senderPhone,
+      'recieverPhone': recieverPhone,
     });
   }
 
   @override
   void userDataChanged(User user) {
-    _socket.emit('user-change-data', {'user': user});
+    _socket.emit('user-data-change', {'user': user});
   }
 
   @override
   void dispose() {
+    _socket.emit('disconnected-user', {'user': Application.user?.toJson()});
     _socket.disconnect();
     _socket.dispose();
   }
-
-
 }
-

@@ -33,9 +33,8 @@ class AppRouter {
                 key: state.pageKey,
                 restorationId: state.pageKey.value,
                 child: const HomeView(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) =>
-                        FadeTransition(opacity: animation, child: child),
+                transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+                    FadeTransition(opacity: animation, child: child),
               ),
           routes: [
             GoRoute(
@@ -47,18 +46,19 @@ class AppRouter {
             ),
           ]),
       GoRoute(
-          path: '/login',
-          name: RouteName.login,
-          builder: (context, state) => const LoginView(),
-          routes: [
-            GoRoute(
-              path: 'otp',
-              name: RouteName.otp,
-              builder: (context, state) => PinCodeVerificationView(
-                phoneNumber: state.extra! as String,
-              ),
+        path: '/login',
+        name: RouteName.login,
+        builder: (context, state) => const LoginView(),
+        routes: [
+          GoRoute(
+            path: 'otp',
+            name: RouteName.otp,
+            builder: (context, state) => PinCodeVerificationView(
+              phoneNumber: state.extra! as String,
             ),
-          ]),
+          ),
+        ],
+      ),
     ],
     redirect: ((BuildContext context, GoRouterState state) {
       bool isTryLogin = authCubit.state.status == AuthStatus.isTryLogin;
@@ -99,9 +99,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
   ///
   GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners();
-    _subscription = stream.asBroadcastStream().listen(
-          (dynamic _) => notifyListeners(),
-        );
+    _subscription = stream.asBroadcastStream().listen((dynamic _) => notifyListeners());
   }
 
   late final StreamSubscription<dynamic> _subscription;
@@ -112,6 +110,10 @@ class GoRouterRefreshStream extends ChangeNotifier {
     super.dispose();
   }
 }
+
+
+
+
 
 // if the user is not logged in, they need to login
 // final loggedIn = loginInfo.loggedIn;
