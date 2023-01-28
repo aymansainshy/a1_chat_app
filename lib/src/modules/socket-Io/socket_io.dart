@@ -86,28 +86,29 @@ class SocketIoImpl extends SocketIO {
   }
 
   @override
-  void typing(String senderId, String recieverId) {
+  void typing(String senderPhone, String recieverPhone) {
     _socket.emit('typing', {
-      'senderId': senderId,
-      'recieverId': recieverId,
+      'senderPhone': senderPhone,
+      'recieverPhone': recieverPhone,
     });
   }
 
   @override
-  void stopTyping(String senderId, String recieverId) {
+  void stopTyping(String senderPhone, String recieverPhone) {
     _socket.emit('stop-typing', {
-      'senderId': senderId,
-      'recieverId': recieverId,
+      'senderPhone': senderPhone,
+      'recieverPhone': recieverPhone,
     });
   }
 
   @override
   void userDataChanged(User user) {
-    _socket.emit('user-change-data', {'user': user});
+    _socket.emit('user-data-change', {'user': user});
   }
 
   @override
   void dispose() {
+    _socket.emit('disconnected-user', {'user': Application.user?.toJson()});
     _socket.disconnect();
     _socket.dispose();
   }
