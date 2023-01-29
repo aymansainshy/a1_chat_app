@@ -16,7 +16,7 @@ abstract class SocketIO {
 
   void messageDelivered(Message message);
 
-  void iReadMessages(String senderPhone, String recieverPhone);
+  void iReadMessages(Message message);
 
   void typing(String senderPhone, String recieverPhone);
 
@@ -44,35 +44,32 @@ class SocketIoImpl extends SocketIO {
       return _socket.emit('user-data', {'user': Application.user?.toJson()});
     });
 
-    _socket.on('online-user', (data) {
-      injector<OnlineUsersBloc>().add(NewUser(User.fromJson(data)));
+    _socket.on('online-user', (user) {
+      injector<OnlineUsersBloc>().add(NewUser(User.fromJson(user)));
     });
 
-    _socket.on('message-success', (data) {
-      injector<MessageBloc>().add(MessageSuccess(message: Message.fromJson(data)));
+    _socket.on('message-success', (message) {
+      injector<MessageBloc>().add(MessageSuccess(message: Message.fromJson(message)));
     });
 
-    _socket.on('message-delivered', (data) {
-      injector<MessageBloc>().add(MessageDelivered(message: Message.fromJson(data)));
+    _socket.on('message-delivered', (message) {
+      injector<MessageBloc>().add(MessageDelivered(message: Message.fromJson(message)));
     });
 
-    _socket.on('send-text-message', (data) {
-      injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJson(data)));
+    _socket.on('send-text-message', (textMessage) {
+      injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJson(textMessage)));
     });
 
-    _socket.on('message-read', (senderPhone) {
-      injector<MessageBloc>().add(MessageRead(senderPhone: senderPhone));
+    _socket.on('message-read', (message) {
+      injector<MessageBloc>().add(MessageRead(message: Message.fromJson(message)));
     });
 
     _socket.onDisconnect((_) => print('disconnect'));
   }
 
   @override
-  void iReadMessages(String senderPhone, String recieverPhone) {
-    _socket.emit('iread-message', {
-      'senderPhone': senderPhone,
-      'recieverPhone': recieverPhone,
-    });
+  void iReadMessages(Message message) {
+    _socket.emit('iread-message', message.toJson());
   }
 
   @override

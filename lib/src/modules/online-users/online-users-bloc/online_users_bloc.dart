@@ -15,11 +15,14 @@ class OnlineUsersBloc extends Bloc<OnlineUsersEvent, OnlineUsersState> {
   final OnlineUserRepository onlineUserRepository;
   final List<User>? onlineUsers = [];
 
-  OnlineUsersBloc(this.onlineUserRepository)
-      : super(const OnlineUsersState(users: [])) {
+  OnlineUsersBloc(this.onlineUserRepository) : super(const OnlineUsersState(users: [])) {
     on<GetOnlineUser>((event, emit) async {
+
       final onlineUsers = await onlineUserRepository.getOnlineUsers();
-      if (onlineUsers!.contains(Application.user)) {
+      if (onlineUsers == null) {
+        return;
+      }
+      if (onlineUsers.contains(Application.user)) {
         onlineUsers.remove(Application.user);
       }
       emit(state.copyWith(users: onlineUsers));

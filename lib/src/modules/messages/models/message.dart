@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../../online-users/models/user_model.dart';
 
@@ -57,6 +58,10 @@ class Message extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'isRead': isRead,
+      'isReceive': isReceive,
+      'isDelivered': isDelivered,
+      'isNew': isNew,
       'sender': {
         'id': sender?.id,
         'name': sender?.name,
@@ -78,6 +83,10 @@ class Message extends Equatable {
     return Message(
       id: json['id'],
       content: json['content'],
+      isRead: json['isRead'],
+      isReceive: json['isReceive'],
+      isNew: json['isNew'],
+      isDelivered: json['isDelivered'],
       createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
@@ -93,6 +102,7 @@ class Message extends Equatable {
         isReceive,
         isDelivered,
         isRead,
+        isNew,
       ];
 }
 

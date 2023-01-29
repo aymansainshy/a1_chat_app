@@ -9,6 +9,7 @@ import 'package:a1_chat_app/src/modules/home/views/home_view.dart';
 
 import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../modules/auth/views/confirm_otp.dart';
+import '../modules/messages/models/message.dart';
 import '../modules/online-users/models/user_model.dart';
 
 class RouteName {
@@ -41,7 +42,7 @@ class AppRouter {
               path: 'chat',
               name: RouteName.chat,
               builder: (context, state) {
-                return ChatView(user: state.extra! as User);
+                return ChatView(chatData: state.extra! as ChatData);
               },
             ),
           ]),

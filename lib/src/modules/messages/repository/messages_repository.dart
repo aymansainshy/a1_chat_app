@@ -4,9 +4,9 @@ import '../../../modules/storage/storage.dart';
 import '../../online-users/models/user_model.dart';
 
 abstract class MessageRepository {
-  Future<Map<String, MessageRoom?>?> getMessages();
+  Future<List<Message?>?> getMessages();
 
-  Future<void> saveMessage(MessageRoom messageRoom);
+  Future<void> saveMessage(Message message);
 }
 
 class MessageRepositoryImpl extends MessageRepository {
@@ -62,12 +62,13 @@ class MessageRepositoryImpl extends MessageRepository {
   };
 
   @override
-  Future<Map<String, MessageRoom?>?> getMessages() async {
-    return messagesWithRooms;
+  Future<List<Message?>?> getMessages() async {
+    final messages = await messageStorage.getMessages();
+    return messages;
   }
 
   @override
-  Future<void> saveMessage(MessageRoom messageRoom) async {
-    messageStorage.saveMessage(messageRoom);
+  Future<void> saveMessage(Message message) async {
+    messageStorage.saveMessage(message);
   }
 }

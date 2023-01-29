@@ -13,7 +13,6 @@ class OnlineUserRepositoryImpl extends OnlineUserRepository {
     try {
       final response = await Dio().get("${Application.domain}/online-users");
       final loadedData = response.data['data'] as List<dynamic>;
-      print(loadedData);
       final List<User> users =  loadedData.map((user) => User.fromJson(user)).toList();
       return users;
     } catch (e) {

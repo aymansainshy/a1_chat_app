@@ -10,13 +10,20 @@ import '../../home/widgets/user_avatar.dart';
 import '../../online-users/models/user_model.dart';
 import '../widgets/text_message_widget.dart';
 
+class ChatData {
+  final User user;
+  final Message? messageToRead;
+
+  ChatData({required this.user, this.messageToRead});
+}
+
 class ChatView extends StatefulWidget {
   const ChatView({
     Key? key,
-    required this.user,
+    required this.chatData,
   }) : super(key: key);
 
-  final User? user;
+  final ChatData chatData;
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -32,9 +39,12 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<MessageBloc>(context).add(IReadMessage(reciverPhone: widget.user!.phoneNumber!));
 
-    BlocProvider.of<MessageBloc>(context).add(OpenMessagesRoom(widget.user!.phoneNumber!));
+    if (widget.chatData.messageToRead != null) {
+      BlocProvider.of<MessageBloc>(context).add(IReadMessage(message: widget.chatData.messageToRead!));
+    }
+
+    BlocProvider.of<MessageBloc>(context).add(OpenMessagesRoom(widget.chatData.user.phoneNumber!));
   }
 
   @override
@@ -60,8 +70,9 @@ class _ChatViewState extends State<ChatView> {
             // }
           },
           builder: (context, messageState) {
-            final List<Message?>? messages = messageState.messageRooms[widget.user?.phoneNumber]?.messages?.reversed.toList();
-
+            final List<Message?>? messages =
+                messageState.messageRooms[widget.chatData.user.phoneNumber]?.messages?.reversed.toList();
+            final user = widget.chatData.user;
             return SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +93,7 @@ class _ChatViewState extends State<ChatView> {
                             icon: const Icon(Icons.arrow_back),
                           ),
                           UserAvatar(
-                            imageUrl: "${Application.domain}/uploads/${widget.user?.imageUrl}",
+                            imageUrl: "${Application.domain}/uploads/${user.imageUrl}",
                             radius: 26,
                             isOnline: true,
                           ),
@@ -94,7 +105,7 @@ class _ChatViewState extends State<ChatView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${widget.user?.name ?? widget.user?.phoneNumber}",
+                                  "${user.name ?? user.phoneNumber}",
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20),
                                 ),
                                 const SizedBox(height: 8),
@@ -138,7 +149,7 @@ class _ChatViewState extends State<ChatView> {
                                 return TextMessageWidget(
                                   isMe: isMe,
                                   message: messages?[i],
-                                  avatar: widget.user?.imageUrl,
+                                  avatar: user.imageUrl,
                                 );
                               },
                             ),
@@ -207,16 +218,14 @@ class _ChatViewState extends State<ChatView> {
                             var newMessage = Message(
                               id: DateTime.now().toIso8601String(),
                               sender: Application.user,
-                              receiver: widget.user,
+                              receiver: user,
                               content: messageText,
                               createdAt: DateTime.now(),
                             );
 
                             _textEditingController.clear();
 
-                            BlocProvider.of<MessageBloc>(context).add(
-                              SendMessage(message: newMessage),
-                            );
+                            BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage));
                           },
                           child: Container(
                             height: 45,
