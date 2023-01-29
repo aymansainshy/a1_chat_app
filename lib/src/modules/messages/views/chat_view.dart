@@ -155,25 +155,28 @@ class _ChatViewState extends State<ChatView> {
                               reverse: true,
                               elements: messages!,
                               groupBy: (Message message) => DateTime(
-                                message.createdAt.year,
-                                message.createdAt.month,
-                                message.createdAt.day,
+                                -message.createdAt.year,
+                                -message.createdAt.month,
+                                -message.createdAt.day,
                               ),
                               groupHeaderBuilder: (message) => SizedBox(
                                 height: 35,
                                 child: Align(
                                   child: Container(
                                     width: 100,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).backgroundColor,
-                                      borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black54, //Theme.of(context).backgroundColor,
+                                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
                                         DateFormat.yMMMd().format(message.createdAt),
                                         textAlign: TextAlign.center,
-                                        style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 12),
+                                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                              fontSize: 12,
+                                              color: Colors.white,
+                                            ),
                                       ),
                                     ),
                                   ),
