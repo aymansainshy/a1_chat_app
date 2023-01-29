@@ -40,11 +40,11 @@ class SocketIoImpl extends SocketIO {
     );
 
     _socket.onConnect((_) {
-      return _socket.emit('user-data', {'user': Application.user?.toJson()});
+      return _socket.emit('user-connected', {'user': Application.user?.toJson()});
     });
 
-    _socket.on('online-user', (user) {
-      injector<OnlineUsersBloc>().add(NewUser(User.fromJson(user)));
+    _socket.on('user-connected', (connectedUser) {
+      injector<OnlineUsersBloc>().add(NewUser(User.fromJson(connectedUser)));
     });
 
     _socket.on('message-success', (message) {
@@ -57,11 +57,15 @@ class SocketIoImpl extends SocketIO {
 
     _socket.on('send-text-message', (textMessage) {
       injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJson(textMessage)));
-      final message = Message.fromJson(textMessage);
     });
 
     _socket.on('message-read', (message) {
       injector<MessageBloc>().add(MessageRead(message: Message.fromJson(message)));
+    });
+
+    _socket.on('disconnected-user', (disConnectedUser) {
+      injector<OnlineUsersBloc>().add(UserDisconnected(User.fromJson(disConnectedUser)));
+       print('disconnected-user $disConnectedUser');
     });
 
     _socket.onDisconnect((_) => print('disconnect'));

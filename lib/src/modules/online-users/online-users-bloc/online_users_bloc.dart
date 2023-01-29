@@ -1,7 +1,6 @@
-import 'dart:async';
 
 import 'package:a1_chat_app/src/modules/online-users/repository/user_repository.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../config/app_config.dart';
@@ -28,11 +27,22 @@ class OnlineUsersBloc extends Bloc<OnlineUsersEvent, OnlineUsersState> {
       emit(state.copyWith(users: onlineUsers));
     });
 
+
     on<NewUser>((event, emit) {
       if (onlineUsers!.contains(event.user)) {
         return;
       }
       onlineUsers?.add(event.user);
+      emit(state.copyWith(users: onlineUsers));
+    });
+
+
+    on<UserDisconnected>((event, emit) {
+      if (!onlineUsers!.contains(event.user)) {
+        return;
+      }
+
+      onlineUsers?.remove(event.user);
       emit(state.copyWith(users: onlineUsers));
     });
   }
