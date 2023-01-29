@@ -3,6 +3,8 @@ import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
 
 import '../../../config/app_config.dart';
 import '../../../core/utils/hellper_methods.dart';
@@ -70,9 +72,10 @@ class _ChatViewState extends State<ChatView> {
             // }
           },
           builder: (context, messageState) {
-            final List<Message?>? messages =
-                messageState.messageRooms[widget.chatData.user.phoneNumber]?.messages?.reversed.toList();
+            final List<Message>? messages =
+                messageState.messageRooms[widget.chatData.user.phoneNumber]?.messages.reversed.toList();
             final user = widget.chatData.user;
+
             return SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,17 +144,45 @@ class _ChatViewState extends State<ChatView> {
                           ? const Center(
                               child: Text('Start messaging '),
                             )
-                          : ListView.builder(
+                          : GroupedListView<Message, DateTime>(
                               reverse: true,
-                              itemCount: messages?.length,
-                              itemBuilder: (context, i) {
-                                var isMe = isMeCheck(messages?[i]);
+                              elements: messages!,
+                              groupBy: (Message message) => DateTime(
+                                message.createdAt.year,
+                                message.createdAt.month,
+                                message.createdAt.day,
+                              ),
+                              groupHeaderBuilder: (message) => SizedBox(
+                                height: 35,
+                                child: Align(
+                                  child: Container(
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).backgroundColor,
+                                      borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                        DateFormat.yMMMd().format(message.createdAt),
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              indexedItemBuilder: (context, dynamic _, i) {
+                                var isMe = isMeCheck(messages[i]);
                                 return TextMessageWidget(
                                   isMe: isMe,
-                                  message: messages?[i],
+                                  message: messages[i],
                                   avatar: user.imageUrl,
                                 );
                               },
+                              useStickyGroupSeparators: true,
+                              floatingHeader: true,
+                              order: GroupedListOrder.ASC,
                             ),
                     ),
                   ),
@@ -169,7 +200,7 @@ class _ChatViewState extends State<ChatView> {
                               maxLines: 4,
                               minLines: 1,
                               // autofocus: true,
-                              textDirection: TextDirection.ltr,
+                              // textDirection: TextDirection.LTR,
                               decoration: InputDecoration(
                                 labelText: "  Message ...",
                                 // labelStyle: TextStyle(
@@ -250,6 +281,29 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 }
+
+// Widget _createGroupHeader(Message message) {
+//   return SizedBox(
+//     height: 35,
+//     child: Align(
+//       child: Container(
+//         width: 120,
+//         decoration: const BoxDecoration(
+//           color: Colors.blue,
+//           borderRadius: BorderRadius.all(Radius.circular(25.0)),
+//         ),
+//         child: Padding(
+//           padding: const EdgeInsets.all(5.0),
+//           child: Text(
+//             DateFormat.yMMMd().format(message.createdAt),
+//             textAlign: TextAlign.center,
+//             style: Theme.of(context).textTheme.bodyText2,
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+// }
 
 bool isMessagesNullOrEmpty(List<Message?>? messages) {
   return messages == null || messages.isEmpty;

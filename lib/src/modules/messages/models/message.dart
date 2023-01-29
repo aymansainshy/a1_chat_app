@@ -12,7 +12,7 @@ class MessageRoom extends Equatable {
   late bool? isTyping;
   late bool? isOnline;
   late Message? lastMessage;
-  late List<Message?>? messages;
+  late List<Message> messages;
 
   MessageRoom({
     required this.id,

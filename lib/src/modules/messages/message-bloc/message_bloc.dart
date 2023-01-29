@@ -34,7 +34,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
 
         if (_messageRooms.containsKey(roomKey)) {
-          _messageRooms[roomKey]?.messages?.add(message);
+          _messageRooms[roomKey]?.messages.add(message);
         } else {
           _messageRooms.putIfAbsent(roomKey, () {
             final createdRoom = MessageRoom(
@@ -52,7 +52,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
     on<SendMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
-        _messageRooms[event.message?.receiver?.phoneNumber]?.messages?.add(event.message);
+        _messageRooms[event.message?.receiver?.phoneNumber]?.messages.add(event.message!);
 
         _socketIO.sendMessage(event.message!);
 
@@ -63,7 +63,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           final createdRoom = MessageRoom(
             id: event.message?.receiver?.id,
             user: event.message?.receiver,
-            messages: [event.message],
+            messages: [event.message!],
           );
           return createdRoom;
         });
@@ -77,13 +77,13 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     on<MessageSuccess>((event, emit) {
       final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
       final message = messages?.firstWhere((message) => message?.id == event.message.id);
-      final messageIndex = messages?.indexOf(message);
+      final messageIndex = messages?.indexOf(message!);
       message?.isReceive = true;
 
       messages?.removeAt(messageIndex!);
-      messages?.insert(messageIndex!, message);
+      messages?.insert(messageIndex!, message!);
 
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages!;
       messageRepository.saveMessage(message!);
       emit(state.copyWith(messageRooms: _messageRooms));
     });
@@ -119,13 +119,13 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     // Message Delivered to user
     on<MessageDelivered>((event, emit) {
       final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
-      final message = messages?.firstWhere((message) => message?.id == event.message.id);
-      final messageIndex = messages?.indexOf(message);
+      final message = messages?.firstWhere((message) => message.id == event.message.id);
+      final messageIndex = messages?.indexOf(message!);
       message?.isDelivered = true;
 
       messages?.removeAt(messageIndex!);
-      messages?.insert(messageIndex!, message);
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages;
+      messages?.insert(messageIndex!, message!);
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages!;
       messageRepository.saveMessage(message!);
       emit(state.copyWith(messageRooms: _messageRooms));
     });
@@ -136,8 +136,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       // }
       _socketIO.iReadMessages(event.message);
 
-      _messageRooms[event.message.sender?.phoneNumber]?.messages?.forEach((message) {
-        message?.isNew = false;
+      _messageRooms[event.message.sender?.phoneNumber]?.messages.forEach((message) {
+        message.isNew = false;
         messageRepository.saveMessage(message!);
       });
 
@@ -145,9 +145,9 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<MessageRead>((event, emit) {
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages?.forEach((message) {
-        message?.isRead = true;
-        messageRepository.saveMessage(message!);
+      _messageRooms[event.message.receiver?.phoneNumber]?.messages.forEach((message) {
+        message.isRead = true;
+        messageRepository.saveMessage(message);
       });
       emit(state.copyWith(messageRooms: _messageRooms));
     });

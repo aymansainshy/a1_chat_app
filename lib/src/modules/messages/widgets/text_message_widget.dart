@@ -1,10 +1,10 @@
 import 'package:a1_chat_app/src/config/app_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
-import '../../../core/utils/hellper_methods.dart';
 import '../models/message.dart';
+import 'blue_check_widget.dart';
 
 class TextMessageWidget extends StatelessWidget {
   const TextMessageWidget({
@@ -24,8 +24,8 @@ class TextMessageWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Column(
-        mainAxisAlignment: isMe ? MainAxisAlignment.start : MainAxisAlignment.end,
-        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        // mainAxisAlignment: isMe ? MainAxisAlignment.start : MainAxisAlignment.end,
+        // crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -33,8 +33,8 @@ class TextMessageWidget extends StatelessWidget {
             children: [
               if (!isMe)
                 Container(
-                  height: 25,
-                  width: 25,
+                  height: 20,
+                  width: 20,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
@@ -44,14 +44,9 @@ class TextMessageWidget extends StatelessWidget {
                 ),
               const SizedBox(width: 2),
               Container(
-                padding: const EdgeInsets.only(
-                  top: 4,
-                  bottom: 2,
-                  left: 10,
-                  right: 10,
-                ),
+                padding: const EdgeInsets.only(top: 7, bottom: 8, left: 10, right: 10),
                 constraints: BoxConstraints(
-                  maxWidth: mediaQuery.width / 1.3,
+                  maxWidth: mediaQuery.width / 1.2,
                 ),
                 decoration: BoxDecoration(
                   color: isMe ? Theme.of(context).backgroundColor : Theme.of(context).primaryColor,
@@ -62,49 +57,10 @@ class TextMessageWidget extends StatelessWidget {
                     bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(18),
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 5),
-                    Text(
-                      message?.content ?? '',
-                      // textAlign: isMe ? TextAlign.left : TextAlign.right,
-                      style: GoogleFonts.rubik(
-                        textStyle: Theme.of(context).textTheme.caption?.copyWith(
-                              color: isMe ? Colors.black : Colors.white,
-                              fontSize: ScreenUtil().setSp(15),
-                            ),
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    SizedBox(
-                      width: 74,
-                      height: 14,
-                      child: Row(
-                        children: [
-                          MediaQuery(
-                            data: MediaQuery.of(context).copyWith(
-                              textScaleFactor: 1,
-                            ),
-                            child: Text(
-                              getMessageTime(message!),
-                              textAlign: TextAlign.right,
-                              style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                    fontSize: 10,
-                                    color: isMe ? Colors.grey : Colors.grey,
-                                  ),
-                            ),
-                          ),
-                          if (isMe) const Spacer(),
-                          if (isMe) ReadBlueCheck(message: message!)
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                child: message!.content.length < 35
+                    ? HorizontalMessage(message: message!, isMe: isMe)
+                    : VerticalMessage(message: message!, isMe: isMe),
               ),
-
-              // TextMessageItem(isMe: isMe, message: message),
             ],
           ),
         ],
@@ -113,67 +69,117 @@ class TextMessageWidget extends StatelessWidget {
   }
 }
 
-class ReadBlueCheck extends StatelessWidget {
-  const ReadBlueCheck({required this.message, Key? key}) : super(key: key);
+class HorizontalMessage extends StatelessWidget {
+  const HorizontalMessage({
+    required this.message,
+    required this.isMe,
+    Key? key,
+  }) : super(key: key);
 
   final Message message;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
-    if (message.isRead) {
-      return Stack(
-        clipBehavior: Clip.none,
-        children: const [
-          Icon(
-            Icons.check,
-            size: 15,
-            color: Colors.blue,
-          ),
-          Positioned(
-            bottom: -1,
-            right: 5,
-            child: Icon(
-              Icons.check,
-              size: 15,
-              color: Colors.blue,
-            ),
-          ),
-        ],
-      );
-    }
-    if (message.isDelivered) {
-      return Stack(
-        clipBehavior: Clip.none,
-        children: const [
-          Icon(
-            Icons.check,
-            size: 15,
-            color: Colors.grey,
-          ),
-          Positioned(
-            bottom: -1,
-            right: 5,
-            child: Icon(
-              Icons.check,
-              size: 15,
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      );
-    }
-    if (message.isReceive) {
-      return const Icon(
-        Icons.check,
-        size: 15,
-        color: Colors.grey,
-      );
-    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        MessageContent(message: message, isMe: isMe),
+        const SizedBox(width: 5),
+        Transform.translate(
+          offset: const Offset(0, 1),
+          child: BlueReadCheckAndDate(isMe: isMe, message: message),
+        ),
+      ],
+    );
+  }
+}
 
-    return const Icon(
-      Icons.access_time_filled,
-      size: 14,
-      color: Colors.grey,
+class VerticalMessage extends StatelessWidget {
+  const VerticalMessage({
+    required this.message,
+    required this.isMe,
+    Key? key,
+  }) : super(key: key);
+
+  final Message message;
+  final bool isMe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 5),
+        MessageContent(message: message, isMe: isMe),
+        const SizedBox(height: 3),
+        BlueReadCheckAndDate(isMe: isMe, message: message),
+      ],
+    );
+  }
+}
+
+class MessageContent extends StatelessWidget {
+  const MessageContent({
+    required this.message,
+    required this.isMe,
+    Key? key,
+  }) : super(key: key);
+
+  final Message message;
+  final bool isMe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      message.content ?? '',
+      style: GoogleFonts.rubik(
+        textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+              color: isMe ? Colors.black : Colors.white,
+              // fontSize: ScreenUtil().setSp(14),
+            ),
+      ),
+    );
+  }
+}
+
+class BlueReadCheckAndDate extends StatelessWidget {
+  const BlueReadCheckAndDate({
+    required this.message,
+    required this.isMe,
+    Key? key,
+  }) : super(key: key);
+
+  final Message message;
+  final bool isMe;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: isMe ? 70 : 50,
+      height: 14,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              textScaleFactor: 1,
+            ),
+            child: Text(
+              DateFormat('hh:mm a').format(message.createdAt),
+              textAlign: TextAlign.right,
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    fontSize: 10,
+                    color: isMe ? Colors.grey : Colors.grey,
+                  ),
+            ),
+          ),
+          if (isMe) const Spacer(),
+          if (isMe) ReadBlueCheck(message: message)
+        ],
+      ),
     );
   }
 }
