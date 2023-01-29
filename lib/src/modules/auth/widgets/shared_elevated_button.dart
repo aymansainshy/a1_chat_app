@@ -6,8 +6,8 @@ class SharedElevatedButton extends StatelessWidget {
   const SharedElevatedButton({
     required this.child,
     required this.onPressed,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final void Function()? onPressed;
   final Widget child;

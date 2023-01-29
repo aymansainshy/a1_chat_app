@@ -216,12 +216,12 @@ class _ChatViewState extends State<ChatView> {
                             _formKey.currentState?.save();
 
                             var newMessage = Message(
-                              id: DateTime.now().toIso8601String(),
-                              sender: Application.user,
-                              receiver: user,
-                              content: messageText,
-                              createdAt: DateTime.now(),
-                            );
+                                id: DateTime.now().toIso8601String(),
+                                sender: Application.user,
+                                receiver: user,
+                                content: messageText,
+                                createdAt: DateTime.now(),
+                                receivedAt: DateTime.now());
 
                             _textEditingController.clear();
 

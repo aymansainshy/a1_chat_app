@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
@@ -58,6 +57,7 @@ class SocketIoImpl extends SocketIO {
 
     _socket.on('send-text-message', (textMessage) {
       injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJson(textMessage)));
+      final message = Message.fromJson(textMessage);
     });
 
     _socket.on('message-read', (message) {

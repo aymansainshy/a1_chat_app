@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
 import '../../online-users/models/user_model.dart';
+
 
 @immutable
 // ignore: must_be_immutable
@@ -31,17 +29,18 @@ class MessageRoom extends Equatable {
 
 @immutable
 // ignore: must_be_immutable
+
 class Message extends Equatable {
   late String? id;
   late User? sender;
   late User? receiver;
   late String content;
-
   late DateTime createdAt;
   late bool isRead;
   late bool isReceive;
   late bool isDelivered;
   late bool isNew;
+  late DateTime? receivedAt;
 
   Message({
     required this.id,
@@ -49,6 +48,7 @@ class Message extends Equatable {
     required this.receiver,
     required this.content,
     required this.createdAt,
+    required this.receivedAt,
     this.isRead = false,
     this.isDelivered = false,
     this.isReceive = false,
@@ -76,6 +76,7 @@ class Message extends Equatable {
       },
       'content': content,
       'createdAt': createdAt.toIso8601String(),
+      'receivedAt': receivedAt?.toIso8601String(),
     };
   }
 
@@ -90,6 +91,22 @@ class Message extends Equatable {
       createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
+      receivedAt: DateTime.now(),
+    );
+  }
+
+  factory Message.fromJsonDb(Map<String, dynamic> json) {
+    return Message(
+      id: json['id'],
+      content: json['content'],
+      isRead: json['isRead'],
+      isReceive: json['isReceive'],
+      isNew: json['isNew'],
+      isDelivered: json['isDelivered'],
+      createdAt: DateTime.parse(json['createdAt']),
+      sender: User.fromJson(json['sender']),
+      receiver: User.fromJson(json['receiver']),
+      receivedAt: DateTime.parse(json['receivedAt']),
     );
   }
 
@@ -103,28 +120,6 @@ class Message extends Equatable {
         isDelivered,
         isRead,
         isNew,
+        receivedAt,
       ];
-}
-
-class MessageUser {
-  late String? id;
-  late String? name;
-  late String? imageUrl;
-  late String? phoneNumber;
-
-  MessageUser({
-    required this.id,
-    this.name,
-    this.imageUrl,
-    required this.phoneNumber,
-  });
-
-  factory MessageUser.fromJson(Map<String, dynamic> json) {
-    return MessageUser(
-      id: json['id'],
-      name: json['name'],
-      imageUrl: json['imageUrl'],
-      phoneNumber: json['phoneNumber'],
-    );
-  }
 }

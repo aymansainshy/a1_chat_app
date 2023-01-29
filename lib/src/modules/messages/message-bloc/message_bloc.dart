@@ -26,21 +26,17 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     on<GetMessagesRoom>((event, emit) async {
       final loadedMessageRooms = await messageRepository.getMessages();
 
+      // loadedMessageRooms?.sort((e1, e2) => e1!.receivedAt!.compareTo(e2!.receivedAt!));
+
       loadedMessageRooms?.forEach((message) {
-        final indexOf = loadedMessageRooms.indexOf(message);
-
-        print(indexOf);
-
         final isMe = message?.sender == Application.user;
 
         final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
 
         if (_messageRooms.containsKey(roomKey)) {
-          print('Message Index : ${loadedMessageRooms.indexOf(message)}');
           _messageRooms[roomKey]?.messages?.add(message);
         } else {
           _messageRooms.putIfAbsent(roomKey, () {
-            print('First Message : ${loadedMessageRooms.indexOf(message)}');
             final createdRoom = MessageRoom(
               id: message.receiver?.id,
               user: isMe ? message.receiver : message.sender,
@@ -95,7 +91,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     //Receive new message
     on<ReceiveMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
-
         if (openedRoom == event.message.sender?.phoneNumber) {
           event.message.isNew = false;
           _socketIO.iReadMessages(event.message);

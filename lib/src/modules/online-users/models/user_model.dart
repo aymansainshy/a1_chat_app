@@ -1,11 +1,18 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 
+// part 'user_model.g.dart';
 // ignore: must_be_immutable
 class User extends Equatable {
+
   late String? id;
+
   late String? name;
+
   late String? phoneNumber;
+
   late String? imageUrl;
+
   late String? token;
 
   User({
