@@ -44,7 +44,7 @@ class TextMessageWidget extends StatelessWidget {
                 ),
               const SizedBox(width: 2),
               Container(
-                padding: const EdgeInsets.only(top: 7, bottom: 8, left: 10, right: 10),
+                padding: const EdgeInsets.only(top: 7, bottom: 7, left: 10, right: 10),
                 constraints: BoxConstraints(
                   maxWidth: mediaQuery.width / 1.2,
                 ),
@@ -57,7 +57,7 @@ class TextMessageWidget extends StatelessWidget {
                     bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(18),
                   ),
                 ),
-                child: message!.content.length < 35
+                child: message!.content.length < 30
                     ? HorizontalMessage(message: message!, isMe: isMe)
                     : VerticalMessage(message: message!, isMe: isMe),
               ),
@@ -88,7 +88,7 @@ class HorizontalMessage extends StatelessWidget {
         MessageContent(message: message, isMe: isMe),
         const SizedBox(width: 5),
         Transform.translate(
-          offset: const Offset(0, 1),
+          offset: const Offset(0, 3),
           child: BlueReadCheckAndDate(isMe: isMe, message: message),
         ),
       ],
@@ -109,7 +109,7 @@ class VerticalMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         const SizedBox(height: 5),
         MessageContent(message: message, isMe: isMe),
@@ -137,7 +137,6 @@ class MessageContent extends StatelessWidget {
       style: GoogleFonts.rubik(
         textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
               color: isMe ? Colors.black : Colors.white,
-              // fontSize: ScreenUtil().setSp(14),
             ),
       ),
     );

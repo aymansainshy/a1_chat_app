@@ -60,7 +60,7 @@ class _ChatViewState extends State<ChatView> {
     return WillPopScope(
       onWillPop: () async {
         BlocProvider.of<MessageBloc>(context).add(const OpenMessagesRoom(''));
-        return Future(() => false);
+        return Future(() => true);
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
