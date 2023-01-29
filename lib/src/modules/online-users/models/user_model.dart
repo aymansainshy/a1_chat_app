@@ -10,6 +10,7 @@ class User extends Equatable {
   late String? imageUrl;
   late String? token;
   late String? socketId;
+  late DateTime? lastSeen;
 
   User({
     required this.id,
@@ -18,6 +19,7 @@ class User extends Equatable {
     this.imageUrl,
     this.token,
     this.socketId,
+    this.lastSeen,
   });
 
   Map<String, dynamic> toJson() {
@@ -27,6 +29,7 @@ class User extends Equatable {
       'phoneNumber': phoneNumber,
       'imageUrl': imageUrl,
       'socketId': socketId,
+      'lastSeen' : lastSeen?.toIso8601String(),
     };
   }
 
@@ -36,6 +39,7 @@ class User extends Equatable {
         phoneNumber: json["phoneNumber"],
         imageUrl: json["imageUrl"],
         token: json["token"] ?? '',
+        lastSeen: DateTime.now(),
         socketId: json["socketId"] ?? '',
       );
 

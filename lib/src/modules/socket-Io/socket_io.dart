@@ -109,7 +109,6 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void dispose() {
-    _socket.emit('disconnected-user', {'user': Application.user?.toJson()});
     _socket.disconnect();
     _socket.dispose();
   }

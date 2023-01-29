@@ -1,5 +1,7 @@
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
+import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
+import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -95,10 +97,15 @@ class _ChatViewState extends State<ChatView> {
                             },
                             icon: const Icon(Icons.arrow_back),
                           ),
-                          UserAvatar(
-                            imageUrl: "${Application.domain}/uploads/${user.imageUrl}",
-                            radius: 26,
-                            isOnline: true,
+                          BlocBuilder<OnlineUsersBloc, OnlineUsersState>(
+                            builder: (context, onlineUserState) {
+                              bool isOnline = onlineUserState.users.contains(user);
+                              return UserAvatar(
+                                imageUrl: "${Application.domain}/uploads/${user.imageUrl}",
+                                radius: 26,
+                                isOnline: isOnline,
+                              );
+                            },
                           ),
                           const SizedBox(width: 8),
                           Transform.translate(
