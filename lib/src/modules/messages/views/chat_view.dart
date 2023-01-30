@@ -35,6 +35,7 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView> {
   final TextEditingController _textEditingController = TextEditingController();
+  final ScrollController _chatScrollController = ScrollController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -147,6 +148,7 @@ class _ChatViewState extends State<ChatView> {
                             )
                           : GroupedListView<Message, DateTime>(
                               reverse: true,
+                              controller: _chatScrollController,
                               elements: messages!,
                               groupBy: (Message message) => DateTime(
                                 -message.createdAt.year,
@@ -259,6 +261,12 @@ class _ChatViewState extends State<ChatView> {
                                 receivedAt: DateTime.now());
 
                             _textEditingController.clear();
+
+                            // Scroll to the bottom of chat View .....
+                            if (_chatScrollController.hasClients) {
+                              final position = _chatScrollController.position.minScrollExtent;
+                              _chatScrollController.jumpTo(position);
+                            }
 
                             BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage));
                           },
