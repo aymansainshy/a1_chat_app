@@ -29,7 +29,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       // loadedMessageRooms?.sort((e1, e2) => e1!.receivedAt!.compareTo(e2!.receivedAt!));
 
       loadedMessageRooms?.forEach((message) {
-        final isMe = message?.sender == Application.user;
+        final isMe = message?.sender?.phoneNumber == Application.user?.phoneNumber;
 
         final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
 
