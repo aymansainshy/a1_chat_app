@@ -316,7 +316,7 @@ class LastSeenInformationWidget extends StatelessWidget {
             );
           } else {
             final lastSeen = PreferencesUtils.getString(user.phoneNumber!);
-            if (lastSeen != null) {
+            if (!isOnline && lastSeen != null) {
               final lastSeenData = lastSeenTime(lastSeen);
               return Text(
                 "Last Seen : $lastSeenData",
