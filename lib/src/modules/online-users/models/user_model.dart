@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 
+// part 'user_model.g.dart';
 // ignore: must_be_immutable
 class User extends Equatable {
   late String? id;
@@ -7,6 +9,8 @@ class User extends Equatable {
   late String? phoneNumber;
   late String? imageUrl;
   late String? token;
+  late String? socketId;
+  late DateTime? lastSeen;
 
   User({
     required this.id,
@@ -14,6 +18,8 @@ class User extends Equatable {
     this.name,
     this.imageUrl,
     this.token,
+    this.socketId,
+    this.lastSeen,
   });
 
   Map<String, dynamic> toJson() {
@@ -22,6 +28,8 @@ class User extends Equatable {
       'name': name,
       'phoneNumber': phoneNumber,
       'imageUrl': imageUrl,
+      'socketId': socketId,
+      'lastSeen' : lastSeen?.toIso8601String(),
     };
   }
 
@@ -30,7 +38,9 @@ class User extends Equatable {
         name: json["name"],
         phoneNumber: json["phoneNumber"],
         imageUrl: json["imageUrl"],
-        token: json["token"],
+        token: json["token"] ?? '',
+        lastSeen: DateTime.now(),
+        socketId: json["socketId"] ?? '',
       );
 
   @override

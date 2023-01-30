@@ -7,7 +7,6 @@ import 'package:hive_flutter/adapters.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // final path =  await getApplicationDocumentsDirectory();
   await Hive.initFlutter();
   injector.setup();
   runApp(const MyApp());

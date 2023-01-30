@@ -17,3 +17,12 @@ class GetOnlineUser extends OnlineUsersEvent {
   @override
   List<Object?> get props => [];
 }
+
+class UserDisconnected extends OnlineUsersEvent {
+  final User user;
+
+  const UserDisconnected(this.user);
+
+  @override
+  List<Object?> get props => [user.id];
+}

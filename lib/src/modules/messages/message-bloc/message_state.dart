@@ -4,8 +4,8 @@ class MessageBlocState {
   final Map<String, MessageRoom?> messageRooms;
 
   int newMessages(MessageRoom room) {
-    final messages = messageRooms[room.user?.phoneNumber]?.messages?.where(
-        (message) => message!.isNew && message.receiver == Application.user);
+    final messages = messageRooms[room.user?.phoneNumber]?.messages.where(
+        (message) => message.isNew && message.receiver == Application.user);
     return messages?.length ?? 0;
   }
 
