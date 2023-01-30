@@ -20,9 +20,17 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
   final Map<String, MessageRoom?> _messageRooms = {};
 
   User? getRoomUser(Message message) {
-    if (message.sender == Application.user) {
+    print('Application user  ${Application.user?.phoneNumber}');
+
+    if (message.sender?.phoneNumber == Application.user?.phoneNumber) {
+      // print("0000000000000000000000000000000000000000000000000000000000000");
+      // print(message.sender?.phoneNumber == Application.user?.phoneNumber);
+      // print('Room User ... ${message.receiver?.phoneNumber}');
       return message.receiver!;
     } else {
+      // print("4444444444444444444444444444444444444444444444444444444444444");
+      // print(message.receiver?.phoneNumber == Application.user?.phoneNumber);
+      // print('Room User ... ${message.sender?.phoneNumber}');
       return message.sender!;
     }
   }
@@ -40,7 +48,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       for (var message in loadedMessageRooms!) {
         final roomUser = getRoomUser(message!);
 
-        print("Room User is .... : $roomUser");
+        // print("Room User is .... : ${roomUser?.phoneNumber}");
 
         if (_messageRooms.containsKey(roomUser!.phoneNumber)) {
           _messageRooms[roomUser.phoneNumber]?.messages.add(message);
