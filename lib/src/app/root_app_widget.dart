@@ -17,7 +17,7 @@ import '../router/app_router.dart';
 import '../../injector.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}): super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -28,7 +28,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     injector<AppBloc>().add(AppStarted());
-    injector<MessageBloc>().add(GetMessagesRoom());
   }
 
   @override
@@ -48,7 +47,12 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (BuildContext context, Widget? child) {
-          return BlocBuilder<AppBloc, AppState>(
+          return BlocConsumer<AppBloc, AppState>(
+            listener: (context, appState) {
+              if (appState is AppSetupInComplete) {
+                BlocProvider.of<MessageBloc>(context).add(GetMessagesRoom());
+              }
+            },
             builder: (context, appState) {
               if (appState is AppSetupInComplete) {
                 return BlocBuilder<ThemeCubit, ThemeState>(
@@ -76,7 +80,7 @@ class _MyAppState extends State<MyApp> {
               }
 
               return AnimatedSplashView(
-                duration: 1000,
+                duration: 800,
                 imagePath: AssetsUtils.chatLogo,
               );
             },

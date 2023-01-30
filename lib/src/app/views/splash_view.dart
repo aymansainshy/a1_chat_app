@@ -26,8 +26,7 @@ class AnimatedSplashView extends StatefulWidget {
   AnimatedSplashState createState() => AnimatedSplashState();
 }
 
-class AnimatedSplashState extends State<AnimatedSplashView>
-    with SingleTickerProviderStateMixin {
+class AnimatedSplashState extends State<AnimatedSplashView> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -35,15 +34,14 @@ class AnimatedSplashState extends State<AnimatedSplashView>
   void initState() {
     super.initState();
 
-    if (_duration < 1000) _duration = 2000;
+    if (_duration < 800) _duration = 800;
 
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: _duration),
     );
 
-    _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-        parent: _animationController, curve: Curves.easeInCirc));
+    _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInCirc));
 
     _animationController.forward();
   }
@@ -56,8 +54,7 @@ class AnimatedSplashState extends State<AnimatedSplashView>
 
   @override
   Widget build(BuildContext context) {
-    var isLandScape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    var isLandScape = MediaQuery.of(context).orientation == Orientation.landscape;
     var mediaQuery = MediaQuery.of(context).size;
 
     return MaterialApp(
@@ -84,12 +81,8 @@ class AnimatedSplashState extends State<AnimatedSplashView>
                     offset: const Offset(0, 30),
                     child: Container(
                       padding: const EdgeInsets.all(30),
-                      height: isLandScape
-                          ? ScreenUtil().setHeight(700)
-                          : mediaQuery.height / 3,
-                      width: isLandScape
-                          ? ScreenUtil().setWidth(700)
-                          : mediaQuery.width,
+                      height: isLandScape ? ScreenUtil().setHeight(700) : mediaQuery.height / 3,
+                      width: isLandScape ? ScreenUtil().setWidth(700) : mediaQuery.width,
                       child: Hero(
                         tag: klogoAnimation,
                         child: SvgPicture.asset(
@@ -100,12 +93,8 @@ class AnimatedSplashState extends State<AnimatedSplashView>
                     ),
                   ),
                   SizedBox(
-                    height: isLandScape
-                        ? ScreenUtil().setHeight(800)
-                        : ScreenUtil().setHeight(200),
-                    width: isLandScape
-                        ? ScreenUtil().setWidth(700)
-                        : ScreenUtil().setWidth(800),
+                    height: isLandScape ? ScreenUtil().setHeight(800) : ScreenUtil().setHeight(200),
+                    width: isLandScape ? ScreenUtil().setWidth(700) : ScreenUtil().setWidth(800),
                     child: const SpinKitThreeBounce(
                       color: AppColors.borderColor,
                       size: 19,
