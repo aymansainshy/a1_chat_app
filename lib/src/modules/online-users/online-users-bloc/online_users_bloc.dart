@@ -1,4 +1,4 @@
-
+import 'package:a1_chat_app/src/core/utils/preference_utils.dart';
 import 'package:a1_chat_app/src/modules/online-users/repository/user_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -16,7 +16,6 @@ class OnlineUsersBloc extends Bloc<OnlineUsersEvent, OnlineUsersState> {
 
   OnlineUsersBloc(this.onlineUserRepository) : super(const OnlineUsersState(users: [])) {
     on<GetOnlineUser>((event, emit) async {
-
       final onlineUsers = await onlineUserRepository.getOnlineUsers();
       if (onlineUsers == null) {
         return;
@@ -27,20 +26,23 @@ class OnlineUsersBloc extends Bloc<OnlineUsersEvent, OnlineUsersState> {
       emit(state.copyWith(users: onlineUsers));
     });
 
-
     on<NewUser>((event, emit) {
       if (onlineUsers!.contains(event.user)) {
         return;
       }
       onlineUsers?.add(event.user);
+      // Remove Saved Last Seen Time
+      PreferencesUtils.remove(event.user.phoneNumber!);
       emit(state.copyWith(users: onlineUsers));
     });
 
-
-    on<UserDisconnected>((event, emit) {
+    on<UserDisconnected>((event, emit) async {
       if (!onlineUsers!.contains(event.user)) {
         return;
       }
+
+      // Save Last Seen Time
+      await PreferencesUtils.setString(event.user.phoneNumber!, DateTime.now().toIso8601String());
 
       onlineUsers?.remove(event.user);
       emit(state.copyWith(users: onlineUsers));

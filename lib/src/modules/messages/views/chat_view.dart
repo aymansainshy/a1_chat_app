@@ -1,7 +1,6 @@
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
-import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../../config/app_config.dart';
 import '../../../core/utils/hellper_methods.dart';
+import '../../../core/utils/preference_utils.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../../online-users/models/user_model.dart';
 import '../widgets/text_message_widget.dart';
@@ -119,13 +119,7 @@ class _ChatViewState extends State<ChatView> {
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20),
                                 ),
                                 const SizedBox(height: 8),
-                                Transform.translate(
-                                  offset: const Offset(0, -5),
-                                  child: Text(
-                                    "Online",
-                                    style: Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                ),
+                                LastSeenInformationWidget(user: user),
                               ],
                             ),
                           ),
@@ -292,29 +286,65 @@ class _ChatViewState extends State<ChatView> {
   }
 }
 
-// Widget _createGroupHeader(Message message) {
-//   return SizedBox(
-//     height: 35,
-//     child: Align(
-//       child: Container(
-//         width: 120,
-//         decoration: const BoxDecoration(
-//           color: Colors.blue,
-//           borderRadius: BorderRadius.all(Radius.circular(25.0)),
-//         ),
-//         child: Padding(
-//           padding: const EdgeInsets.all(5.0),
-//           child: Text(
-//             DateFormat.yMMMd().format(message.createdAt),
-//             textAlign: TextAlign.center,
-//             style: Theme.of(context).textTheme.bodyText2,
-//           ),
-//         ),
-//       ),
-//     ),
-//   );
-// }
+class LastSeenInformationWidget extends StatelessWidget {
+  const LastSeenInformationWidget({
+    required this.user,
+    Key? key,
+  }) : super(key: key);
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: const Offset(0, -5),
+      child: BlocBuilder<OnlineUsersBloc, OnlineUsersState>(
+        builder: (context, onlineUserState) {
+          bool isOnline = onlineUserState.users.contains(user);
+          if (isOnline) {
+            return Text(
+              "Online",
+              style: Theme.of(context).textTheme.bodyText2,
+            );
+          } else {
+            final lastSeen = PreferencesUtils.getString(user.phoneNumber!);
+            if (lastSeen != null) {
+              final lastSeenData = lastSeenTime(lastSeen);
+              return Text(
+                "Last Seen : $lastSeenData",
+                style: Theme.of(context).textTheme.bodyText2,
+              );
+            }
+            return Text(
+              "Last Seen : recently",
+              style: Theme.of(context).textTheme.bodyText2,
+            );
+          }
+        },
+      ),
+    );
+  }
+}
 
 bool isMessagesNullOrEmpty(List<Message?>? messages) {
   return messages == null || messages.isEmpty;
+}
+
+String lastSeenTime(String lastSeenDate) {
+  final now = DateTime.now();
+  final lastSeen = DateTime.parse(lastSeenDate);
+
+  final today = DateTime(now.year, now.month, now.day);
+  final yesterday = DateTime(now.year, now.month, now.day - 1);
+
+  final aDate = DateTime(lastSeen.year, lastSeen.month, lastSeen.day);
+
+  if (aDate == today) {
+    final formatDate = DateFormat('hh:mm a').format(lastSeen);
+    return formatDate;
+  } else if (aDate == yesterday) {
+    return "Yesterday";
+  } else {
+    return "${lastSeen.day}/${lastSeen.month}/${lastSeen.year}";
+  }
 }
