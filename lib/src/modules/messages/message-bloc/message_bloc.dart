@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/app_config.dart';
+import '../../online-users/models/user_model.dart';
 import '../../socket-Io/socket_io.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
@@ -18,6 +19,14 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
   final Map<String, MessageRoom?> _messageRooms = {};
 
+  User? getRoomUser(Message message) {
+    if (message.sender == Application.user) {
+      return message.receiver!;
+    } else {
+      return message.sender!;
+    }
+  }
+
   MessageBloc(this._socketIO, this.messageRepository) : super(MessageBlocState(messageRooms: {})) {
     on<OpenMessagesRoom>((event, emit) {
       openedRoom = event.openedRoom;
@@ -28,24 +37,31 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
       // loadedMessageRooms?.sort((e1, e2) => e1!.receivedAt!.compareTo(e2!.receivedAt!));
 
-      loadedMessageRooms?.forEach((message) {
-        final isMe = message?.sender?.phoneNumber == Application.user?.phoneNumber;
+      for (var message in loadedMessageRooms!) {
+        final roomUser = getRoomUser(message!);
 
-        final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
+        print("Room User is .... : $roomUser");
 
-        if (_messageRooms.containsKey(roomKey)) {
-          _messageRooms[roomKey]?.messages.add(message);
+        if (_messageRooms.containsKey(roomUser!.phoneNumber)) {
+          _messageRooms[roomUser.phoneNumber]?.messages.add(message);
         } else {
-          _messageRooms.putIfAbsent(roomKey, () {
+          _messageRooms.putIfAbsent(roomUser.phoneNumber!, () {
             final createdRoom = MessageRoom(
               id: message.receiver?.id,
-              user: isMe ? message.receiver : message.sender,
+              user: roomUser,
               messages: [message],
             );
             return createdRoom;
           });
         }
-      });
+      }
+
+      // loadedMessageRooms?.forEach((message) {
+      //
+      // final isMe = message?.sender?.phoneNumber == Application.user?.phoneNumber;
+      //
+      // final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
+      //});
 
       emit(state.copyWith(messageRooms: _messageRooms));
     });
