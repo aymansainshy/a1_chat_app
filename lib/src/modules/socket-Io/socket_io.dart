@@ -64,7 +64,6 @@ class SocketIoImpl extends SocketIO {
 
     _socket.on('disconnected-user', (disConnectedUser) {
       injector<OnlineUsersBloc>().add(UserDisconnected(User.fromJson(disConnectedUser)));
-      print('disconnected-user $disConnectedUser');
     });
 
     _socket.onDisconnect((_) => print('disconnect'));
