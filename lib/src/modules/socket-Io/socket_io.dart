@@ -1,4 +1,3 @@
-
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
@@ -65,7 +64,7 @@ class SocketIoImpl extends SocketIO {
 
     _socket.on('disconnected-user', (disConnectedUser) {
       injector<OnlineUsersBloc>().add(UserDisconnected(User.fromJson(disConnectedUser)));
-       print('disconnected-user $disConnectedUser');
+      print('disconnected-user $disConnectedUser');
     });
 
     _socket.onDisconnect((_) => print('disconnect'));
@@ -88,18 +87,12 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void typing(String senderPhone, String recieverPhone) {
-    _socket.emit('typing', {
-      'senderPhone': senderPhone,
-      'recieverPhone': recieverPhone,
-    });
+    _socket.emit('typing', {'senderPhone': senderPhone, 'recieverPhone': recieverPhone});
   }
 
   @override
   void stopTyping(String senderPhone, String recieverPhone) {
-    _socket.emit('stop-typing', {
-      'senderPhone': senderPhone,
-      'recieverPhone': recieverPhone,
-    });
+    _socket.emit('stop-typing', {'senderPhone': senderPhone, 'recieverPhone': recieverPhone});
   }
 
   @override
