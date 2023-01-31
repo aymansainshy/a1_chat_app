@@ -16,6 +16,7 @@ import '../../config/app_config.dart';
 import '../../config/preferences_config.dart';
 import '../../core/utils/preference_utils.dart';
 import '../../modules/auth/auth-bloc/auth_cubit.dart';
+import '../../modules/messages/repository/messages_repository.dart';
 import '../../modules/online-users/models/user_model.dart';
 
 abstract class AppEvent extends Equatable {
@@ -99,14 +100,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
           if (userData != null) {
             Application.user = User.fromJson(jsonDecode(userData));
+            await injector<MessageRepository>().fetchMessages();
           }
         }
 
 
-        // await Future.delayed(const Duration(milliseconds: 2000));
-
         injector<AuthCubit>().checkAuth();
         injector<OnlineUsersBloc>().add(GetOnlineUser());
+
+        await Future.delayed(const Duration(milliseconds: 1000));
 
         emit(AppSetupInComplete());
       } catch (e) {

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../config/app_config.dart';
 import '../../../core/utils/hellper_methods.dart';
+import '../../../core/utils/preference_utils.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../../online-users/online-users-bloc/online_users_bloc.dart';
 import '../models/message.dart';
