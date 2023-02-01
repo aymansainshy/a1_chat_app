@@ -21,14 +21,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
   User? getRoomUser(Message message) {
     if (message.sender?.phoneNumber.toString() == Application.user?.phoneNumber.toString()) {
-      print("0000000000000000000000000000000000000000000000000000000000000");
-      print(message.sender?.phoneNumber == Application.user?.phoneNumber);
-      print('Room User ... ${message.receiver?.phoneNumber}');
       return message.receiver!;
     } else {
-      print("4444444444444444444444444444444444444444444444444444444444444");
-      print(message.receiver?.phoneNumber == Application.user?.phoneNumber);
-      print('Room User ... ${message.sender?.phoneNumber}');
       return message.sender!;
     }
   }
@@ -60,13 +54,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         }
       }
 
-      // loadedMessageRooms?.forEach((message) {
-      //
-      // final isMe = message?.sender?.phoneNumber == Application.user?.phoneNumber;
-      //
-      // final roomKey = isMe ? message!.receiver!.phoneNumber! : message!.sender!.phoneNumber!;
-      //});
-
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
@@ -96,7 +83,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
     on<MessageSuccess>((event, emit) {
       final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
-      final message = messages?.firstWhere((message) => message?.id == event.message.id);
+      final message = messages?.firstWhere((message) => message.id == event.message.id);
       final messageIndex = messages?.indexOf(message!);
       message?.isReceive = true;
 
@@ -117,7 +104,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           messageRepository.saveMessage(event.message);
         }
 
-        _messageRooms[event.message.sender?.phoneNumber]?.messages?.add(event.message);
+        _messageRooms[event.message.sender?.phoneNumber]?.messages.add(event.message);
         _socketIO.messageDelivered(event.message);
         messageRepository.saveMessage(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
@@ -151,24 +138,24 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<IReadMessage>((event, emit) {
-      // if (event.message.sender == Application.user) {
-      //   return;
-      // }
+      if (event.message.sender == Application.user) {
+        return;
+      }
       _socketIO.iReadMessages(event.message);
 
-      _messageRooms[event.message.sender?.phoneNumber]?.messages.forEach((message) {
+      for (var message in _messageRooms[event.message.sender?.phoneNumber]!.messages) {
         message.isNew = false;
-        messageRepository.saveMessage(message!);
-      });
+        messageRepository.saveMessage(message);
+      }
 
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
     on<MessageRead>((event, emit) {
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages.forEach((message) {
+      for (var message in _messageRooms[event.message.receiver?.phoneNumber]!.messages) {
         message.isRead = true;
         messageRepository.saveMessage(message);
-      });
+      }
       emit(state.copyWith(messageRooms: _messageRooms));
     });
   }

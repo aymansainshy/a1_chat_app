@@ -235,12 +235,12 @@ class _ChatViewState extends State<ChatView> {
                                 floatingLabelBehavior: FloatingLabelBehavior.never,
                               ),
                               controller: _textEditingController,
-                              // validator: (value) {
-                              //   if (value?.trim().isEmpty) {
-                              //     return ;
-                              //   }
-                              //   return null;
-                              // },
+                              validator: (value) {
+                                if (value!.trim().isEmpty) {
+                                  return;
+                                }
+                                return null;
+                              },
                               onSaved: (value) {
                                 messageText = _textEditingController.value.text;
                               },
@@ -250,7 +250,13 @@ class _ChatViewState extends State<ChatView> {
                         const SizedBox(width: 3),
                         InkWell(
                           onTap: () async {
+                            // var isValid = _formKey.currentState?.validate();
+
                             _formKey.currentState?.save();
+
+                            if (messageText.isEmpty) {
+                              return;
+                            }
 
                             var newMessage = Message(
                                 id: DateTime.now().toIso8601String(),
