@@ -20,11 +20,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
   final Map<String, MessageRoom?> _messageRooms = {};
 
   User? getRoomUser(Message message) {
-    if (message.sender?.phoneNumber.toString() == Application.user?.phoneNumber.toString()) {
-      return message.receiver!;
-    } else {
-      return message.sender!;
-    }
+    bool isMe = message.sender?.phoneNumber == Application.user?.phoneNumber;
+    return isMe ? message.receiver : message.sender;
   }
 
   MessageBloc(this._socketIO, this.messageRepository) : super(MessageBlocState(messageRooms: {})) {
