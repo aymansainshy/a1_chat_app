@@ -83,11 +83,12 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         if (message.id == event.message.id) {
           message.isReceive = true;
           messageRepository.saveMessage(message);
+          emit(state.copyWith(messageRooms: _messageRooms));
           return;
         }
       }
 
-      emit(state.copyWith(messageRooms: _messageRooms));
+
     });
 
     //Receive new message
@@ -124,11 +125,11 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         if (message.id == event.message.id) {
           message.isDelivered = true;
           messageRepository.saveMessage(message);
+          emit(state.copyWith(messageRooms: _messageRooms));
           return;
         }
-      }
 
-      emit(state.copyWith(messageRooms: _messageRooms));
+      }
     });
 
     on<IReadMessage>((event, emit) {
