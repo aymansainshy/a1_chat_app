@@ -79,16 +79,14 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<MessageSuccess>((event, emit) {
-      final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
-      final message = messages?.firstWhere((message) => message.id == event.message.id);
-      final messageIndex = messages?.indexOf(message!);
-      message?.isReceive = true;
+      for (var message in _messageRooms[event.message.receiver?.phoneNumber!]!.messages) {
+        if (message.id == event.message.id) {
+          message.isReceive = true;
+          messageRepository.saveMessage(message);
+          return;
+        }
+      }
 
-      messages?.removeAt(messageIndex!);
-      messages?.insert(messageIndex!, message!);
-
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages!;
-      messageRepository.saveMessage(message!);
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
@@ -122,15 +120,14 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
     // Message Delivered to user
     on<MessageDelivered>((event, emit) {
-      final messages = _messageRooms[event.message.receiver?.phoneNumber]?.messages;
-      final message = messages?.firstWhere((message) => message.id == event.message.id);
-      final messageIndex = messages?.indexOf(message!);
-      message?.isDelivered = true;
+      for (var message in _messageRooms[event.message.receiver?.phoneNumber!]!.messages) {
+        if (message.id == event.message.id) {
+          message.isDelivered = true;
+          messageRepository.saveMessage(message);
+          return;
+        }
+      }
 
-      messages?.removeAt(messageIndex!);
-      messages?.insert(messageIndex!, message!);
-      _messageRooms[event.message.receiver?.phoneNumber]?.messages = messages!;
-      messageRepository.saveMessage(message!);
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
