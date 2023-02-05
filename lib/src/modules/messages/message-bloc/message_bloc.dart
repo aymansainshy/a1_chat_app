@@ -87,13 +87,12 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           return;
         }
       }
-
-
     });
 
     //Receive new message
     on<ReceiveMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
+
         if (openedRoom == event.message.sender?.phoneNumber) {
           event.message.isNew = false;
           _socketIO.iReadMessages(event.message);
@@ -103,6 +102,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _messageRooms[event.message.sender?.phoneNumber]?.messages.add(event.message);
         _socketIO.messageDelivered(event.message);
         messageRepository.saveMessage(event.message);
+
         emit(state.copyWith(messageRooms: _messageRooms));
       } else {
         _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {
@@ -113,6 +113,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           );
           return createdRoom;
         });
+
         _socketIO.messageDelivered(event.message);
         messageRepository.saveMessage(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
