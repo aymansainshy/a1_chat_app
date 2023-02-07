@@ -28,7 +28,7 @@ class ReadBlueCheck extends StatelessWidget {
         width: 18,
       );
     }
-    if (message.isReceive) {
+    if (message.isSuccess) {
       return SvgPicture.asset(
         AssetsUtils.chekIcon,
         fit: BoxFit.cover,

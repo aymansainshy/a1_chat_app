@@ -37,7 +37,7 @@ class Message extends Equatable {
   late String content;
   late DateTime createdAt;
   late bool isRead;
-  late bool isReceive;
+  late bool isSuccess;
   late bool isDelivered;
   late bool isNew;
   late DateTime? receivedAt;
@@ -51,28 +51,28 @@ class Message extends Equatable {
     required this.receivedAt,
     this.isRead = false,
     this.isDelivered = false,
-    this.isReceive = false,
+    this.isSuccess = false,
     this.isNew = true,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'isRead': isRead,
-      'isReceive': isReceive,
-      'isDelivered': isDelivered,
-      'isNew': isNew,
+      'is_read': isRead,
+      'is_success': isSuccess,
+      'is_delivered': isDelivered,
+      'is_new': isNew,
       'sender': {
         'id': sender?.id,
         'name': sender?.name,
-        'phoneNumber': sender?.phoneNumber,
-        'imageUrl': sender?.imageUrl,
+        'phone_number': sender?.phoneNumber,
+        'image_url': sender?.imageUrl,
       },
       'receiver': {
         'id': receiver?.id,
         'name': receiver?.name,
-        'phoneNumber': receiver?.phoneNumber,
-        'imageUrl': receiver?.imageUrl,
+        'phone_number': receiver?.phoneNumber,
+        'image_url': receiver?.imageUrl,
       },
       'content': content,
       'createdAt': createdAt.toIso8601String(),
@@ -84,10 +84,10 @@ class Message extends Equatable {
     return Message(
       id: json['id'],
       content: json['content'],
-      isRead: json['isRead'],
-      isReceive: json['isReceive'],
-      isNew: json['isNew'],
-      isDelivered: json['isDelivered'],
+      isRead: json['is_read'],
+      isSuccess: json['is_success'],
+      isNew: json['is_new'],
+      isDelivered: json['is_delivered'],
       createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
@@ -100,9 +100,9 @@ class Message extends Equatable {
       id: json['id'],
       content: json['content'],
       isRead: json['isRead'],
-      isReceive: json['isReceive'],
-      isNew: json['isNew'],
-      isDelivered: json['isDelivered'],
+      isSuccess: json['is_success'],
+      isNew: json['is_new'],
+      isDelivered: json['is_delivered'],
       createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
@@ -116,7 +116,7 @@ class Message extends Equatable {
         sender,
         receiver,
         content,
-        isReceive,
+        isSuccess,
         isDelivered,
         isRead,
         isNew,

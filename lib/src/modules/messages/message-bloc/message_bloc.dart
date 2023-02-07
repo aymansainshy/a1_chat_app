@@ -81,7 +81,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     on<MessageSuccess>((event, emit) {
       for (var message in _messageRooms[event.message.receiver?.phoneNumber!]!.messages) {
         if (message.id == event.message.id) {
-          message.isReceive = true;
+          message.isSuccess = true;
           messageRepository.saveMessage(message);
           emit(state.copyWith(messageRooms: _messageRooms));
           return;
