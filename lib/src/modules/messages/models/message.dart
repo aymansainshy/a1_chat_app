@@ -32,6 +32,7 @@ class MessageRoom extends Equatable {
 
 class Message extends Equatable {
   late String? id;
+  late String? uuid;
   late User? sender;
   late User? receiver;
   late String content;
@@ -43,7 +44,8 @@ class Message extends Equatable {
   late DateTime? receivedAt;
 
   Message({
-    required this.id,
+     this.id,
+    required this.uuid,
     required this.sender,
     required this.receiver,
     required this.content,
@@ -58,6 +60,7 @@ class Message extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'uuid': uuid,
       'is_read': isRead,
       'is_success': isSuccess,
       'is_delivered': isDelivered,
@@ -82,7 +85,8 @@ class Message extends Equatable {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      id: json['id'],
+      id: json['id']?? '',
+      uuid: json['uuid'],
       content: json['content'],
       isRead: json['is_read'],
       isSuccess: json['is_success'],
@@ -97,7 +101,8 @@ class Message extends Equatable {
 
   factory Message.fromJsonDb(Map<String, dynamic> json) {
     return Message(
-      id: json['id'],
+      id: json['id']?? '',
+      uuid: json['uuid'],
       content: json['content'],
       isRead: json['is_read'],
       isSuccess: json['is_success'],
@@ -113,6 +118,7 @@ class Message extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        uuid,
         sender,
         receiver,
         content,

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
-import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:async';
 import 'dart:io';

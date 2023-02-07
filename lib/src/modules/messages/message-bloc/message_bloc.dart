@@ -80,7 +80,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
     on<MessageSuccess>((event, emit) {
       for (var message in _messageRooms[event.message.receiver?.phoneNumber!]!.messages) {
-        if (message.id == event.message.id) {
+        if (message.uuid == event.message.uuid) {
           message.isSuccess = true;
           messageRepository.saveMessage(message);
           emit(state.copyWith(messageRooms: _messageRooms));
@@ -123,7 +123,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     // Message Delivered to user
     on<MessageDelivered>((event, emit) {
       for (var message in _messageRooms[event.message.receiver?.phoneNumber!]!.messages) {
-        if (message.id == event.message.id) {
+        if (message.uuid == event.message.uuid) {
           message.isDelivered = true;
           messageRepository.saveMessage(message);
           emit(state.copyWith(messageRooms: _messageRooms));
