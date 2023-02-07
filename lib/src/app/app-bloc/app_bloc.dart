@@ -51,7 +51,6 @@ class AppSetupInFailure extends AppState {
 class AppBloc extends Bloc<AppEvent, AppState> {
   final DeviceInfoPlugin deviceInfoPlugin;
 
-
   late UserDevice device;
 
   AppBloc(this.deviceInfoPlugin) : super(AppInitial()) {
@@ -89,7 +88,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             );
           }
         } catch (e) {
-          // print("Device setup error $e");
+          print("Device setup error $e");
         }
 
         Application.device = device;
@@ -97,13 +96,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         //Setup user if Exist ......
         if (PreferencesUtils.containsKey(Preferences.user)!) {
           String? userData = PreferencesUtils.getString(Preferences.user);
-
+          print(userData.toString());
           if (userData != null) {
             Application.user = User.fromJson(jsonDecode(userData));
             await injector<MessageRepository>().fetchMessages();
           }
         }
-
 
         injector<AuthCubit>().checkAuth();
         injector<OnlineUsersBloc>().add(GetOnlineUser());

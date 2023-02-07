@@ -99,7 +99,7 @@ class Message extends Equatable {
     return Message(
       id: json['id'],
       content: json['content'],
-      isRead: json['isRead'],
+      isRead: json['is_read'],
       isSuccess: json['is_success'],
       isNew: json['is_new'],
       isDelivered: json['is_delivered'],
