@@ -28,12 +28,13 @@ class User extends Equatable {
       'phone_number': phoneNumber,
       'image_url': imageUrl,
       'socketId': socketId,
+      'token': token,
       'lastSeen' : lastSeen?.toIso8601String(),
     };
   }
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
+        id: json["id"].toString(),
         name: json["name"],
         phoneNumber: json["phone_number"],
         imageUrl: json["image_url"],

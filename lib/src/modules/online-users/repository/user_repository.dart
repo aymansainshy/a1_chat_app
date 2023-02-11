@@ -16,7 +16,6 @@ class OnlineUserRepositoryImpl extends OnlineUserRepository {
       final List<User> users =  loadedData.map((user) => User.fromJson(user)).toList();
       return users;
     } catch (e) {
-      print(e.toString());
       rethrow;
     }
   }

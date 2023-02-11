@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../online-users/models/user_model.dart';
 
-
 @immutable
 // ignore: must_be_immutable
 class MessageRoom extends Equatable {
@@ -44,7 +43,7 @@ class Message extends Equatable {
   late DateTime? receivedAt;
 
   Message({
-     this.id,
+    this.id,
     required this.uuid,
     required this.sender,
     required this.receiver,
@@ -85,7 +84,7 @@ class Message extends Equatable {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      id: json['id']?? '',
+      id: json['id'].toString() ?? '',
       uuid: json['uuid'],
       content: json['content'],
       isRead: json['is_read'],
@@ -99,9 +98,25 @@ class Message extends Equatable {
     );
   }
 
+  factory Message.fromJsonApi(Map<String, dynamic> json) {
+    return Message(
+      id: json['id'].toString() ?? '',
+      uuid: json['uuid'],
+      content: json['content'],
+      isRead: json['is_read'] == 0 ? false : true,
+      isSuccess: json['is_success'] == 0 ? false : true,
+      isNew: json['is_new'] == 0 ? false : true,
+      isDelivered: json['is_delivered'] == 0 ? false : true,
+      createdAt: DateTime.parse(json['createdAt']),
+      sender: User.fromJson(json['sender']),
+      receiver: User.fromJson(json['receiver']),
+      receivedAt: DateTime.now(),
+    );
+  }
+
   factory Message.fromJsonDb(Map<String, dynamic> json) {
     return Message(
-      id: json['id']?? '',
+      id: json['id'].toString() ?? '',
       uuid: json['uuid'],
       content: json['content'],
       isRead: json['is_read'],
