@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../online-users/models/user_model.dart';
 
-
 @immutable
 // ignore: must_be_immutable
 class MessageRoom extends Equatable {
@@ -32,18 +31,20 @@ class MessageRoom extends Equatable {
 
 class Message extends Equatable {
   late String? id;
+  late String? uuid;
   late User? sender;
   late User? receiver;
   late String content;
   late DateTime createdAt;
   late bool isRead;
-  late bool isReceive;
+  late bool isSuccess;
   late bool isDelivered;
   late bool isNew;
   late DateTime? receivedAt;
 
   Message({
-    required this.id,
+    this.id,
+    required this.uuid,
     required this.sender,
     required this.receiver,
     required this.content,
@@ -51,28 +52,29 @@ class Message extends Equatable {
     required this.receivedAt,
     this.isRead = false,
     this.isDelivered = false,
-    this.isReceive = false,
+    this.isSuccess = false,
     this.isNew = true,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'isRead': isRead,
-      'isReceive': isReceive,
-      'isDelivered': isDelivered,
-      'isNew': isNew,
+      'uuid': uuid,
+      'is_read': isRead,
+      'is_success': isSuccess,
+      'is_delivered': isDelivered,
+      'is_new': isNew,
       'sender': {
         'id': sender?.id,
         'name': sender?.name,
-        'phoneNumber': sender?.phoneNumber,
-        'imageUrl': sender?.imageUrl,
+        'phone_number': sender?.phoneNumber,
+        'image_url': sender?.imageUrl,
       },
       'receiver': {
         'id': receiver?.id,
         'name': receiver?.name,
-        'phoneNumber': receiver?.phoneNumber,
-        'imageUrl': receiver?.imageUrl,
+        'phone_number': receiver?.phoneNumber,
+        'image_url': receiver?.imageUrl,
       },
       'content': content,
       'createdAt': createdAt.toIso8601String(),
@@ -80,14 +82,31 @@ class Message extends Equatable {
     };
   }
 
-  factory Message.fromJson(Map<String, dynamic> json) {
+  factory Message.fromJsonSocketIO(Map<String, dynamic> json) {
     return Message(
-      id: json['id'],
+      id: json['id'].toString() ?? '',
+      uuid: json['uuid'],
       content: json['content'],
-      isRead: json['isRead'],
-      isReceive: json['isReceive'],
-      isNew: json['isNew'],
-      isDelivered: json['isDelivered'],
+      isRead: json['is_read'],
+      isSuccess: json['is_success'],
+      isNew: json['is_new'],
+      isDelivered: json['is_delivered'],
+      createdAt: DateTime.parse(json['createdAt']),
+      sender: User.fromJson(json['sender']),
+      receiver: User.fromJson(json['receiver']),
+      receivedAt: DateTime.now(),
+    );
+  }
+
+  factory Message.fromJsonApi(Map<String, dynamic> json) {
+    return Message(
+      id: json['id'].toString() ?? '',
+      uuid: json['uuid'],
+      content: json['content'],
+      isRead: json['is_read'] == 0 ? false : true,
+      isSuccess: json['is_success'] == 0 ? false : true,
+      isNew: json['is_new'] == 0 ? false : true,
+      isDelivered: json['is_delivered'] == 0 ? false : true,
       createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
@@ -97,12 +116,13 @@ class Message extends Equatable {
 
   factory Message.fromJsonDb(Map<String, dynamic> json) {
     return Message(
-      id: json['id'],
+      id: json['id'].toString() ?? '',
+      uuid: json['uuid'],
       content: json['content'],
-      isRead: json['isRead'],
-      isReceive: json['isReceive'],
-      isNew: json['isNew'],
-      isDelivered: json['isDelivered'],
+      isRead: json['is_read'],
+      isSuccess: json['is_success'],
+      isNew: json['is_new'],
+      isDelivered: json['is_delivered'],
       createdAt: DateTime.parse(json['createdAt']),
       sender: User.fromJson(json['sender']),
       receiver: User.fromJson(json['receiver']),
@@ -113,10 +133,11 @@ class Message extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        uuid,
         sender,
         receiver,
         content,
-        isReceive,
+        isSuccess,
         isDelivered,
         isRead,
         isNew,

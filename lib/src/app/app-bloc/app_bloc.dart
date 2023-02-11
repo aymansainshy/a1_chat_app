@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
-import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:async';
 import 'dart:io';
@@ -51,7 +50,6 @@ class AppSetupInFailure extends AppState {
 class AppBloc extends Bloc<AppEvent, AppState> {
   final DeviceInfoPlugin deviceInfoPlugin;
 
-
   late UserDevice device;
 
   AppBloc(this.deviceInfoPlugin) : super(AppInitial()) {
@@ -89,7 +87,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             );
           }
         } catch (e) {
-          // print("Device setup error $e");
+          print("Device setup error $e");
         }
 
         Application.device = device;
@@ -97,13 +95,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         //Setup user if Exist ......
         if (PreferencesUtils.containsKey(Preferences.user)!) {
           String? userData = PreferencesUtils.getString(Preferences.user);
-
           if (userData != null) {
             Application.user = User.fromJson(jsonDecode(userData));
-            await injector<MessageRepository>().fetchMessages();
+
+            try {
+              await injector<MessageRepository>().fetchMessages();
+              await injector<MessageRepository>().fetchUserMessages();
+            } catch (e) {
+              print(e.toString());
+              rethrow;
+            }
+
           }
         }
-
 
         injector<AuthCubit>().checkAuth();
         injector<OnlineUsersBloc>().add(GetOnlineUser());

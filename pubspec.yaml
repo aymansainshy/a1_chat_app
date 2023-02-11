@@ -56,6 +56,7 @@ dependencies:
   path_provider: ^2.0.11
   grouped_list: ^5.1.2
   dio: ^4.0.6
+  logger: ^1.1.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
