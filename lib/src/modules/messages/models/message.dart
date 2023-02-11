@@ -82,7 +82,7 @@ class Message extends Equatable {
     };
   }
 
-  factory Message.fromJson(Map<String, dynamic> json) {
+  factory Message.fromJsonSocketIO(Map<String, dynamic> json) {
     return Message(
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],

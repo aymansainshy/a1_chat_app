@@ -47,19 +47,19 @@ class SocketIoImpl extends SocketIO {
     });
 
     _socket.on('message-success', (message) {
-      injector<MessageBloc>().add(MessageSuccess(message: Message.fromJson(message)));
+      injector<MessageBloc>().add(MessageSuccess(message: Message.fromJsonSocketIO(message)));
     });
 
     _socket.on('message-delivered', (message) {
-      injector<MessageBloc>().add(MessageDelivered(message: Message.fromJson(message)));
+      injector<MessageBloc>().add(MessageDelivered(message: Message.fromJsonSocketIO(message)));
     });
 
     _socket.on('send-text-message', (textMessage) {
-      injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJson(textMessage)));
+      injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJsonSocketIO(textMessage)));
     });
 
     _socket.on('message-read', (message) {
-      injector<MessageBloc>().add(MessageRead(message: Message.fromJson(message)));
+      injector<MessageBloc>().add(MessageRead(message: Message.fromJsonSocketIO(message)));
     });
 
     _socket.on('disconnected-user', (disConnectedUser) {
