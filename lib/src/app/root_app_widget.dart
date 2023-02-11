@@ -51,6 +51,7 @@ class _MyAppState extends State<MyApp> {
             listener: (context, appState) {
               if (appState is AppSetupInComplete) {
                 BlocProvider.of<MessageBloc>(context).add(GetMessagesRoom());
+                BlocProvider.of<MessageBloc>(context).add(FetchUserMessages());
               }
             },
             builder: (context, appState) {
