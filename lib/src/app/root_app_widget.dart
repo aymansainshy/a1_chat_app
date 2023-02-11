@@ -50,8 +50,7 @@ class _MyAppState extends State<MyApp> {
           return BlocConsumer<AppBloc, AppState>(
             listener: (context, appState) {
               if (appState is AppSetupInComplete) {
-                BlocProvider.of<MessageBloc>(context).add(GetMessagesRoom());
-                BlocProvider.of<MessageBloc>(context).add(FetchUserMessages());
+                BlocProvider.of<MessageBloc>(context)..add(GetMessagesRoom())..add(FetchUserMessages());
               }
             },
             builder: (context, appState) {

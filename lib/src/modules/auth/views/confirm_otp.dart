@@ -14,6 +14,7 @@ import '../../../core/animations/fade_transition.dart';
 import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/hellper_methods.dart';
+import '../../messages/message-bloc/message_bloc.dart';
 import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 
@@ -28,8 +29,7 @@ class PinCodeVerificationView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PinCodeVerificationView> createState() =>
-      _PinCodeVerificationViewState();
+  State<PinCodeVerificationView> createState() => _PinCodeVerificationViewState();
 }
 
 class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
@@ -83,6 +83,8 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
               // BlocProvider.of<AuthCubit>(context).checkAuth();
               BlocProvider.of<AuthCubit>(context).socket.connectAndListen();
               context.go('/');
+
+              BlocProvider.of<MessageBloc>(context)..add(GetMessagesRoom())..add(FetchUserMessages());
             }
 
             if (otpState is VarifyOtpFaliure) {
@@ -145,10 +147,9 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                           const SizedBox(width: 5),
                           Text(
                             widget.phoneNumber!,
-                            style:
-                                Theme.of(context).textTheme.bodyText1?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ],
                       ),
@@ -194,13 +195,10 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                                   activeColor: Colors.blue,
                                   fieldHeight: 50,
                                   fieldWidth: 50,
-                                  activeFillColor: hasError
-                                      ? Colors.blue[100]
-                                      : Colors.white,
+                                  activeFillColor: hasError ? Colors.blue[100] : Colors.white,
                                 ),
                                 cursorColor: Colors.black,
-                                animationDuration:
-                                    const Duration(milliseconds: 300),
+                                animationDuration: const Duration(milliseconds: 300),
                                 enableActiveFill: true,
                                 errorAnimationController: errorController,
                                 controller: textEditingController,
@@ -244,8 +242,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                         children: [
                           const Text(
                             "OTP didn't received",
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: 15),
+                            style: TextStyle(color: Colors.black54, fontSize: 15),
                           ),
                           BlocBuilder<OtpBloc, OtpState>(
                             builder: (context, otpState) {
@@ -265,13 +262,9 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                                       )
                                     : Text(
                                         "Resend OTP",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge
-                                            ?.copyWith(
+                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
+                                              color: Theme.of(context).primaryColor,
                                             ),
                                       ),
                               );
@@ -283,8 +276,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                       SharedElevatedButton(
                         onPressed: () {
                           formKey.currentState?.save();
-                          BlocProvider.of<OtpBloc>(context)
-                              .add(VarifyOtp(widget.phoneNumber, currentText));
+                          BlocProvider.of<OtpBloc>(context).add(VarifyOtp(widget.phoneNumber, currentText));
                         },
                         child: SizedBox(
                           height: _kbuttonHeight,
@@ -301,10 +293,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                               : Center(
                                   child: Text(
                                     "Varify",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .button
-                                        ?.copyWith(
+                                    style: Theme.of(context).textTheme.button?.copyWith(
                                           color: AppColors.textButtomColor,
                                         ),
                                   ),

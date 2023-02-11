@@ -59,6 +59,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         List<Message?> loadedUserMessages = await messageRepository.fetchUserMessages();
 
         for (var nMessage in loadedUserMessages) {
+          print(nMessage);
           final message = _messageRooms[nMessage?.receiver?.phoneNumber]!.messages.firstWhere((message) => message.id == nMessage?.id);
 
           message.isDelivered = nMessage!.isDelivered;
@@ -66,6 +67,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           messageRepository.saveMessage(message);
         }
 
+        emit(state.copyWith(messageRooms: _messageRooms));
       } catch (e) {
         print(e.toString());
       }
