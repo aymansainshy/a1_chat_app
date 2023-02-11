@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,8 +13,7 @@ class AuthState extends Equatable {
 
   const AuthState.authenticated() : this._(status: AuthStatus.authenticated);
 
-  const AuthState.unAuthenticated()
-      : this._(status: AuthStatus.unAuthenticated);
+  const AuthState.unAuthenticated() : this._(status: AuthStatus.unAuthenticated);
 
   const AuthState.isTryLogin() : this._(status: AuthStatus.isTryLogin);
 
@@ -26,8 +23,6 @@ class AuthState extends Equatable {
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this.socket) : super(const AuthState._());
-
-
 
   final SocketIO socket;
 
