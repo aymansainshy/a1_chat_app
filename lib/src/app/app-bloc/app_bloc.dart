@@ -97,15 +97,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           String? userData = PreferencesUtils.getString(Preferences.user);
           if (userData != null) {
             Application.user = User.fromJson(jsonDecode(userData));
-
-            try {
-              await injector<MessageRepository>().fetchMessages();
-              await injector<MessageRepository>().fetchUserMessages();
-            } catch (e) {
-              print(e.toString());
-              rethrow;
-            }
-
+            await injector<MessageRepository>().fetchMessages();
           }
         }
 

@@ -1,7 +1,6 @@
 import 'package:a1_chat_app/src/config/app_config.dart';
 import 'package:a1_chat_app/src/core/theme/app_theme.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
-import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +11,7 @@ import '../button_switcher_cubit.dart';
 import '../widgets/user_avatar.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key? key}): super(key: key);
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -61,20 +60,17 @@ class ButtonSwitcher extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    BlocProvider.of<ButtonSwitcherCubit>(context)
-                        .toggleButton(0);
+                    BlocProvider.of<ButtonSwitcherCubit>(context).toggleButton(0);
                   },
                   child: BlocBuilder<MessageBloc, MessageBlocState>(
                     builder: (context, messageState) {
                       return Stack(
-                        clipBehavior : Clip.none,
+                        clipBehavior: Clip.none,
                         children: [
                           Container(
                             height: ScreenUtil().setHeight(30),
                             decoration: BoxDecoration(
-                              color: bState.index == 0
-                                  ? Theme.of(context).primaryColor
-                                  : AppColors.borderColor,
+                              color: bState.index == 0 ? Theme.of(context).primaryColor : AppColors.borderColor,
                               borderRadius: const BorderRadius.all(
                                 Radius.circular(20),
                               ),
@@ -82,10 +78,7 @@ class ButtonSwitcher extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 "Messages",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    ?.copyWith(
+                                style: Theme.of(context).textTheme.bodyText1?.copyWith(
                                       color: Theme.of(context).cardColor,
                                     ),
                               ),
@@ -106,9 +99,7 @@ class ButtonSwitcher extends StatelessWidget {
                                   child: Container(
                                     height: 22,
                                     width: 22,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Theme.of(context).primaryColor),
+                                    decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
                                     child: Center(
                                       child: MediaQuery(
                                         data: MediaQuery.of(context).copyWith(
@@ -116,12 +107,8 @@ class ButtonSwitcher extends StatelessWidget {
                                         ),
                                         child: Text(
                                           '${messageState.totalNewMessages()}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2
-                                              ?.copyWith(
-                                                  color: Theme.of(context)
-                                                      .cardColor),
+                                          style:
+                                              Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).cardColor),
                                         ),
                                       ),
                                     ),
@@ -139,15 +126,12 @@ class ButtonSwitcher extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    BlocProvider.of<ButtonSwitcherCubit>(context)
-                        .toggleButton(1);
+                    BlocProvider.of<ButtonSwitcherCubit>(context).toggleButton(1);
                   },
                   child: Container(
                     height: ScreenUtil().setHeight(30),
                     decoration: BoxDecoration(
-                      color: bState.index == 1
-                          ? Theme.of(context).primaryColor
-                          : AppColors.borderColor,
+                      color: bState.index == 1 ? Theme.of(context).primaryColor : AppColors.borderColor,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(20),
                       ),
@@ -184,9 +168,7 @@ class UserInformationWidget extends StatelessWidget {
           Transform.translate(
             offset: const Offset(5, 0),
             child: UserAvatar(
-              imageUrl:
-                  "${Application.domain}/uploads/${Application.user?.imageUrl}" ??
-                      "",
+              imageUrl: "${Application.domain}/uploads/${Application.user?.imageUrl}" ?? "",
               radius: 30,
             ),
           ),

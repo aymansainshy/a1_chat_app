@@ -54,6 +54,25 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
+    on<FetchUserMessages>((event, emit) async {
+      try {
+        List<Message?> loadedUserMessages = await messageRepository.fetchUserMessages();
+
+        for (var nMessage in loadedUserMessages) {
+          print(nMessage);
+          final message = _messageRooms[nMessage?.receiver?.phoneNumber]!.messages.firstWhere((message) => message.id == nMessage?.id);
+
+          message.isDelivered = nMessage!.isDelivered;
+          message.isRead = nMessage.isRead;
+          messageRepository.saveMessage(message);
+        }
+
+        emit(state.copyWith(messageRooms: _messageRooms));
+      } catch (e) {
+        print(e.toString());
+      }
+    });
+
     on<SendMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
         _messageRooms[event.message?.receiver?.phoneNumber]?.messages.add(event.message!);
@@ -92,7 +111,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     //Receive new message
     on<ReceiveMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
-
         if (openedRoom == event.message.sender?.phoneNumber) {
           event.message.isNew = false;
           _socketIO.iReadMessages(event.message);
@@ -129,7 +147,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           emit(state.copyWith(messageRooms: _messageRooms));
           return;
         }
-
       }
     });
 

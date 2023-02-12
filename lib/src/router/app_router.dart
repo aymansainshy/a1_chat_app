@@ -62,8 +62,8 @@ class AppRouter {
       ),
     ],
     redirect: ((BuildContext context, GoRouterState state) {
-      bool isTryLogin = authCubit.state.status == AuthStatus.isTryLogin;
-      bool isAuthenticated = authCubit.state.status == AuthStatus.authenticated;
+      bool isTryLogin = authCubit.state == const AuthState.isTryLogin();
+      bool isAuthenticated = authCubit.state  == const AuthState.authenticated();
 
       print("isAuthenticated $isAuthenticated");
       print('isTryLogin $isTryLogin');
