@@ -131,16 +131,5 @@ class Message extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        id,
-        uuid,
-        sender,
-        receiver,
-        content,
-        isSuccess,
-        isDelivered,
-        isRead,
-        isNew,
-        receivedAt,
-      ];
+  List<Object?> get props => [uuid];
 }

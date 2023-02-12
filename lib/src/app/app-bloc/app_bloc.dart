@@ -54,16 +54,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   AppBloc(this.deviceInfoPlugin) : super(AppInitial()) {
     on<AppStarted>((event, emit) async {
-      Application.preferences = await SharedPreferences.getInstance();
-      // PreferencesUtils.clear();
+      emit(AppSetupInProgress());
 
-      ///Setting local storage path
-      Application.storagePath = (await getApplicationDocumentsDirectory()).path;
-
-      // Read Save Device Information
       try {
-        emit(AppSetupInProgress());
+        Application.preferences = await SharedPreferences.getInstance();
+        // PreferencesUtils.clear();
 
+        ///Setting local storage path
+        Application.storagePath = (await getApplicationDocumentsDirectory()).path;
+
+        // Read Save Device Information
         try {
           if (Platform.isAndroid) {
             final android = await deviceInfoPlugin.androidInfo;
