@@ -55,19 +55,52 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<FetchUserMessages>((event, emit) async {
+      // try {
+      //   List<Message?> loadedUserMessages = await messageRepository.fetchUserMessages();
+      //
+      //   for (var nMessage in loadedUserMessages) {
+      //     final message =_messageRooms[nMessage?.receiver?.phoneNumber]!.messages.firstWhere((message) => message.id == nMessage?.id);
+      //
+      //     message.isDelivered = nMessage!.isDelivered;
+      //     message.isRead = nMessage.isRead;
+      //     messageRepository.saveMessage(message);
+      //   }
+      //
+      //   emit(state.copyWith(messageRooms: _messageRooms));
+      // } catch (e) {
+      //   print(e.toString());
+      // }
+    });
+
+    on<FetchUserReceivedMessages>((event, emit) async {
+      List<Message?> loadedUserMessages = await messageRepository.fetchUserReceivedMessages();
       try {
-        List<Message?> loadedUserMessages = await messageRepository.fetchUserMessages();
+        for (var message in loadedUserMessages) {
+          print("message is New ...... ${message!.isNew}");
 
-        for (var nMessage in loadedUserMessages) {
-          print(nMessage);
-          final message = _messageRooms[nMessage?.receiver?.phoneNumber]!.messages.firstWhere((message) => message.id == nMessage?.id);
 
-          message.isDelivered = nMessage!.isDelivered;
-          message.isRead = nMessage.isRead;
-          messageRepository.saveMessage(message);
-        }
+            if (_messageRooms.containsKey(message.sender?.phoneNumber)) {
 
-        emit(state.copyWith(messageRooms: _messageRooms));
+              if (!_messageRooms[message.sender?.phoneNumber]!.messages.contains(message)) {
+                _messageRooms[message.sender?.phoneNumber]!.messages.add(message);
+              }
+
+            } else {
+              _messageRooms.putIfAbsent(message.sender!.phoneNumber!, () {
+                final createdRoom = MessageRoom(
+                  id: message.receiver?.id,
+                  user: message.receiver,
+                  messages: [message],
+                );
+                return createdRoom;
+              });
+            }
+
+            emit(state.copyWith(messageRooms: _messageRooms));
+            _socketIO.messageDelivered(message);
+            messageRepository.saveMessage(message);
+          }
+
       } catch (e) {
         print(e.toString());
       }

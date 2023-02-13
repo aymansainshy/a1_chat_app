@@ -12,6 +12,8 @@ var logger = Logger(
 abstract class MessageRepository {
   Future<List<Message?>> fetchUserMessages();
 
+  Future<List<Message?>> fetchUserReceivedMessages();
+
   Future<void> fetchMessages();
 
   List<Message?>? getMessages();
@@ -43,6 +45,7 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<List<Message?>> fetchUserMessages() async {
+
     try {
       final response = await Dio().get(
         "${Application.domain}/user-messages/${Application.user?.id}",
@@ -59,10 +62,40 @@ class MessageRepositoryImpl extends MessageRepository {
 
       final loadedData = response.data['data'] as List<dynamic>;
       final List<Message> userMessages = loadedData.map((message) => Message.fromJsonApi(message)).toList();
+      print("User Sending Messages");
       logger.i(userMessages.toString());
 
       return userMessages;
     } catch (error) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Message?>> fetchUserReceivedMessages() async {
+
+    try {
+      final response = await Dio().get(
+        "${Application.domain}/user-received-messages/${Application.user?.id}",
+        options: Options(
+          sendTimeout: 2000,
+          receiveTimeout: 1000,
+          headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${Application.user?.token}'
+          },
+        ),
+      );
+
+      final loadedData = response.data['data'] as List<dynamic>;
+      final List<Message> userMessages = loadedData.map((message) => Message.fromJsonApi(message)).toList();
+      print("User Received Messages");
+      logger.i(userMessages.toString());
+
+      return userMessages;
+    } catch (error) {
+      print(error.toString());
       rethrow;
     }
   }
