@@ -1,13 +1,12 @@
+import 'package:a1_chat_app/injector.dart';
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../config/app_config.dart';
+import '../../../core/constan/const.dart';
+import '../../../modules/messages/message-bloc/message_bloc.dart';
 import '../../../modules/messages/models/message.dart';
 import '../../../modules/storage/storage.dart';
-
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
 
 abstract class MessageRepository {
   Future<List<Message?>> fetchUserMessages();
@@ -45,7 +44,6 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<List<Message?>> fetchUserMessages() async {
-
     try {
       final response = await Dio().get(
         "${Application.domain}/user-messages/${Application.user?.id}",
@@ -62,8 +60,20 @@ class MessageRepositoryImpl extends MessageRepository {
 
       final loadedData = response.data['data'] as List<dynamic>;
       final List<Message> userMessages = loadedData.map((message) => Message.fromJsonApi(message)).toList();
-      print("User Sending Messages");
-      logger.i(userMessages.toString());
+
+      if (kDebugMode) {
+        print("User Sending Messages");
+        logger.i(userMessages.toString());
+      }
+
+      for (var message in userMessages) {
+        if (message.isRead) {
+          injector<MessageBloc>().add(MessageRead(message: message));
+        }
+        if (message.isDelivered) {
+          injector<MessageBloc>().add(MessageDelivered(message: message));
+        }
+      }
 
       return userMessages;
     } catch (error) {
@@ -73,7 +83,6 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<List<Message?>> fetchUserReceivedMessages() async {
-
     try {
       final response = await Dio().get(
         "${Application.domain}/user-received-messages/${Application.user?.id}",
@@ -90,12 +99,12 @@ class MessageRepositoryImpl extends MessageRepository {
 
       final loadedData = response.data['data'] as List<dynamic>;
       final List<Message> userMessages = loadedData.map((message) => Message.fromJsonApi(message)).toList();
-      print("User Received Messages");
-      logger.i(userMessages.toString());
 
       return userMessages;
     } catch (error) {
-      print(error.toString());
+      if (kDebugMode) {
+        print(error.toString());
+      }
       rethrow;
     }
   }

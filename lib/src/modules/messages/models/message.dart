@@ -28,7 +28,6 @@ class MessageRoom extends Equatable {
 
 @immutable
 // ignore: must_be_immutable
-
 class Message extends Equatable {
   late String? id;
   late String? uuid;
