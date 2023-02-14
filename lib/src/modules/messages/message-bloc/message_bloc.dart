@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/app_config.dart';
@@ -55,57 +56,45 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<FetchUserMessages>((event, emit) async {
-      // try {
-      //   List<Message?> loadedUserMessages = await messageRepository.fetchUserMessages();
-      //
-      //   for (var nMessage in loadedUserMessages) {
-      //     final message =_messageRooms[nMessage?.receiver?.phoneNumber]!.messages.firstWhere((message) => message.id == nMessage?.id);
-      //
-      //     message.isDelivered = nMessage!.isDelivered;
-      //     message.isRead = nMessage.isRead;
-      //     messageRepository.saveMessage(message);
-      //   }
-      //
-      //   emit(state.copyWith(messageRooms: _messageRooms));
-      // } catch (e) {
-      //   print(e.toString());
-      // }
+      try {
+        await messageRepository.fetchUserMessages();
+      } catch (e) {
+        if (kDebugMode) print(e.toString());
+      }
     });
 
     on<FetchUserReceivedMessages>((event, emit) async {
       List<Message?> loadedUserMessages = await messageRepository.fetchUserReceivedMessages();
       try {
         for (var message in loadedUserMessages) {
-          print("message is New ...... ${message!.isNew}");
+          if (kDebugMode) print("message ID ...... ${message!.id}");
 
-
-            if (_messageRooms.containsKey(message.sender?.phoneNumber)) {
-
-              if (!_messageRooms[message.sender?.phoneNumber]!.messages.contains(message)) {
-                _messageRooms[message.sender?.phoneNumber]!.messages.add(message);
-              }
-
-            } else {
-              _messageRooms.putIfAbsent(message.sender!.phoneNumber!, () {
-                final createdRoom = MessageRoom(
-                  id: message.receiver?.id,
-                  user: message.receiver,
-                  messages: [message],
-                );
-                return createdRoom;
-              });
+          if (_messageRooms.containsKey(message!.sender?.phoneNumber)) {
+            if (!_messageRooms[message.sender?.phoneNumber]!.messages.contains(message)) {
+              _messageRooms[message.sender?.phoneNumber]!.messages.add(message);
             }
-
-            emit(state.copyWith(messageRooms: _messageRooms));
-            _socketIO.messageDelivered(message);
-            messageRepository.saveMessage(message);
+          } else {
+            _messageRooms.putIfAbsent(message.sender!.phoneNumber!, () {
+              final createdRoom = MessageRoom(
+                id: message.receiver?.id,
+                user: message.receiver,
+                messages: [message],
+              );
+              return createdRoom;
+            });
           }
 
+          emit(state.copyWith(messageRooms: _messageRooms));
+          message.isDelivered = true;
+          _socketIO.messageDelivered(message); // emit socket event
+          messageRepository.saveMessage(message);
+        }
       } catch (e) {
-        print(e.toString());
+        if (kDebugMode) print(e.toString());
       }
     });
 
+    // Emit bloc event to emit socket event - Send-Message
     on<SendMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
         _messageRooms[event.message?.receiver?.phoneNumber]?.messages.add(event.message!);
@@ -130,6 +119,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       }
     });
 
+    // Listen to socket event - message-success
     on<MessageSuccess>((event, emit) {
       for (var message in _messageRooms[event.message.receiver?.phoneNumber!]!.messages) {
         if (message.uuid == event.message.uuid) {
@@ -141,17 +131,22 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       }
     });
 
-    //Receive new message
+    // Listen to socket event - Receive new message
     on<ReceiveMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
+        // If the user is already in the room ,
+        // message should be delivered and read .
         if (openedRoom == event.message.sender?.phoneNumber) {
           event.message.isNew = false;
-          _socketIO.iReadMessages(event.message);
+          event.message.isDelivered = true;
+          event.message.isRead = true;
+          _socketIO.iReadMessages(event.message); // emit socket event
           messageRepository.saveMessage(event.message);
         }
 
         _messageRooms[event.message.sender?.phoneNumber]?.messages.add(event.message);
-        _socketIO.messageDelivered(event.message);
+        event.message.isDelivered = true;
+        _socketIO.messageDelivered(event.message); // emit socket event
         messageRepository.saveMessage(event.message);
 
         emit(state.copyWith(messageRooms: _messageRooms));
@@ -165,13 +160,14 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           return createdRoom;
         });
 
-        _socketIO.messageDelivered(event.message);
+        event.message.isDelivered = true;
+        _socketIO.messageDelivered(event.message); // emit socket event
         messageRepository.saveMessage(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
       }
     });
 
-    // Message Delivered to user
+    // Listen to socket event - Message Delivered to user
     on<MessageDelivered>((event, emit) {
       for (var message in _messageRooms[event.message.receiver?.phoneNumber!]!.messages) {
         if (message.uuid == event.message.uuid) {
@@ -183,11 +179,14 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       }
     });
 
+    // emit Bloc event to emit socket event
     on<IReadMessage>((event, emit) {
       if (event.message.sender == Application.user) {
         return;
       }
-      _socketIO.iReadMessages(event.message);
+
+      event.message.isRead = true;
+      _socketIO.iReadMessages(event.message); // emit socket event
 
       for (var message in _messageRooms[event.message.sender?.phoneNumber]!.messages) {
         message.isNew = false;
@@ -197,6 +196,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       emit(state.copyWith(messageRooms: _messageRooms));
     });
 
+    // Listen to socket event - message-read
     on<MessageRead>((event, emit) {
       for (var message in _messageRooms[event.message.receiver?.phoneNumber]!.messages) {
         message.isRead = true;
