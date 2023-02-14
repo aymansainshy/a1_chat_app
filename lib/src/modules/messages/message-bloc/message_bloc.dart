@@ -67,7 +67,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       List<Message?> loadedUserMessages = await messageRepository.fetchUserReceivedMessages();
       try {
         for (var message in loadedUserMessages) {
-          if (kDebugMode) print("message is New ...... ${message!.isNew}");
+          if (kDebugMode) print("message ID ...... ${message!.id}");
 
           if (_messageRooms.containsKey(message!.sender?.phoneNumber)) {
             if (!_messageRooms[message.sender?.phoneNumber]!.messages.contains(message)) {
@@ -90,7 +90,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           messageRepository.saveMessage(message);
         }
       } catch (e) {
-        print(e.toString());
+        if (kDebugMode) print(e.toString());
       }
     });
 
