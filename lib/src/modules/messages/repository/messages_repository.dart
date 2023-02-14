@@ -59,7 +59,7 @@ class MessageRepositoryImpl extends MessageRepository {
       );
 
       final loadedData = response.data['data'] as List<dynamic>;
-      final List<Message> userMessages = loadedData.map((message) => Message.fromJsonApi(message)).toList();
+      final List<Message> userMessages = loadedData.map((message) => Message.fromJsonSocketIO(message)).toList();
 
       if (kDebugMode) {
         print("User Sending Messages");
@@ -98,7 +98,7 @@ class MessageRepositoryImpl extends MessageRepository {
       );
 
       final loadedData = response.data['data'] as List<dynamic>;
-      final List<Message> userMessages = loadedData.map((message) => Message.fromJsonApi(message)).toList();
+      final List<Message> userMessages = loadedData.map((message) => Message.fromJsonSocketIO(message)).toList();
 
       return userMessages;
     } catch (error) {
