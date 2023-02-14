@@ -48,8 +48,8 @@ class MessageRepositoryImpl extends MessageRepository {
       final response = await Dio().get(
         "${Application.domain}/user-messages/${Application.user?.id}",
         options: Options(
-          sendTimeout: 2000,
-          receiveTimeout: 1000,
+          sendTimeout: 5000,
+          receiveTimeout: 5000,
           headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
@@ -87,8 +87,8 @@ class MessageRepositoryImpl extends MessageRepository {
       final response = await Dio().get(
         "${Application.domain}/user-received-messages/${Application.user?.id}",
         options: Options(
-          sendTimeout: 2000,
-          receiveTimeout: 1000,
+          sendTimeout: 5000,
+          receiveTimeout: 5000,
           headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
