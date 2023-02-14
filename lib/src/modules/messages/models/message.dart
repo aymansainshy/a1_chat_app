@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../../online-users/models/user_model.dart';
 
+enum MessageType { text, media }
+
 @immutable
 // ignore: must_be_immutable
 class MessageRoom extends Equatable {
@@ -30,6 +32,7 @@ class MessageRoom extends Equatable {
 // ignore: must_be_immutable
 class Message extends Equatable {
   late String? id;
+  late MessageType messageType;
   late String? uuid;
   late User? sender;
   late User? receiver;
@@ -49,6 +52,7 @@ class Message extends Equatable {
     required this.content,
     required this.createdAt,
     required this.receivedAt,
+    required this.messageType,
     this.isRead = false,
     this.isDelivered = false,
     this.isSuccess = false,
@@ -59,6 +63,7 @@ class Message extends Equatable {
     return {
       'id': id,
       'uuid': uuid,
+      'message_type': messageType.toString(),
       'is_read': isRead,
       'is_success': isSuccess,
       'is_delivered': isDelivered,
@@ -85,6 +90,7 @@ class Message extends Equatable {
     return Message(
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
+      messageType: json['message_type'] ?? MessageType.text,
       content: json['content'],
       isRead: json['is_read'],
       isSuccess: json['is_success'],
@@ -97,11 +103,11 @@ class Message extends Equatable {
     );
   }
 
-
   factory Message.fromJsonDb(Map<String, dynamic> json) {
     return Message(
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
+      messageType: json['message_type'] ?? MessageType.text,
       content: json['content'],
       isRead: json['is_read'],
       isSuccess: json['is_success'],
