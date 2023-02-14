@@ -55,7 +55,6 @@ class SocketIoImpl extends SocketIO {
     });
 
     _socket.on('send-text-message', (textMessage) {
-      print(textMessage);
       injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJsonSocketIO(textMessage)));
     });
 

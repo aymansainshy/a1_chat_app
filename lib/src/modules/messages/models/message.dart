@@ -97,21 +97,6 @@ class Message extends Equatable {
     );
   }
 
-  factory Message.fromJsonApi(Map<String, dynamic> json) {
-    return Message(
-      id: json['id'].toString() ?? '',
-      uuid: json['uuid'],
-      content: json['content'],
-      isRead: json['is_read'] == 0 ? false : true,
-      isSuccess: json['is_success'] == 0 ? false : true,
-      isNew: json['is_new'] == 0 ? false : true,
-      isDelivered: json['is_delivered'] == 0 ? false : true,
-      createdAt: DateTime.parse(json['createdAt']),
-      sender: User.fromJson(json['sender']),
-      receiver: User.fromJson(json['receiver']),
-      receivedAt: DateTime.now(),
-    );
-  }
 
   factory Message.fromJsonDb(Map<String, dynamic> json) {
     return Message(
