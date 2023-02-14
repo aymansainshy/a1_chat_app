@@ -261,6 +261,7 @@ class _ChatViewState extends State<ChatView> {
                             var newMessage = Message(
                                 id: DateTime.now().toIso8601String(),
                                 uuid: DateTime.now().toIso8601String(),
+                                messageType: MessageType.text,
                                 sender: Application.user,
                                 receiver: user,
                                 content: messageText,
