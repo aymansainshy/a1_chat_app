@@ -26,10 +26,10 @@ class SendMessage extends MessageBlocEvent {
   const SendMessage({required this.message});
 }
 
-class ReceiveMessage extends MessageBlocEvent {
+class ReceiveTextMessage extends MessageBlocEvent {
   final Message message;
 
-  const ReceiveMessage({required this.message});
+  const ReceiveTextMessage({required this.message});
 }
 
 class MessageSuccess extends MessageBlocEvent {

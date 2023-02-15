@@ -132,7 +132,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     // Listen to socket event - Receive new message
-    on<ReceiveMessage>((event, emit) {
+    on<ReceiveTextMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message.sender?.phoneNumber)) {
         // If the user is already in the room ,
         // message should be delivered and read .
