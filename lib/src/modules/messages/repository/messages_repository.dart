@@ -15,6 +15,8 @@ abstract class MessageRepository {
 
   Future<void> fetchMessages();
 
+  Future<void> uploadMessageFile({String url, FormData data});
+
   List<Message?>? getMessages();
 
   Future<void> saveMessage(Message message);
@@ -106,6 +108,33 @@ class MessageRepositoryImpl extends MessageRepository {
         print(error.toString());
       }
       rethrow;
+    }
+  }
+
+  @override
+  Future<void> uploadMessageFile({String? url, FormData? data}) async {
+    print("Start Posting RealEstate  ..........");
+    try {
+      final response = await Dio().post(
+        url!,
+        data: data,
+        options: Options(
+          sendTimeout: 20000,
+          receiveTimeout: 20000,
+          headers: {
+            'Accept': '*/*',
+            'content-type': 'multipart/form-data',
+          },
+        ),
+        onSendProgress: (sent, total) {
+          print("Sent : [ ${(sent / total) * 100} ] from : [ 100% ] ....");
+          // AppBlocs.uploadingProcessBloc.add(AddUploadingProgress((sent/ total) * 100));
+        },
+      );
+      print("Dio Posting Response  .. ${response.data}");
+    } on DioError catch (e) {
+      print("Dio Error Posting Service .. $e");
+      throw e.toString();
     }
   }
 }
