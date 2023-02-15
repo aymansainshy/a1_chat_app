@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +38,7 @@ class Message extends Equatable {
   late String? uuid;
   late User? sender;
   late User? receiver;
-  late String content;
+  late MContent content;
   late DateTime createdAt;
   late bool isRead;
   late bool isSuccess;
@@ -80,7 +82,11 @@ class Message extends Equatable {
         'phone_number': receiver?.phoneNumber,
         'image_url': receiver?.imageUrl,
       },
-      'content': content,
+      'content': {
+        'text': content.text,
+        'file': content.fileUrl,
+        'file_path': content.filePath,
+      },
       'createdAt': createdAt.toIso8601String(),
       'receivedAt': receivedAt?.toIso8601String(),
     };
@@ -91,7 +97,11 @@ class Message extends Equatable {
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
       messageType: json['message_type'] ?? MessageType.text,
-      content: json['content'],
+      content: MContent(
+        text: json['content']['text'] ?? '',
+        filePath: json['content']['file_path'],
+        fileUrl: json['content']['file_url'],
+      ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
       isNew: json['is_new'],
@@ -108,7 +118,11 @@ class Message extends Equatable {
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
       messageType: json['message_type'] ?? MessageType.text,
-      content: json['content'],
+      content: MContent(
+        text: json['content']['text'] ?? '',
+        filePath: json['content']['file_path'],
+        fileUrl: json['content']['file_url'],
+      ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
       isNew: json['is_new'],
@@ -122,4 +136,20 @@ class Message extends Equatable {
 
   @override
   List<Object?> get props => [uuid];
+}
+
+class MContent{
+  final String? fileUrl;
+  final String? text;
+  final String? filePath;
+  final bool? isLoading;
+  final double? process;
+
+  MContent({
+    this.fileUrl,
+    this.text,
+    this.filePath,
+    this.isLoading = false,
+    this.process,
+  });
 }

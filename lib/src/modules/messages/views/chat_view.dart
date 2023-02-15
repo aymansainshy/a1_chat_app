@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
@@ -40,6 +42,7 @@ class _ChatViewState extends State<ChatView> {
   final _formKey = GlobalKey<FormState>();
 
   String messageText = '';
+  File? messageImage;
 
   @override
   void initState() {
@@ -258,25 +261,53 @@ class _ChatViewState extends State<ChatView> {
                               return;
                             }
 
-                            var newMessage = Message(
+                            var messageType = messageImage == null ? MessageType.text : MessageType.media;
+                            late MContent messageContent;
+
+                            if (messageType == MessageType.text) {
+                              messageContent = MContent(text: messageText);
+                              var newMessage = Message(
+                                  id: DateTime.now().toIso8601String(),
+                                  uuid: DateTime.now().toIso8601String(),
+                                  messageType: messageType,
+                                  sender: Application.user,
+                                  receiver: user,
+                                  content: messageContent,
+                                  createdAt: DateTime.now(),
+                                  receivedAt: DateTime.now(),
+                              );
+
+                              _textEditingController.clear();
+
+                              // Scroll to the bottom of chat View .....
+                              if (_chatScrollController.hasClients) {
+                                final position = _chatScrollController.position.minScrollExtent;
+                                _chatScrollController.jumpTo(position);
+                              }
+
+                              BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage));
+                            } else {
+
+                              messageContent = MContent(text: messageText, filePath: messageImage?.path);
+                              var newMessage = Message(
                                 id: DateTime.now().toIso8601String(),
                                 uuid: DateTime.now().toIso8601String(),
-                                messageType: MessageType.text,
+                                messageType: messageType,
                                 sender: Application.user,
                                 receiver: user,
-                                content: messageText,
+                                content: messageContent,
                                 createdAt: DateTime.now(),
-                                receivedAt: DateTime.now());
+                                receivedAt: DateTime.now(),
+                              );
 
-                            _textEditingController.clear();
 
-                            // Scroll to the bottom of chat View .....
-                            if (_chatScrollController.hasClients) {
-                              final position = _chatScrollController.position.minScrollExtent;
-                              _chatScrollController.jumpTo(position);
+                              // All this bottom lines is going to be in MessageBloc
+                              // SaveImage Without sending data
+                              // Upload image - return response
+                              // Send Message via socket with updated imageUrl
+                              // Process ImageMessage
+
                             }
-
-                            BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage));
                           },
                           child: Container(
                             height: 45,

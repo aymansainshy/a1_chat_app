@@ -57,7 +57,7 @@ class TextMessageWidget extends StatelessWidget {
                     bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(18),
                   ),
                 ),
-                child: message!.content.length < 30
+                child: message!.content.text!.length < 30
                     ? HorizontalMessage(message: message!, isMe: isMe)
                     : VerticalMessage(message: message!, isMe: isMe),
               ),
@@ -133,7 +133,7 @@ class MessageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      message.content ?? '',
+      message.content.text ?? '',
       style: GoogleFonts.rubik(
         textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
               color: isMe ? Colors.black : Colors.white,

@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../config/app_config.dart';
 import '../../../core/utils/hellper_methods.dart';
-import '../../../core/utils/preference_utils.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../../online-users/online-users-bloc/online_users_bloc.dart';
 import '../models/message.dart';
@@ -24,10 +23,14 @@ class RoomWidget extends StatelessWidget {
   final int newMessageCount;
 
   String getMessageContent(Message message) {
-    if (message.content.length > 70) {
-      return "${message.content.substring(0, 65)} ...";
+    if (message.messageType == MessageType.text) {
+      if (message.content.text!.length > 70) {
+        return "${message.content.text!.substring(0, 65)} ...";
+      } else {
+        return "${message.content.text} ...";
+      }
     } else {
-      return "${message.content} ...";
+      return "File ...";
     }
   }
 
