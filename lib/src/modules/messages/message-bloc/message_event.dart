@@ -25,6 +25,12 @@ class SendTextMessage extends MessageBlocEvent {
   const SendTextMessage({required this.message});
 }
 
+class SendFileMessage extends MessageBlocEvent {
+  final Message? message;
+
+  const SendFileMessage({required this.message});
+}
+
 class ReceiveMessage extends MessageBlocEvent {
   final Message message;
 

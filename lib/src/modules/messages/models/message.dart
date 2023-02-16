@@ -150,11 +150,11 @@ class Message extends Equatable {
 }
 
 class MContent {
-  final String? fileUrl;
-  final String? text;
-  final String? filePath;
-  final bool? isLoading;
-  final double? process;
+  late String? fileUrl;
+  late String? text;
+  late String? filePath;
+  late bool? isLoading;
+  late double? process;
 
   MContent({
     this.fileUrl,

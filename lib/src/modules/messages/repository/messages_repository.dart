@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:a1_chat_app/injector.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -15,7 +17,7 @@ abstract class MessageRepository {
 
   Future<void> fetchMessages();
 
-  Future<void> uploadMessageFile({String url, FormData data});
+  Future<dynamic> uploadMessageFile(File data);
 
   List<Message?>? getMessages();
 
@@ -117,11 +119,11 @@ class MessageRepositoryImpl extends MessageRepository {
   }
 
   @override
-  Future<void> uploadMessageFile({String? url, FormData? data}) async {
+  Future<dynamic> uploadMessageFile(File? data) async {
     print("Start Posting Image  ..........");
     try {
       final response = await Dio().post(
-        url!,
+        "url",
         data: data,
         options: Options(
           sendTimeout: 20000,
@@ -132,13 +134,14 @@ class MessageRepositoryImpl extends MessageRepository {
           },
         ),
         onSendProgress: (sent, total) {
-          // print("Sent : [ ${(sent / total) * 100} ] from : [ 100% ] ....");
+          print("Sent : [ ${(sent / total) * 100} ] from : [ 100% ] ....");
           // AppBlocs.uploadingProcessBloc.add(AddUploadingProgress((sent/ total) * 100));
         },
       );
       if (kDebugMode) {
         print("Dio Posting Response  .. ${response.data}");
       }
+      return response.data;
     } on DioError catch (e) {
       // print("Dio Error Posting Service .. $e");
       throw e.toString();

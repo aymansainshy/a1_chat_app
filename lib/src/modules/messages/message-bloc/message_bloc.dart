@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -116,6 +118,47 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _socketIO.sendMessage(event.message!);
         emit(state.copyWith(messageRooms: _messageRooms));
         messageRepository.saveMessage(event.message!);
+      }
+    });
+
+
+    on<SendFileMessage>((event, emit) async {
+      if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
+        _messageRooms[event.message?.receiver?.phoneNumber]?.messages.add(event.message!);
+
+        try {
+          File message = File(event.message!.content.filePath!);
+          event.message?.content.isLoading = true;
+          emit(state.copyWith(messageRooms: _messageRooms));
+
+          // final response = await  messageRepository.uploadMessageFile(message);
+
+          // event.message?.content.fileUrl = response.url;
+          // _socketIO.sendMessage(event.message!);
+
+          // Update message content with new image url
+          // Then send message via socket-Io
+
+        }catch (e) {
+          print(e.toString());
+        }
+
+
+
+        // messageRepository.saveMessage(event.message!);
+      } else {
+        _messageRooms.putIfAbsent(event.message!.receiver!.phoneNumber!, () {
+          final createdRoom = MessageRoom(
+            id: event.message?.receiver?.id,
+            user: event.message?.receiver,
+            messages: [event.message!],
+          );
+          return createdRoom;
+        });
+
+        // _socketIO.sendMessage(event.message!);
+        emit(state.copyWith(messageRooms: _messageRooms));
+        // messageRepository.saveMessage(event.message!);
       }
     });
 
