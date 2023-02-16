@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../config/app_config.dart';
 import '../modules/auth/auth-bloc/otp_bloc.dart';
 import '../modules/home/button_switcher_cubit.dart';
 import 'app-bloc/app_bloc.dart';
@@ -50,10 +51,12 @@ class _MyAppState extends State<MyApp> {
           return BlocConsumer<AppBloc, AppState>(
             listener: (context, appState) {
               if (appState is AppSetupInComplete) {
-                BlocProvider.of<MessageBloc>(context)
-                  ..add(GetMessagesRoom())
-                  ..add(FetchUserMessages())
-                  ..add(FetchUserReceivedMessages());
+                if(Application.user != null ){
+                  BlocProvider.of<MessageBloc>(context)
+                    ..add(GetMessagesRoom())
+                    ..add(FetchUserMessages())
+                    ..add(FetchUserReceivedMessages());
+                }
               }
             },
             builder: (context, appState) {

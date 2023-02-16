@@ -76,8 +76,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           } else {
             _messageRooms.putIfAbsent(message.sender!.phoneNumber!, () {
               final createdRoom = MessageRoom(
-                id: message.receiver?.id,
-                user: message.receiver,
+                id: message.sender?.id,
+                user: message.sender,
                 messages: [message],
               );
               return createdRoom;

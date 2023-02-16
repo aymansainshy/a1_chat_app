@@ -102,6 +102,11 @@ class MessageRepositoryImpl extends MessageRepository {
       final loadedData = response.data['data'] as List<dynamic>;
       final List<Message> userMessages = loadedData.map((message) => Message.fromJsonSocketIO(message)).toList();
 
+      if (kDebugMode) {
+        print("User Receiving Messages");
+        logger.i(loadedData.toString());
+      }
+
       return userMessages;
     } catch (error) {
       if (kDebugMode) {
@@ -113,7 +118,7 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<void> uploadMessageFile({String? url, FormData? data}) async {
-    print("Start Posting RealEstate  ..........");
+    print("Start Posting Image  ..........");
     try {
       final response = await Dio().post(
         url!,
@@ -127,13 +132,15 @@ class MessageRepositoryImpl extends MessageRepository {
           },
         ),
         onSendProgress: (sent, total) {
-          print("Sent : [ ${(sent / total) * 100} ] from : [ 100% ] ....");
+          // print("Sent : [ ${(sent / total) * 100} ] from : [ 100% ] ....");
           // AppBlocs.uploadingProcessBloc.add(AddUploadingProgress((sent/ total) * 100));
         },
       );
-      print("Dio Posting Response  .. ${response.data}");
+      if (kDebugMode) {
+        print("Dio Posting Response  .. ${response.data}");
+      }
     } on DioError catch (e) {
-      print("Dio Error Posting Service .. $e");
+      // print("Dio Error Posting Service .. $e");
       throw e.toString();
     }
   }

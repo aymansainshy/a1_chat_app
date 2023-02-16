@@ -355,15 +355,18 @@ class LastSeenInformationWidget extends StatelessWidget {
             );
           } else {
             final lastSeen = PreferencesUtils.getString(user.phoneNumber!);
-            if (!isOnline && lastSeen != null) {
+
+            if (lastSeen != null) {
+
               final lastSeenData = lastSeenTime(lastSeen);
               return Text(
                 "Last Seen : $lastSeenData",
                 style: Theme.of(context).textTheme.bodyText2,
               );
             }
+
             return Text(
-              "Last Seen : recently",
+              "Last Seen : Recently",
               style: Theme.of(context).textTheme.bodyText2,
             );
           }
@@ -379,17 +382,18 @@ bool isMessagesNullOrEmpty(List<Message?>? messages) {
 
 String lastSeenTime(String lastSeenDate) {
   final now = DateTime.now();
+
   final lastSeen = DateTime.parse(lastSeenDate);
 
   final today = DateTime(now.year, now.month, now.day);
   final yesterday = DateTime(now.year, now.month, now.day - 1);
 
-  final aDate = DateTime(lastSeen.year, lastSeen.month, lastSeen.day);
+  final fLastSeen = DateTime(lastSeen.year, lastSeen.month, lastSeen.day);
 
-  if (aDate == today) {
+  if (fLastSeen == today) {
     final formatDate = DateFormat('hh:mm a').format(lastSeen);
     return formatDate;
-  } else if (aDate == yesterday) {
+  } else if (fLastSeen == yesterday) {
     return "Yesterday";
   } else {
     return "${lastSeen.day}/${lastSeen.month}/${lastSeen.year}";

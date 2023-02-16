@@ -76,7 +76,7 @@ class Message extends Equatable {
     return {
       'id': id,
       'uuid': uuid,
-      'message_type': messageType.name,
+      'type': messageType.name,
       'is_read': isRead,
       'is_success': isSuccess,
       'is_delivered': isDelivered,
@@ -110,8 +110,8 @@ class Message extends Equatable {
       messageType: getMessageType(json['type']) ?? MessageType.text,
       content: MContent(
         text: json['content']['text'] ?? '',
-        filePath: json['content']['file_path'],
-        fileUrl: json['content']['file_url'],
+        filePath: json['content']['file_path'] ?? '',
+        fileUrl: json['content']['file_url'] ?? '',
       ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
@@ -131,8 +131,8 @@ class Message extends Equatable {
       messageType: getMessageType(json['type']) ?? MessageType.text,
       content: MContent(
         text: json['content']['text'] ?? '',
-        filePath: json['content']['file_path'],
-        fileUrl: json['content']['file_url'],
+        filePath: json['content']['file_path'] ?? '',
+        fileUrl: json['content']['file_url'] ?? '',
       ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
