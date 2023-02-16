@@ -7,6 +7,17 @@ import '../../online-users/models/user_model.dart';
 
 enum MessageType { text, media }
 
+MessageType? getMessageType(String type) {
+  switch (type) {
+    case 'text':
+      return MessageType.text;
+    case 'media':
+      return MessageType.media;
+    default:
+      return MessageType.text;
+  }
+}
+
 @immutable
 // ignore: must_be_immutable
 class MessageRoom extends Equatable {
@@ -65,7 +76,7 @@ class Message extends Equatable {
     return {
       'id': id,
       'uuid': uuid,
-      'message_type': messageType.toString(),
+      'message_type': messageType.name,
       'is_read': isRead,
       'is_success': isSuccess,
       'is_delivered': isDelivered,
@@ -96,7 +107,7 @@ class Message extends Equatable {
     return Message(
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
-      messageType: json['message_type'] ?? MessageType.text,
+      messageType: getMessageType(json['type']) ?? MessageType.text,
       content: MContent(
         text: json['content']['text'] ?? '',
         filePath: json['content']['file_path'],
@@ -117,7 +128,7 @@ class Message extends Equatable {
     return Message(
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
-      messageType: json['message_type'] ?? MessageType.text,
+      messageType: getMessageType(json['type']) ?? MessageType.text,
       content: MContent(
         text: json['content']['text'] ?? '',
         filePath: json['content']['file_path'],
@@ -138,7 +149,7 @@ class Message extends Equatable {
   List<Object?> get props => [uuid];
 }
 
-class MContent{
+class MContent {
   final String? fileUrl;
   final String? text;
   final String? filePath;

@@ -285,7 +285,7 @@ class _ChatViewState extends State<ChatView> {
                                 _chatScrollController.jumpTo(position);
                               }
 
-                              BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage));
+                              BlocProvider.of<MessageBloc>(context).add(SendTextMessage(message: newMessage));
                             } else {
 
                               messageContent = MContent(text: messageText, filePath: messageImage?.path);

@@ -19,17 +19,16 @@ class OpenMessagesRoom extends MessageBlocEvent {
   const OpenMessagesRoom(this.openedRoom);
 }
 
-class SendMessage extends MessageBlocEvent {
-  // final MessageRoom? room;
+class SendTextMessage extends MessageBlocEvent {
   final Message? message;
 
-  const SendMessage({required this.message});
+  const SendTextMessage({required this.message});
 }
 
-class ReceiveTextMessage extends MessageBlocEvent {
+class ReceiveMessage extends MessageBlocEvent {
   final Message message;
 
-  const ReceiveTextMessage({required this.message});
+  const ReceiveMessage({required this.message});
 }
 
 class MessageSuccess extends MessageBlocEvent {
