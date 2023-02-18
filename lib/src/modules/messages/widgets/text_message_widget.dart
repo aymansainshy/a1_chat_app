@@ -132,7 +132,7 @@ class MessageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return SelectableText(
       message.content.text ?? '',
       style: GoogleFonts.rubik(
         textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(

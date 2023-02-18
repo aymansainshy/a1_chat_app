@@ -24,11 +24,11 @@ class RoomWidget extends StatelessWidget {
 
   String getMessageContent(Message message) {
     if (message.messageType == MessageType.text) {
-      if (message.content.text!.length > 70) {
-        return "${message.content.text!.substring(0, 65)} ...";
-      } else {
+      // if (message.content.text!.length > 70) {
+      //   return "${message.content.text!.substring(0, 65)} ...";
+      // } else {
         return "${message.content.text} ...";
-      }
+      // }
     } else {
       return "File ...";
     }
@@ -90,6 +90,8 @@ class RoomWidget extends StatelessWidget {
                             ),
                             child: Text(
                               getMessageContent(messageRoom.messages.last),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.rubik(
                                 textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: ScreenUtil().setSp(14)),
                               ),
