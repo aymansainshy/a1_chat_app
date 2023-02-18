@@ -154,6 +154,8 @@ class MContent {
   late String? text;
   late String? filePath;
   late bool? isLoading;
+  late bool? uploaded;
+  late bool? downloaded;
   late double? process;
 
   MContent({
@@ -162,5 +164,7 @@ class MContent {
     this.filePath,
     this.isLoading = false,
     this.process,
+    this.uploaded,
+    this.downloaded,
   });
 }
