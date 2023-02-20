@@ -1,11 +1,10 @@
-
-
 import 'dart:io';
 
 import 'package:a1_chat_app/src/config/app_config.dart';
 import 'package:a1_chat_app/src/modules/messages/widgets/text_message_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/hellper_methods.dart';
 import '../models/message.dart';
 
 class ImageMessageWidget extends StatelessWidget {
@@ -46,21 +45,20 @@ class ImageMessageWidget extends StatelessWidget {
                 ),
               const SizedBox(width: 2),
               Container(
-                padding: const EdgeInsets.only(top: 7, bottom: 7, left: 10, right: 10),
-                constraints: BoxConstraints(
-                  maxWidth: mediaQuery.width / 1.2,
-                ),
-                decoration: BoxDecoration(
-                  color: isMe ? Theme.of(context).backgroundColor : Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(18),
-                    topRight: const Radius.circular(18),
-                    bottomLeft: isMe ? const Radius.circular(18) : const Radius.circular(0),
-                    bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(18),
+                  padding: const EdgeInsets.only(top: 7, bottom: 7, left: 10, right: 10),
+                  constraints: BoxConstraints(
+                    maxWidth: mediaQuery.width / 1.2,
                   ),
-                ),
-                child: ImageContent(message: message!, isMe: isMe)
-              ),
+                  decoration: BoxDecoration(
+                    color: isMe ? Theme.of(context).backgroundColor : Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(18),
+                      topRight: const Radius.circular(18),
+                      bottomLeft: isMe ? const Radius.circular(18) : const Radius.circular(0),
+                      bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(18),
+                    ),
+                  ),
+                  child: ImageContent(message: message!, isMe: isMe)),
             ],
           ),
         ],
@@ -68,7 +66,6 @@ class ImageMessageWidget extends StatelessWidget {
     );
   }
 }
-
 
 class ImageContent extends StatelessWidget {
   const ImageContent({
@@ -88,10 +85,29 @@ class ImageContent extends StatelessWidget {
         const SizedBox(height: 5),
         Stack(
           alignment: Alignment.center,
-          clipBehavior : Clip.none,
+          clipBehavior: Clip.none,
           children: [
             Image.file(File(message.content.filePath!)),
-            if(message.content.isLoading!) const Center(child:  CircularProgressIndicator())
+            if (message.content.isLoading!)
+              Center(
+                child: sleekCircularSlider(
+                  context,
+                  30,
+                  Theme.of(context).backgroundColor,
+                  Theme.of(context).backgroundColor,
+                ),
+              ),
+            if (!message.content.isLoading! && !message.content.uploaded!)
+              Center(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.cloud_upload_outlined,
+                    color: Theme.of(context).backgroundColor,
+                    size: 30,
+                  ),
+                ),
+              ),
           ],
         ),
         const SizedBox(height: 3),
