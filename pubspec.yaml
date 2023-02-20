@@ -58,6 +58,8 @@ dependencies:
   dio: ^4.0.6
   logger: ^1.1.0
   image_picker: ^0.8.6+1
+  talker_dio_logger: ^1.0.2
+  talker: ^2.4.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

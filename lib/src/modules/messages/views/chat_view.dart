@@ -273,6 +273,8 @@ class _ChatViewState extends State<ChatView> {
                                 ),
                                 IconButton(
                                   onPressed: () async {
+                                    final messageBloc = BlocProvider.of<MessageBloc>(context);
+
                                     final ImagePicker picker = ImagePicker();
                                     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
                                     if (image != null) {
@@ -290,7 +292,7 @@ class _ChatViewState extends State<ChatView> {
                                         receivedAt: DateTime.now(),
                                       );
 
-                                      BlocProvider.of<MessageBloc>(context).add(SendFileMessage(message: imageMessage));
+                                      messageBloc.add(SendFileMessage(message: imageMessage));
 
                                     }
                                   },
@@ -370,6 +372,7 @@ class LastSeenInformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Transform.translate(
       offset: const Offset(0, -5),
       child: BlocBuilder<OnlineUsersBloc, OnlineUsersState>(

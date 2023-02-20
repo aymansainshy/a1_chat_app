@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/core/constan/const.dart';
 import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
@@ -15,7 +14,6 @@ import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/hellper_methods.dart';
 import '../../messages/message-bloc/message_bloc.dart';
-import '../../socket-Io/socket_io.dart';
 import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 

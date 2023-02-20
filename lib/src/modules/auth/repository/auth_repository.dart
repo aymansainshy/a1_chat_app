@@ -1,5 +1,7 @@
 import 'package:a1_chat_app/src/config/app_config.dart';
 import 'package:dio/dio.dart';
+import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
+import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 
 import '../../online-users/models/user_model.dart';
 
@@ -18,10 +20,24 @@ abstract class AuthRepository {
 }
 
 class AuthRepositoryImpl extends AuthRepository {
+  final _dio = Dio();
+
+  talkerDioLogger() {
+    return TalkerDioLogger(
+      settings: const TalkerDioLoggerSettings(
+        printRequestHeaders: true,
+        printResponseHeaders: true,
+        printResponseMessage: true,
+      ),
+    );
+  }
+
   @override
   Future<OtpResponse> sendOtp(String phoneNumber) async {
     try {
-      final response = await Dio().post(
+      _dio.interceptors.add(talkerDioLogger());
+
+      final response = await _dio.post(
         "${Application.domain}/login",
         options: Options(
           sendTimeout: 2000,
@@ -34,9 +50,7 @@ class AuthRepositoryImpl extends AuthRepository {
         data: {"phone_number": phoneNumber},
       );
       final responseData = response.data as Map<String, dynamic>;
-      print(responseData.toString());
-      return OtpResponse(responseData['code'].toString(),
-          responseData['message'], responseData['data']);
+      return OtpResponse(responseData['code'].toString(), responseData['message'], responseData['data']);
     } on DioError {
       rethrow;
     }
@@ -45,7 +59,9 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<User?> confirmOtp(String otp, String phoneNumber) async {
     try {
-      final response = await Dio().post(
+      _dio.interceptors.add(talkerDioLogger());
+
+      final response = await _dio.post(
         "${Application.domain}/login/confirmotp",
         options: Options(
           sendTimeout: 2000,
@@ -61,6 +77,7 @@ class AuthRepositoryImpl extends AuthRepository {
         },
       );
       final responseData = response.data as Map<String, dynamic>;
+
       User? user = User(
         id: responseData['data']['id'].toString(),
         name: responseData['data']['name'],
@@ -68,10 +85,9 @@ class AuthRepositoryImpl extends AuthRepository {
         phoneNumber: responseData['data']['phone_number'],
         token: responseData['data']['token'],
       );
-      print(responseData.toString());
+
       return user;
-    } on DioError catch(e){
-      print(e.toString());
+    } on DioError {
       rethrow;
     }
   }

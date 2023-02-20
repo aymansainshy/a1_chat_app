@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.2"
+  ansicolor:
+    dependency: transitive
+    description:
+      name: ansicolor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   args:
     dependency: transitive
     description:
@@ -845,6 +852,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  talker:
+    dependency: "direct main"
+    description:
+      name: talker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.0"
+  talker_dio_logger:
+    dependency: "direct main"
+    description:
+      name: talker_dio_logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.2"
+  talker_logger:
+    dependency: transitive
+    description:
+      name: talker_logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   term_glyph:
     dependency: transitive
     description:

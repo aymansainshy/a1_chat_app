@@ -111,7 +111,10 @@ class Message extends Equatable {
       content: MContent(
         text: json['content']['text'] ?? '',
         filePath: json['content']['file_path'] ?? '',
-        fileUrl: json['content']['file_url'] ?? '',
+        fileUrl: json['content']['file'] ?? '',
+        isLoading: false, //json['content']['isLoading'],
+        downloaded: false, //json['content']['downloaded'],
+        uploaded: true, //json['content']['uploaded'],
       ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
@@ -132,7 +135,10 @@ class Message extends Equatable {
       content: MContent(
         text: json['content']['text'] ?? '',
         filePath: json['content']['file_path'] ?? '',
-        fileUrl: json['content']['file_url'] ?? '',
+        fileUrl: json['content']['file'] ?? '',
+        isLoading: json['content']['isLoading'],
+        downloaded: json['content']['downloaded'],
+        uploaded: json['content']['uploaded'],
       ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
@@ -164,7 +170,7 @@ class MContent {
     this.filePath,
     this.isLoading = false,
     this.process,
-    this.uploaded,
-    this.downloaded,
+    this.uploaded = false,
+    this.downloaded = false,
   });
 }
