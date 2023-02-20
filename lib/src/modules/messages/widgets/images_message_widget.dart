@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:a1_chat_app/src/config/app_config.dart';
 import 'package:a1_chat_app/src/modules/messages/widgets/text_message_widget.dart';
@@ -87,7 +88,30 @@ class ImageContent extends StatelessWidget {
           alignment: Alignment.center,
           clipBehavior: Clip.none,
           children: [
-            Image.file(File(message.content.filePath!)),
+            if (!message.content.downloaded!)
+              Container(
+                height: 200,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      "${Application.domain}/uploads/images/${message.content.fileUrl!}",
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: ClipRRect(
+                  // make sure we apply clip it properly
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                    child: Container(
+                      alignment: Alignment.center,
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                  ),
+                ),
+              ),
+            if (message.content.downloaded!) Image.file(File(message.content.filePath!)),
             if (message.content.isLoading!)
               Center(
                 child: sleekCircularSlider(
@@ -95,6 +119,17 @@ class ImageContent extends StatelessWidget {
                   30,
                   Theme.of(context).backgroundColor,
                   Theme.of(context).backgroundColor,
+                ),
+              ),
+            if (!message.content.isLoading! && !message.content.downloaded!)
+              Center(
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.cloud_download_outlined,
+                    color: Theme.of(context).backgroundColor,
+                    size: 30,
+                  ),
                 ),
               ),
             if (!message.content.isLoading! && !message.content.uploaded!)
