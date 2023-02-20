@@ -151,8 +151,8 @@ class MessageRepositoryImpl extends MessageRepository {
         "${Application.domain}/upload-message-file",
         data: multiPartData,
         options: Options(
-          sendTimeout: 20000,
-          receiveTimeout: 20000,
+          sendTimeout: 5000,
+          receiveTimeout: 5000,
           headers: {
             'Accept': 'application/json',
             'content-type': 'multipart/form-data',
@@ -168,9 +168,8 @@ class MessageRepositoryImpl extends MessageRepository {
         print("Dio Posting Response  .. ${response.data}");
       }
       return response.data['data'];
-    } on DioError catch (e) {
-      // print("Dio Error Posting Service .. $e");
-      throw e.toString();
+    } on DioError catch (error) {
+     rethrow;
     }
   }
 }
