@@ -21,6 +21,8 @@ abstract class MessageRepository {
 
   Future<dynamic> uploadMessageFile(File data);
 
+  Future<dynamic> downloadMessageFile();
+
   List<Message?>? getMessages();
 
   Future<void> saveMessage(Message message);
@@ -171,5 +173,11 @@ class MessageRepositoryImpl extends MessageRepository {
     } on DioError catch (error) {
      rethrow;
     }
+  }
+
+  @override
+  Future downloadMessageFile() {
+    // TODO: implement downloadMessageFile
+    throw UnimplementedError();
   }
 }

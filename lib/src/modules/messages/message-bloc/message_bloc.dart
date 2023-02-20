@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';
@@ -76,6 +76,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           if (_messageRooms.containsKey(message!.sender?.phoneNumber)) {
             if (!_messageRooms[message.sender?.phoneNumber]!.messages.contains(message)) {
               _messageRooms[message.sender?.phoneNumber]!.messages.add(message);
+
+              if (message.messageType == MessageType.media) {
+                injector<SingleMessageBloc>().add(DownloadMessageFiles(message));
+              }
             }
           } else {
             _messageRooms.putIfAbsent(message.sender!.phoneNumber!, () {
@@ -86,6 +90,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
               );
               return createdRoom;
             });
+
+            if (message.messageType == MessageType.media) {
+              injector<SingleMessageBloc>().add(DownloadMessageFiles(message));
+            }
           }
 
           emit(state.copyWith(messageRooms: _messageRooms));
@@ -129,7 +137,6 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
 
         injector<SingleMessageBloc>().add(SendMessageFiles(event.message!));
         emit(state.copyWith(messageRooms: _messageRooms));
-
       } else {
         _messageRooms.putIfAbsent(event.message!.receiver!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -176,6 +183,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         messageRepository.saveMessage(event.message);
 
         emit(state.copyWith(messageRooms: _messageRooms));
+
+        if (event.message.messageType == MessageType.media) {
+          injector<SingleMessageBloc>().add(DownloadMessageFiles(event.message));
+        }
       } else {
         _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -190,6 +201,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _socketIO.messageDelivered(event.message); // emit socket event
         messageRepository.saveMessage(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
+
+        if (event.message.messageType == MessageType.media) {
+          injector<SingleMessageBloc>().add(DownloadMessageFiles(event.message));
+        }
       }
     });
 

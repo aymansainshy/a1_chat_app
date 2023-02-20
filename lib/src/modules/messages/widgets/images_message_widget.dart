@@ -48,7 +48,7 @@ class ImageMessageWidget extends StatelessWidget {
                 ),
               const SizedBox(width: 2),
               Container(
-                  padding: const EdgeInsets.only(top: 7, bottom: 7, left: 10, right: 10),
+                  padding: const EdgeInsets.only(top: 0, bottom: 7, left: 5, right: 5),
                   constraints: BoxConstraints(
                     maxWidth: mediaQuery.width / 1.2,
                   ),
@@ -92,59 +92,81 @@ class ImageContent extends StatelessWidget {
               alignment: Alignment.center,
               clipBehavior: Clip.none,
               children: [
-                if (!message.content.downloaded!)
-                  Container(
-                    height: 200,
-                    width: double.maxFinite,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          "${Application.domain}/uploads/images/${message.content.fileUrl!}",
+                if (!isMe && !message.content.downloaded!)
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        maxHeight: 150,
+                      ),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "${Application.domain}/uploads/images/${message.content.fileUrl!}",
+                          ),
+                          fit: BoxFit.cover,
                         ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                              color: Colors.grey.withOpacity(0.1),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (message.content.downloaded!)
+                  Container(
+                    constraints: const BoxConstraints(
+                      maxHeight: 280,
+                      // maxWidth: 200,
+                      minWidth: 200,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                      child: Image.file(
+                        File(message.content.filePath!),
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: ClipRRect(
-                      // make sure we apply clip it properly
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                        child: Container(
-                          alignment: Alignment.center,
-                          color: Colors.grey.withOpacity(0.1),
-                        ),
-                      ),
-                    ),
                   ),
-                if (message.content.downloaded!) Image.file(File(message.content.filePath!)),
+
                 if (message.content.isLoading!)
-                  Center(
-                    child: sleekCircularSlider(
-                      context,
-                      30,
-                      Theme.of(context).backgroundColor,
-                      Theme.of(context).backgroundColor,
+                  sleekCircularSlider(
+                    context,
+                    30,
+                    Theme.of(context).backgroundColor,
+                    Theme.of(context).backgroundColor,
+                  ),
+
+                if (!isMe && !message.content.isLoading! && !message.content.downloaded!)
+                  IconButton(
+                    onPressed: () {
+                      BlocProvider.of<SingleMessageBloc>(context).add(DownloadMessageFiles(message));
+                    },
+                    icon: Icon(
+                      Icons.cloud_download_outlined,
+                      color: Theme.of(context).backgroundColor,
+                      size: 30,
                     ),
                   ),
-                if (!message.content.isLoading! && !message.content.downloaded!)
-                  Center(
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.cloud_download_outlined,
-                        color: Theme.of(context).backgroundColor,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                if (!message.content.isLoading! && !message.content.uploaded!)
-                  Center(
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.cloud_upload_outlined,
-                        color: Theme.of(context).backgroundColor,
-                        size: 30,
-                      ),
+
+                if (isMe && !message.content.isLoading! && !message.content.uploaded!)
+                  IconButton(
+                    onPressed: () {
+                      BlocProvider.of<SingleMessageBloc>(context).add(ReTryUploadMessageFiles(message));
+                    },
+                    icon: Icon(
+                      Icons.cloud_upload_outlined,
+                      color: Theme.of(context).backgroundColor,
+                      size: 30,
                     ),
                   ),
               ],

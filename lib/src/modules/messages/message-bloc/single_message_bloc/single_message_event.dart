@@ -12,3 +12,16 @@ class SendMessageFiles extends SingleMessageEvent {
 
   const SendMessageFiles(this.message);
 }
+
+class DownloadMessageFiles extends SingleMessageEvent {
+  final Message message;
+
+  const DownloadMessageFiles(this.message);
+}
+
+class ReTryUploadMessageFiles extends SingleMessageEvent {
+  final Message message;
+
+  const ReTryUploadMessageFiles(this.message);
+}
+
