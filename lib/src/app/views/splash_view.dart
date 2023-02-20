@@ -1,5 +1,6 @@
 import 'package:a1_chat_app/src/app/app-bloc/app_bloc.dart';
 import 'package:a1_chat_app/src/core/theme/app_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,6 +67,9 @@ class AnimatedSplashState extends State<AnimatedSplashView> with SingleTickerPro
           child: BlocListener<AppBloc, AppState>(
             listener: (context, appState) {
               if (appState is AppSetupInFailure) {
+                if(kDebugMode) {
+                  print(appState.error.toString());
+                }
                 simpleErrorDialog(context, () {
                   BlocProvider.of<AppBloc>(context).add(AppStarted());
                 });

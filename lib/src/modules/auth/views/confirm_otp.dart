@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/core/constan/const.dart';
 import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/auth/widgets/shared_elevated_button.dart';
@@ -15,7 +14,6 @@ import '../../../core/errors/custom_error_dialog.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/hellper_methods.dart';
 import '../../messages/message-bloc/message_bloc.dart';
-import '../../messages/repository/messages_repository.dart';
 import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
 
@@ -81,14 +79,19 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
           listener: (context, otpState) {
 
             if (otpState is VarifyOtpSuccess) {
-              snackBar("varify Done Successfully");
-              BlocProvider.of<AuthCubit>(context).socket.connectAndListen();
+              // snackBar("varify Done Successfully");
+              BlocProvider.of<AuthCubit>(context).checkAuth();
+
+              BlocProvider.of<MessageBloc>(context)
+                ..add(GetMessagesRoom())
+                ..add(FetchUserMessages())
+                ..add(FetchUserReceivedMessages());
+
               context.go('/');
-              BlocProvider.of<MessageBloc>(context)..add(GetMessagesRoom())..add(FetchUserMessages());
             }
 
             if (otpState is VarifyOtpFaliure) {
-              String errorMassege = "Please enter avalid OTP";
+              String errorMassege = "Please enter valid OTP";
 
               customeAlertDialoge(
                 context: context,

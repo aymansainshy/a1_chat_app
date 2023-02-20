@@ -54,7 +54,7 @@ class SocketIoImpl extends SocketIO {
       injector<MessageBloc>().add(MessageDelivered(message: Message.fromJsonSocketIO(message)));
     });
 
-    _socket.on('send-text-message', (textMessage) {
+    _socket.on('send-message', (textMessage) {
       injector<MessageBloc>().add(ReceiveMessage(message: Message.fromJsonSocketIO(textMessage)));
     });
 
@@ -76,8 +76,9 @@ class SocketIoImpl extends SocketIO {
 
   @override
   void sendMessage(Message message) {
-    _socket.emit('send-text-message', message.toJson());
+    _socket.emit('send-message', message.toJson());
   }
+
 
   @override
   void messageDelivered(Message message) {

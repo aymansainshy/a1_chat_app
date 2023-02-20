@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/models/message.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
@@ -6,12 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../config/app_config.dart';
 import '../../../core/utils/hellper_methods.dart';
 import '../../../core/utils/preference_utils.dart';
 import '../../home/widgets/user_avatar.dart';
 import '../../online-users/models/user_model.dart';
+import '../widgets/images_message_widget.dart';
 import '../widgets/text_message_widget.dart';
 
 class ChatData {
@@ -40,6 +44,7 @@ class _ChatViewState extends State<ChatView> {
   final _formKey = GlobalKey<FormState>();
 
   String messageText = '';
+  File? messageImage;
 
   @override
   void initState() {
@@ -180,11 +185,20 @@ class _ChatViewState extends State<ChatView> {
                               ),
                               indexedItemBuilder: (context, dynamic _, i) {
                                 var isMe = isMeCheck(messages[i]);
-                                return TextMessageWidget(
-                                  isMe: isMe,
-                                  message: messages[i],
-                                  avatar: user.imageUrl,
-                                );
+
+                                if (messages[i].messageType == MessageType.text) {
+                                  return TextMessageWidget(
+                                    isMe: isMe,
+                                    message: messages[i],
+                                    avatar: user.imageUrl,
+                                  );
+                                } else {
+                                  return ImageMessageWidget(
+                                    isMe: isMe,
+                                    message: messages[i],
+                                    avatar: user.imageUrl,
+                                  );
+                                }
                               },
                               useStickyGroupSeparators: true,
                               floatingHeader: true,
@@ -200,56 +214,100 @@ class _ChatViewState extends State<ChatView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: Form(
-                            key: _formKey,
-                            child: TextFormField(
-                              maxLines: 4,
-                              minLines: 1,
-                              // autofocus: true,
-                              // textDirection: TextDirection.LTR,
-                              decoration: InputDecoration(
-                                labelText: "  Message ...",
-                                // labelStyle: TextStyle(
-                                //   fontSize: screenUtil.setSp(30),
-                                // ),
-                                contentPadding: const EdgeInsets.all(10.0),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide.none,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide.none,
-                                ),
-                                filled: true,
-                                fillColor: Colors.grey.shade300,
-                                focusColor: Theme.of(context).primaryColor,
-                                floatingLabelBehavior: FloatingLabelBehavior.never,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(25),
                               ),
-                              controller: _textEditingController,
-                              validator: (value) {
-                                if (value!.trim().isEmpty) {
-                                  return;
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                messageText = _textEditingController.value.text;
-                              },
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Form(
+                                    key: _formKey,
+                                    child: TextFormField(
+                                      maxLines: 4,
+                                      minLines: 1,
+                                      // autofocus: true,
+                                      // textDirection: TextDirection.LTR,
+                                      decoration: InputDecoration(
+                                        labelText: "  Message ...",
+                                        // labelStyle: TextStyle(
+                                        //   fontSize: screenUtil.setSp(30),
+                                        // ),
+                                        contentPadding: const EdgeInsets.all(10.0),
+                                        errorBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(30),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(30),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(30),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(30),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.grey.shade300,
+                                        focusColor: Theme.of(context).primaryColor,
+                                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                                      ),
+                                      controller: _textEditingController,
+                                      validator: (value) {
+                                        if (value!.trim().isEmpty) {
+                                          return;
+                                        }
+                                        return null;
+                                      },
+                                      onSaved: (value) {
+                                        messageText = _textEditingController.value.text;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    final messageBloc = BlocProvider.of<MessageBloc>(context);
+
+                                    final ImagePicker picker = ImagePicker();
+                                    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+                                    if (image != null) {
+                                      print(image.path);
+
+                                      late MContent messageContent = MContent(filePath: image.path);
+                                      var imageMessage = Message(
+                                        id: DateTime.now().toIso8601String(),
+                                        uuid: DateTime.now().toIso8601String(),
+                                        messageType: MessageType.media,
+                                        sender: Application.user,
+                                        receiver: user,
+                                        content: messageContent,
+                                        createdAt: DateTime.now(),
+                                        receivedAt: DateTime.now(),
+                                      );
+
+                                      messageBloc.add(SendFileMessage(message: imageMessage));
+
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.camera_alt,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                         const SizedBox(width: 3),
                         InkWell(
-                          onTap: () async {
+                          onTap: ()  {
                             // var isValid = _formKey.currentState?.validate();
 
                             _formKey.currentState?.save();
@@ -258,15 +316,17 @@ class _ChatViewState extends State<ChatView> {
                               return;
                             }
 
+                            late MContent messageContent = MContent(text: messageText);
                             var newMessage = Message(
-                                id: DateTime.now().toIso8601String(),
-                                uuid: DateTime.now().toIso8601String(),
-                                messageType: MessageType.text,
-                                sender: Application.user,
-                                receiver: user,
-                                content: messageText,
-                                createdAt: DateTime.now(),
-                                receivedAt: DateTime.now());
+                              id: DateTime.now().toIso8601String(),
+                              uuid: DateTime.now().toIso8601String(),
+                              messageType: MessageType.text,
+                              sender: Application.user,
+                              receiver: user,
+                              content: messageContent,
+                              createdAt: DateTime.now(),
+                              receivedAt: DateTime.now(),
+                            );
 
                             _textEditingController.clear();
 
@@ -276,7 +336,7 @@ class _ChatViewState extends State<ChatView> {
                               _chatScrollController.jumpTo(position);
                             }
 
-                            BlocProvider.of<MessageBloc>(context).add(SendMessage(message: newMessage));
+                            BlocProvider.of<MessageBloc>(context).add(SendTextMessage(message: newMessage));
                           },
                           child: Container(
                             height: 45,
@@ -312,6 +372,7 @@ class LastSeenInformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Transform.translate(
       offset: const Offset(0, -5),
       child: BlocBuilder<OnlineUsersBloc, OnlineUsersState>(
@@ -324,15 +385,17 @@ class LastSeenInformationWidget extends StatelessWidget {
             );
           } else {
             final lastSeen = PreferencesUtils.getString(user.phoneNumber!);
-            if (!isOnline && lastSeen != null) {
+
+            if (lastSeen != null) {
               final lastSeenData = lastSeenTime(lastSeen);
               return Text(
                 "Last Seen : $lastSeenData",
                 style: Theme.of(context).textTheme.bodyText2,
               );
             }
+
             return Text(
-              "Last Seen : recently",
+              "Last Seen : Recently",
               style: Theme.of(context).textTheme.bodyText2,
             );
           }
@@ -348,17 +411,18 @@ bool isMessagesNullOrEmpty(List<Message?>? messages) {
 
 String lastSeenTime(String lastSeenDate) {
   final now = DateTime.now();
+
   final lastSeen = DateTime.parse(lastSeenDate);
 
   final today = DateTime(now.year, now.month, now.day);
   final yesterday = DateTime(now.year, now.month, now.day - 1);
 
-  final aDate = DateTime(lastSeen.year, lastSeen.month, lastSeen.day);
+  final fLastSeen = DateTime(lastSeen.year, lastSeen.month, lastSeen.day);
 
-  if (aDate == today) {
+  if (fLastSeen == today) {
     final formatDate = DateFormat('hh:mm a').format(lastSeen);
     return formatDate;
-  } else if (aDate == yesterday) {
+  } else if (fLastSeen == yesterday) {
     return "Yesterday";
   } else {
     return "${lastSeen.day}/${lastSeen.month}/${lastSeen.year}";

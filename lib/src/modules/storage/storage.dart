@@ -15,13 +15,13 @@ class MessageStorageImpl extends Storage {
     var messageBox = await Hive.openBox('messages');
 
     messageBox.put(message?.receivedAt?.toIso8601String(), message?.toJson());
-    // messageBox.clear();
+    messageBox.clear();
   }
 
   @override
   Future<List<Message?>?> getMessages() async {
     var messageBox = await Hive.openBox('messages');
-    // messageBox.clear();
+    messageBox.clear();
     final savedMessages = messageBox.values.toList();
     final loadedMessages = savedMessages.map((message) => Message.fromJsonDb(jsonDecode(jsonEncode(message)))).toList();
     return loadedMessages;

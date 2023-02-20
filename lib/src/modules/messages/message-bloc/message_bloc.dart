@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,8 +78,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           } else {
             _messageRooms.putIfAbsent(message.sender!.phoneNumber!, () {
               final createdRoom = MessageRoom(
-                id: message.receiver?.id,
-                user: message.receiver,
+                id: message.sender?.id,
+                user: message.sender,
                 messages: [message],
               );
               return createdRoom;
@@ -95,7 +97,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     // Emit bloc event to emit socket event - Send-Message
-    on<SendMessage>((event, emit) {
+    on<SendTextMessage>((event, emit) {
       if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
         _messageRooms[event.message?.receiver?.phoneNumber]?.messages.add(event.message!);
 
@@ -116,6 +118,48 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _socketIO.sendMessage(event.message!);
         emit(state.copyWith(messageRooms: _messageRooms));
         messageRepository.saveMessage(event.message!);
+      }
+    });
+
+    on<SendFileMessage>((event, emit) async {
+      if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
+        _messageRooms[event.message?.receiver?.phoneNumber]?.messages.add(event.message!);
+
+        try {
+          File message = File(event.message!.content.filePath!);
+          event.message?.content.isLoading = true;
+          event.message?.content.downloaded = true;
+          event.message?.content.uploaded = false;
+          emit(state.copyWith(messageRooms: _messageRooms));
+
+          final response = await messageRepository.uploadMessageFile(message);
+
+          event.message?.content.fileUrl = response;
+          event.message?.content.isLoading = false;
+          _socketIO.sendMessage(event.message!);
+          event.message?.content.uploaded = true;
+          emit(state.copyWith(messageRooms: _messageRooms));
+        } catch (e) {
+          event.message?.content.isLoading = false;
+          event.message?.content.uploaded = false;
+          emit(state.copyWith(messageRooms: _messageRooms));
+          print(e.toString());
+        }
+
+        // messageRepository.saveMessage(event.message!);
+      } else {
+        _messageRooms.putIfAbsent(event.message!.receiver!.phoneNumber!, () {
+          final createdRoom = MessageRoom(
+            id: event.message?.receiver?.id,
+            user: event.message?.receiver,
+            messages: [event.message!],
+          );
+          return createdRoom;
+        });
+
+        // _socketIO.sendMessage(event.message!);
+        emit(state.copyWith(messageRooms: _messageRooms));
+        // messageRepository.saveMessage(event.message!);
       }
     });
 

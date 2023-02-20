@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:a1_chat_app/injector.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
+import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 
 import '../../../config/app_config.dart';
 import '../../../core/constan/const.dart';
@@ -15,6 +19,8 @@ abstract class MessageRepository {
 
   Future<void> fetchMessages();
 
+  Future<dynamic> uploadMessageFile(File data);
+
   List<Message?>? getMessages();
 
   Future<void> saveMessage(Message message);
@@ -26,6 +32,18 @@ class MessageRepositoryImpl extends MessageRepository {
   MessageRepositoryImpl(this.messageStorage);
 
   late List<Message?>? messages = [];
+
+  final _dio = Dio();
+
+  talkerDioLogger() {
+    return TalkerDioLogger(
+      settings: const TalkerDioLoggerSettings(
+        printRequestHeaders: true,
+        printResponseHeaders: true,
+        printResponseMessage: true,
+      ),
+    );
+  }
 
   @override
   List<Message?>? getMessages() {
@@ -44,8 +62,9 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<List<Message?>> fetchUserMessages() async {
+    _dio.interceptors.add(talkerDioLogger());
     try {
-      final response = await Dio().get(
+      final response = await _dio.get(
         "${Application.domain}/user-messages/${Application.user?.id}",
         options: Options(
           sendTimeout: 5000,
@@ -83,8 +102,9 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<List<Message?>> fetchUserReceivedMessages() async {
+    _dio.interceptors.add(talkerDioLogger());
     try {
-      final response = await Dio().get(
+      final response = await _dio.get(
         "${Application.domain}/user-received-messages/${Application.user?.id}",
         options: Options(
           sendTimeout: 5000,
@@ -100,12 +120,57 @@ class MessageRepositoryImpl extends MessageRepository {
       final loadedData = response.data['data'] as List<dynamic>;
       final List<Message> userMessages = loadedData.map((message) => Message.fromJsonSocketIO(message)).toList();
 
+      if (kDebugMode) {
+        print("User Receiving Messages");
+        logger.i(loadedData.toString());
+      }
+
       return userMessages;
     } catch (error) {
       if (kDebugMode) {
         print(error.toString());
       }
       rethrow;
+    }
+  }
+
+  @override
+  Future<dynamic> uploadMessageFile(File data) async {
+    print("Start Posting Image  ..........");
+    _dio.interceptors.add(talkerDioLogger());
+
+    final multiPartData = FormData.fromMap({
+      'image': await MultipartFile.fromFile(
+        data.path,
+        filename: data.path.split('/').last,
+      )
+    });
+
+    try {
+      final response = await _dio.post(
+        "${Application.domain}/upload-message-file",
+        data: multiPartData,
+        options: Options(
+          sendTimeout: 20000,
+          receiveTimeout: 20000,
+          headers: {
+            'Accept': 'application/json',
+            'content-type': 'multipart/form-data',
+            'Authorization': 'Bearer ${Application.user?.token}',
+          },
+        ),
+        onSendProgress: (sent, total) {
+          // print("Sent : [ ${(sent / total) * 100} ] from : [ 100% ] ....");
+          // AppBlocs.uploadingProcessBloc.add(AddUploadingProgress((sent/ total) * 100));
+        },
+      );
+      if (kDebugMode) {
+        print("Dio Posting Response  .. ${response.data}");
+      }
+      return response.data['data'];
+    } on DioError catch (e) {
+      // print("Dio Error Posting Service .. $e");
+      throw e.toString();
     }
   }
 }

@@ -1,9 +1,22 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import '../../online-users/models/user_model.dart';
 
 enum MessageType { text, media }
+
+MessageType? getMessageType(String type) {
+  switch (type) {
+    case 'text':
+      return MessageType.text;
+    case 'media':
+      return MessageType.media;
+    default:
+      return MessageType.text;
+  }
+}
 
 @immutable
 // ignore: must_be_immutable
@@ -36,7 +49,7 @@ class Message extends Equatable {
   late String? uuid;
   late User? sender;
   late User? receiver;
-  late String content;
+  late MContent content;
   late DateTime createdAt;
   late bool isRead;
   late bool isSuccess;
@@ -63,7 +76,7 @@ class Message extends Equatable {
     return {
       'id': id,
       'uuid': uuid,
-      'message_type': messageType.toString(),
+      'type': messageType.name,
       'is_read': isRead,
       'is_success': isSuccess,
       'is_delivered': isDelivered,
@@ -80,7 +93,11 @@ class Message extends Equatable {
         'phone_number': receiver?.phoneNumber,
         'image_url': receiver?.imageUrl,
       },
-      'content': content,
+      'content': {
+        'text': content.text,
+        'file': content.fileUrl,
+        'file_path': content.filePath,
+      },
       'createdAt': createdAt.toIso8601String(),
       'receivedAt': receivedAt?.toIso8601String(),
     };
@@ -90,8 +107,15 @@ class Message extends Equatable {
     return Message(
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
-      messageType: json['message_type'] ?? MessageType.text,
-      content: json['content'],
+      messageType: getMessageType(json['type']) ?? MessageType.text,
+      content: MContent(
+        text: json['content']['text'] ?? '',
+        filePath: json['content']['file_path'] ?? '',
+        fileUrl: json['content']['file'] ?? '',
+        isLoading: false, //json['content']['isLoading'],
+        downloaded: false, //json['content']['downloaded'],
+        uploaded: true, //json['content']['uploaded'],
+      ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
       isNew: json['is_new'],
@@ -107,8 +131,15 @@ class Message extends Equatable {
     return Message(
       id: json['id'].toString() ?? '',
       uuid: json['uuid'],
-      messageType: json['message_type'] ?? MessageType.text,
-      content: json['content'],
+      messageType: getMessageType(json['type']) ?? MessageType.text,
+      content: MContent(
+        text: json['content']['text'] ?? '',
+        filePath: json['content']['file_path'] ?? '',
+        fileUrl: json['content']['file'] ?? '',
+        isLoading: json['content']['isLoading'],
+        downloaded: json['content']['downloaded'],
+        uploaded: json['content']['uploaded'],
+      ),
       isRead: json['is_read'],
       isSuccess: json['is_success'],
       isNew: json['is_new'],
@@ -122,4 +153,24 @@ class Message extends Equatable {
 
   @override
   List<Object?> get props => [uuid];
+}
+
+class MContent {
+  late String? fileUrl;
+  late String? text;
+  late String? filePath;
+  late bool? isLoading;
+  late bool? uploaded;
+  late bool? downloaded;
+  late double? process;
+
+  MContent({
+    this.fileUrl,
+    this.text,
+    this.filePath,
+    this.isLoading = false,
+    this.process,
+    this.uploaded = false,
+    this.downloaded = false,
+  });
 }
