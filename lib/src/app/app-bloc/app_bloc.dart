@@ -61,7 +61,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         // PreferencesUtils.clear();
 
         ///Setting local storage path
-        Application.storagePath = (await getApplicationDocumentsDirectory()).path;
+        Application.storageDir = await getApplicationDocumentsDirectory();
 
         // Read Save Device Information
         try {

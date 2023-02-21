@@ -1,5 +1,3 @@
-
-
 import 'package:a1_chat_app/injector.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';
 import 'package:equatable/equatable.dart';

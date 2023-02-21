@@ -11,7 +11,7 @@ class User extends Equatable {
   late String? socketId;
   late DateTime? lastSeen;
 
-  User({
+   User({
     required this.id,
     required this.phoneNumber,
     this.name,

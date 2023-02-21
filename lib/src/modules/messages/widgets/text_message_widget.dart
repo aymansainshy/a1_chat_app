@@ -57,9 +57,7 @@ class TextMessageWidget extends StatelessWidget {
                     bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(18),
                   ),
                 ),
-                child: message!.content.text!.length < 30
-                    ? HorizontalMessage(message: message!, isMe: isMe)
-                    : VerticalMessage(message: message!, isMe: isMe),
+                child: Content(message: message!, isMe: isMe),
               ),
             ],
           ),
@@ -69,8 +67,8 @@ class TextMessageWidget extends StatelessWidget {
   }
 }
 
-class HorizontalMessage extends StatelessWidget {
-  const HorizontalMessage({
+class Content extends StatelessWidget {
+  const Content({
     required this.message,
     required this.isMe,
     Key? key,
@@ -81,9 +79,8 @@ class HorizontalMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
+    return Wrap(
+      alignment: WrapAlignment.end,
       children: [
         MessageContent(message: message, isMe: isMe),
         const SizedBox(width: 5),
@@ -91,30 +88,6 @@ class HorizontalMessage extends StatelessWidget {
           offset: const Offset(0, 3),
           child: BlueReadCheckAndDate(isMe: isMe, message: message),
         ),
-      ],
-    );
-  }
-}
-
-class VerticalMessage extends StatelessWidget {
-  const VerticalMessage({
-    required this.message,
-    required this.isMe,
-    Key? key,
-  }) : super(key: key);
-
-  final Message message;
-  final bool isMe;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const SizedBox(height: 5),
-        MessageContent(message: message, isMe: isMe),
-        const SizedBox(height: 3),
-        BlueReadCheckAndDate(isMe: isMe, message: message),
       ],
     );
   }

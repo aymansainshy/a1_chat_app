@@ -24,7 +24,9 @@ class SingleMessageBloc extends Bloc<SingleMessageEvent, SingleMessageState> {
         event.message.content.isLoading = true;
         event.message.content.downloaded = true;
         event.message.content.uploaded = false;
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
+
 
         final response = await messageRepository.uploadMessageFile(message);
 
@@ -32,11 +34,15 @@ class SingleMessageBloc extends Bloc<SingleMessageEvent, SingleMessageState> {
         event.message.content.isLoading = false;
         _socketIO.sendMessage(event.message);
         event.message.content.uploaded = true;
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
 
       } catch (e) {
         event.message.content.isLoading = false;
         event.message.content.uploaded = false;
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
       }
     });
@@ -48,6 +54,8 @@ class SingleMessageBloc extends Bloc<SingleMessageEvent, SingleMessageState> {
         event.message.content.isLoading = true;
         event.message.content.downloaded = true;
         event.message.content.uploaded = false;
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
 
         final response = await messageRepository.uploadMessageFile(message);
@@ -56,35 +64,39 @@ class SingleMessageBloc extends Bloc<SingleMessageEvent, SingleMessageState> {
         event.message.content.isLoading = false;
         _socketIO.sendMessage(event.message);
         event.message.content.uploaded = true;
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
       } catch (e) {
         event.message.content.isLoading = false;
         event.message.content.uploaded = false;
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
       }
     });
 
     on<DownloadMessageFiles>((event, emit) async {
       try {
-        late String? downloadedPath;
-
         event.message.content.isLoading = true;
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
 
-        // await Future.delayed(const Duration(seconds: 2)).then((value) => throw Error());
+        final pathUrl = await messageRepository.downloadMessageFile(event.message.content.fileUrl!);
 
-        final response = await messageRepository.downloadMessageFile();
-
-        downloadedPath = response;
-
-        event.message.content.filePath = downloadedPath;
+        event.message.content.filePath = pathUrl;
         event.message.content.isLoading = false;
         event.message.content.downloaded = true;
-        _socketIO.sendMessage(event.message);
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
+
       } catch (e) {
         event.message.content.isLoading = false;
         event.message.content.downloaded = false;
+
+        messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
       }
     });

@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/language/app_lang.dart';
@@ -12,7 +14,7 @@ class Application {
   static bool isEnglish = AppLanguage.defaultLanguage.languageCode == 'en';
   static UserDevice? device;
   static bool isDarktheme = false;
-  static String storagePath = '';
+  static Directory? storageDir;
   static User? user;
 
   static bool isUserUnknown() {
