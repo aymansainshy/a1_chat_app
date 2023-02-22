@@ -6,6 +6,7 @@ import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_blo
 import 'package:a1_chat_app/src/modules/messages/widgets/text_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/utils/hellper_methods.dart';
 import '../models/message.dart';
@@ -48,7 +49,7 @@ class ImageMessageWidget extends StatelessWidget {
                 ),
               const SizedBox(width: 2),
               Container(
-                  padding: const EdgeInsets.only(top: 0, bottom: 7, left: 5, right: 5),
+                  padding: const EdgeInsets.only(top: 0, bottom: 7, left: 3, right: 3),
                   constraints: BoxConstraints(
                     maxWidth: mediaQuery.width / 1.2,
                   ),
@@ -123,21 +124,31 @@ class ImageContent extends StatelessWidget {
                     ),
                   ),
                 if (message.content.downloaded!)
-                  Container(
-                    constraints: const BoxConstraints(
-                      maxHeight: 280,
-                      // maxWidth: 200,
-                      minWidth: 200,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                      child: Image.file(
-                        File(message.content.filePath!),
-                        fit: BoxFit.cover,
+                  GestureDetector(
+                    onTap: () {
+                      context.push('/chat/file-view', extra: message.content.filePath);
+                    },
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        maxHeight: 280,
+                        // maxWidth: 200,
+                        minWidth: 200,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                        child: Hero(
+                          tag: message.content.filePath!,
+                          child: Image.file(
+                            File(message.content.filePath!),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-
                 if (message.content.isLoading!)
                   sleekCircularSlider(
                     context,
@@ -145,7 +156,6 @@ class ImageContent extends StatelessWidget {
                     Theme.of(context).backgroundColor,
                     Theme.of(context).backgroundColor,
                   ),
-
                 if (!isMe && !message.content.isLoading! && !message.content.downloaded!)
                   IconButton(
                     onPressed: () {
@@ -157,7 +167,6 @@ class ImageContent extends StatelessWidget {
                       size: 30,
                     ),
                   ),
-
                 if (isMe && !message.content.isLoading! && !message.content.uploaded!)
                   IconButton(
                     onPressed: () {

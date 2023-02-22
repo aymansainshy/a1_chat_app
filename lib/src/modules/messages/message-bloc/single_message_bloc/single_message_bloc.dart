@@ -28,9 +28,9 @@ class SingleMessageBloc extends Bloc<SingleMessageEvent, SingleMessageState> {
         emit(state.copyWith(DateTime.now()));
 
 
-        final response = await messageRepository.uploadMessageFile(message);
+        final fileUrl = await messageRepository.uploadMessageFile(message);
 
-        event.message.content.fileUrl = response;
+        event.message.content.fileUrl = fileUrl;
         event.message.content.isLoading = false;
         _socketIO.sendMessage(event.message);
         event.message.content.uploaded = true;
@@ -58,9 +58,9 @@ class SingleMessageBloc extends Bloc<SingleMessageEvent, SingleMessageState> {
         messageRepository.saveMessage(event.message);
         emit(state.copyWith(DateTime.now()));
 
-        final response = await messageRepository.uploadMessageFile(message);
+        final fileUrl = await messageRepository.uploadMessageFile(message);
 
-        event.message.content.fileUrl = response;
+        event.message.content.fileUrl = fileUrl;
         event.message.content.isLoading = false;
         _socketIO.sendMessage(event.message);
         event.message.content.uploaded = true;

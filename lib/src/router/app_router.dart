@@ -9,14 +9,14 @@ import 'package:a1_chat_app/src/modules/home/views/home_view.dart';
 
 import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../modules/auth/views/confirm_otp.dart';
-import '../modules/messages/models/message.dart';
-import '../modules/online-users/models/user_model.dart';
+import '../modules/messages/views/file_view.dart';
 
 class RouteName {
   static const home = "home";
   static const login = "login";
   static const otp = "otp";
   static const chat = "chat-view";
+  static const fileView = "message-file-view";
 }
 
 class AppRouter {
@@ -28,24 +28,42 @@ class AppRouter {
     initialLocation: '/', // Splash screen
     routes: <RouteBase>[
       GoRoute(
-          path: '/',
-          name: RouteName.home,
-          pageBuilder: (context, state) => CustomTransitionPage<void>(
-                key: state.pageKey,
-                restorationId: state.pageKey.value,
-                child: const HomeView(),
-                transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-                    FadeTransition(opacity: animation, child: child),
+        path: '/',
+        name: RouteName.home,
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          key: state.pageKey,
+          restorationId: state.pageKey.value,
+          child: const HomeView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
+        routes: [
+          GoRoute(
+            path: 'chat',
+            name: RouteName.chat,
+            builder: (context, state) {
+              return ChatView(chatData: state.extra! as ChatData);
+            },
+            routes: [
+              GoRoute(
+                path: 'file-view',
+                name: RouteName.fileView,
+                pageBuilder: (context, fileState) => CustomTransitionPage<void>(
+                  key: fileState.pageKey,
+                  restorationId: fileState.pageKey.value,
+                  child: MessageFileView(filePath: fileState.extra! as String),
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                ),
               ),
-          routes: [
-            GoRoute(
-              path: 'chat',
-              name: RouteName.chat,
-              builder: (context, state) {
-                return ChatView(chatData: state.extra! as ChatData);
-              },
-            ),
-          ]),
+            ],
+          ),
+        ],
+      ),
       GoRoute(
         path: '/login',
         name: RouteName.login,
@@ -63,7 +81,7 @@ class AppRouter {
     ],
     redirect: ((BuildContext context, GoRouterState state) {
       bool isTryLogin = authCubit.state == const AuthState.isTryLogin();
-      bool isAuthenticated = authCubit.state  == const AuthState.authenticated();
+      bool isAuthenticated = authCubit.state == const AuthState.authenticated();
 
       print("isAuthenticated $isAuthenticated");
       print('isTryLogin $isTryLogin');
@@ -111,10 +129,6 @@ class GoRouterRefreshStream extends ChangeNotifier {
     super.dispose();
   }
 }
-
-
-
-
 
 // if the user is not logged in, they need to login
 // final loggedIn = loginInfo.loggedIn;
