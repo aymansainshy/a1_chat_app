@@ -1,6 +1,7 @@
 import 'package:a1_chat_app/src/core/theme/theme_cubit.dart';
 import 'package:a1_chat_app/src/modules/auth/repository/auth_repository.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
+import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/repository/messages_repository.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:a1_chat_app/src/modules/online-users/repository/user_repository.dart';
@@ -27,6 +28,7 @@ void setup() {
   injector.registerLazySingleton<ThemeCubit>(() => ThemeCubit());
   injector.registerLazySingleton<ButtonSwitcherCubit>(() => ButtonSwitcherCubit());
   injector.registerLazySingleton<OnlineUsersBloc>(() => OnlineUsersBloc(injector()));
+  injector.registerLazySingleton<SingleMessageBloc>(() => SingleMessageBloc(injector(), injector()));
 
   // Repositories
   injector.registerLazySingleton<MessageRepository>(() => MessageRepositoryImpl(injector()));

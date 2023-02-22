@@ -1,6 +1,7 @@
 import 'package:a1_chat_app/src/core/theme/theme_cubit.dart';
 import 'package:a1_chat_app/src/core/utils/assets_utils.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
+import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<ThemeCubit>(create: (context) => injector<ThemeCubit>()),
         BlocProvider<ButtonSwitcherCubit>(create: (context) => injector<ButtonSwitcherCubit>()),
         BlocProvider<OnlineUsersBloc>(create: (context) => injector<OnlineUsersBloc>()),
+        BlocProvider<SingleMessageBloc>(create: (context) => injector<SingleMessageBloc>()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 640),

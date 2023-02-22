@@ -1,5 +1,5 @@
-import 'dart:io';
-
+import 'package:a1_chat_app/injector.dart';
+import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,6 +74,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           if (_messageRooms.containsKey(message!.sender?.phoneNumber)) {
             if (!_messageRooms[message.sender?.phoneNumber]!.messages.contains(message)) {
               _messageRooms[message.sender?.phoneNumber]!.messages.add(message);
+
+              if (message.messageType == MessageType.media) {
+                injector<SingleMessageBloc>().add(DownloadMessageFiles(message));
+              }
             }
           } else {
             _messageRooms.putIfAbsent(message.sender!.phoneNumber!, () {
@@ -84,6 +88,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
               );
               return createdRoom;
             });
+
+            if (message.messageType == MessageType.media) {
+              injector<SingleMessageBloc>().add(DownloadMessageFiles(message));
+            }
           }
 
           emit(state.copyWith(messageRooms: _messageRooms));
@@ -125,28 +133,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       if (_messageRooms.containsKey(event.message?.receiver?.phoneNumber)) {
         _messageRooms[event.message?.receiver?.phoneNumber]?.messages.add(event.message!);
 
-        try {
-          File message = File(event.message!.content.filePath!);
-          event.message?.content.isLoading = true;
-          event.message?.content.downloaded = true;
-          event.message?.content.uploaded = false;
-          emit(state.copyWith(messageRooms: _messageRooms));
-
-          final response = await messageRepository.uploadMessageFile(message);
-
-          event.message?.content.fileUrl = response;
-          event.message?.content.isLoading = false;
-          _socketIO.sendMessage(event.message!);
-          event.message?.content.uploaded = true;
-          emit(state.copyWith(messageRooms: _messageRooms));
-        } catch (e) {
-          event.message?.content.isLoading = false;
-          event.message?.content.uploaded = false;
-          emit(state.copyWith(messageRooms: _messageRooms));
-          print(e.toString());
-        }
-
-        // messageRepository.saveMessage(event.message!);
+        injector<SingleMessageBloc>().add(SendMessageFiles(event.message!));
+        emit(state.copyWith(messageRooms: _messageRooms));
       } else {
         _messageRooms.putIfAbsent(event.message!.receiver!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -157,9 +145,8 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
           return createdRoom;
         });
 
-        // _socketIO.sendMessage(event.message!);
+        injector<SingleMessageBloc>().add(SendMessageFiles(event.message!));
         emit(state.copyWith(messageRooms: _messageRooms));
-        // messageRepository.saveMessage(event.message!);
       }
     });
 
@@ -194,6 +181,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         messageRepository.saveMessage(event.message);
 
         emit(state.copyWith(messageRooms: _messageRooms));
+
+        if (event.message.messageType == MessageType.media) {
+          injector<SingleMessageBloc>().add(DownloadMessageFiles(event.message));
+        }
       } else {
         _messageRooms.putIfAbsent(event.message.sender!.phoneNumber!, () {
           final createdRoom = MessageRoom(
@@ -208,6 +199,10 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
         _socketIO.messageDelivered(event.message); // emit socket event
         messageRepository.saveMessage(event.message);
         emit(state.copyWith(messageRooms: _messageRooms));
+
+        if (event.message.messageType == MessageType.media) {
+          injector<SingleMessageBloc>().add(DownloadMessageFiles(event.message));
+        }
       }
     });
 
