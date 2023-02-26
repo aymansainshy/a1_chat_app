@@ -21,7 +21,7 @@ abstract class MessageRepository {
 
   Future<void> fetchMessages();
 
-  Future<dynamic> uploadMessageFile(File data);
+  Future<String> uploadMessageFile(File data);
 
   Future<String> downloadMessageFile(String url);
 
@@ -139,17 +139,14 @@ class MessageRepositoryImpl extends MessageRepository {
   }
 
   @override
-  Future<dynamic> uploadMessageFile(File data) async {
-    print("Start Posting Image  ..........");
+  Future<String> uploadMessageFile(File data) async {
     _dio.interceptors.add(talkerDioLogger());
 
     final multiPartData = FormData.fromMap({
       'image': await MultipartFile.fromFile(
         data.path,
-        filename: data.path
-            .split('/')
-            .last,
-      )
+        filename: data.path.split('/').last,
+      ),
     });
 
     try {
@@ -174,7 +171,7 @@ class MessageRepositoryImpl extends MessageRepository {
         print("Dio Posting Response  .. ${response.data}");
       }
       return response.data['data'];
-    } on DioError catch (error) {
+    } catch (error) {
       rethrow;
     }
   }
@@ -185,7 +182,6 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<String> downloadMessageFile(String url) async {
-
     final finalUrl = "${Application.domain}/uploads/images/$url";
 
     _dio.interceptors.add(talkerDioLogger());
@@ -195,7 +191,8 @@ class MessageRepositoryImpl extends MessageRepository {
     await Permission.storage.request();
 
     try {
-       await _dio.download(
+
+      await _dio.download(
         finalUrl,
         savePath,
         onReceiveProgress: showDownloadProgress,
@@ -210,15 +207,13 @@ class MessageRepositoryImpl extends MessageRepository {
         ),
       );
 
-      print("Download Completed. ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]");
+      print("Download Completed ..............................");
 
       return savePath;
     } catch (e) {
-      print(e);
       rethrow;
     }
   }
-
 
   void showDownloadProgress(received, total) {
     if (total != -1) {
@@ -226,7 +221,6 @@ class MessageRepositoryImpl extends MessageRepository {
     }
   }
 }
-
 
 // final file = File(savePath);
 // final raf = file.openSync(mode: FileMode.write);
@@ -237,43 +231,42 @@ class MessageRepositoryImpl extends MessageRepository {
 // print(file.path);
 // return file.path;
 
+//
+// Future<bool> _checkPermission() async {
+//   if (platform == TargetPlatform.android) {
+//     final status = await Permission.storage.status;
+//     if (status != PermissionStatus.granted) {
+//       final result = await Permission.storage.request();
+//       if (result == PermissionStatus.granted) {
+//         return true;
+//       }
+//     } else {
+//       return true;
+//     }
+//   } else {
+//     return true;
+//   }
+//   return false;
+// }
+//
+// Future<void> _prepareSaveDir() async {
+//   _localPath = Application.storageDir!.path;
+//
+//   print(_localPath);
+//
+//   final savedDir = Directory(_localPath);
+//   bool hasExisted = await savedDir.exists();
+//   if (!hasExisted) {
+//     savedDir.create();
+//   }
+// }
 
-  //
-  // Future<bool> _checkPermission() async {
-  //   if (platform == TargetPlatform.android) {
-  //     final status = await Permission.storage.status;
-  //     if (status != PermissionStatus.granted) {
-  //       final result = await Permission.storage.request();
-  //       if (result == PermissionStatus.granted) {
-  //         return true;
-  //       }
-  //     } else {
-  //       return true;
-  //     }
-  //   } else {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-  //
-  // Future<void> _prepareSaveDir() async {
-  //   _localPath = Application.storageDir!.path;
-  //
-  //   print(_localPath);
-  //
-  //   final savedDir = Directory(_localPath);
-  //   bool hasExisted = await savedDir.exists();
-  //   if (!hasExisted) {
-  //     savedDir.create();
-  //   }
-  // }
-
-  // Future<String?> _findLocalPath() async {
-  //   if (platform == TargetPlatform.android) {
-  //     return "/sdcard/download/";
-  //   } else {
-  //     var directory = await getApplicationDocumentsDirectory();
-  //     return directory.path + Platform.pathSeparator + 'Download';
-  //   }
-  // }
+// Future<String?> _findLocalPath() async {
+//   if (platform == TargetPlatform.android) {
+//     return "/sdcard/download/";
+//   } else {
+//     var directory = await getApplicationDocumentsDirectory();
+//     return directory.path + Platform.pathSeparator + 'Download';
+//   }
+// }
 // }

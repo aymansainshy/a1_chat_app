@@ -225,12 +225,12 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
       }
 
       event.message.isRead = true;
-      _socketIO.iReadMessages(event.message); // emit socket event
 
       for (var message in _messageRooms[event.message.sender?.phoneNumber]!.messages) {
         message.isNew = false;
         messageRepository.saveMessage(message);
       }
+      _socketIO.iReadMessages(event.message); // emit socket event
 
       emit(state.copyWith(messageRooms: _messageRooms));
     });
