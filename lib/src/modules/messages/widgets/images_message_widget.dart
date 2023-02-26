@@ -88,7 +88,7 @@ class ImageContent extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const SizedBox(height: 5),
+            const SizedBox(height: 3),
             Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,
@@ -181,7 +181,10 @@ class ImageContent extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 3),
-            BlueReadCheckAndDate(isMe: isMe, message: message),
+            Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: BlueReadCheckAndDate(isMe: isMe, message: message),
+            ),
           ],
         );
       },

@@ -171,7 +171,7 @@ class MessageRepositoryImpl extends MessageRepository {
         print("Dio Posting Response  .. ${response.data}");
       }
       return response.data['data'];
-    } on DioError catch (error) {
+    } catch (error) {
       rethrow;
     }
   }
