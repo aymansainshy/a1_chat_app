@@ -10,10 +10,12 @@ import 'package:a1_chat_app/src/modules/home/views/home_view.dart';
 import '../modules/auth/auth-bloc/auth_cubit.dart';
 import '../modules/auth/views/confirm_otp.dart';
 import '../modules/messages/views/file_view.dart';
+import '../modules/settings/views/settings_view.dart';
 
 class RouteName {
   static const home = "home";
   static const login = "login";
+  static const settings = "settings";
   static const otp = "otp";
   static const chat = "chat-view";
   static const fileView = "message-file-view";
@@ -61,6 +63,14 @@ class AppRouter {
                 ),
               ),
             ],
+          ),
+
+          GoRoute(
+            path: 'settings',
+            name: RouteName.settings,
+            builder: (context, state) {
+              return const SettingsView();
+            },
           ),
         ],
       ),

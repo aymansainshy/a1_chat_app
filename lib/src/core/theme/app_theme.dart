@@ -26,6 +26,7 @@ class AppTheme {
     brightness: Brightness.light,
     fontFamily: "Roboto",
     colorScheme: colorScheme,
+    useMaterial3: true,
     primaryColor: AppColors.primaryColor,
     indicatorColor: AppColors.indicatorColor,
     backgroundColor: AppColors.backgroundColor,
@@ -41,6 +42,7 @@ class AppTheme {
     brightness: Brightness.light,
     primarySwatch: Colors.blue,
     fontFamily: "Roboto",
+    // useMaterial3: true,
     colorScheme: colorScheme,
     pageTransitionsTheme: PageTransitionsTheme(builders: {
       TargetPlatform.android: CustomPageTransitionBuilder(),
