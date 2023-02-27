@@ -4,6 +4,7 @@ import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../messages/views/rooms_view.dart';
 import '../../online-users/views/online_user_view.dart';
@@ -195,7 +196,9 @@ class UserInformationWidget extends StatelessWidget {
           ),
           const Spacer(),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.go('/settings');
+            },
             icon: const Icon(
               Icons.settings,
             ),
