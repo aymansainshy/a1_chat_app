@@ -26,7 +26,7 @@ class AppTheme {
     brightness: Brightness.light,
     fontFamily: "Roboto",
     colorScheme: colorScheme,
-    useMaterial3: true,
+    // useMaterial3: true,
     primaryColor: AppColors.primaryColor,
     indicatorColor: AppColors.indicatorColor,
     backgroundColor: AppColors.backgroundColor,
