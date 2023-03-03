@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../animations/custom_page_transition.dart';
+import '../../core/animations/custom_page_transition.dart';
 
 class AppColors {
   static const Color primaryColor = Color.fromARGB(255, 41, 78, 200);

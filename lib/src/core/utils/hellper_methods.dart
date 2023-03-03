@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-import '../../config/app_config.dart';
+import '../../app/app_config_model.dart';
 import '../../modules/messages/models/message.dart';
 
 // String translate(String text, BuildContext context) {

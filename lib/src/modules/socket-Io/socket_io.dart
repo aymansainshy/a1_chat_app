@@ -3,7 +3,7 @@ import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart'
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
-import '../../config/app_config.dart';
+import '../../app/app_config_model.dart';
 import '../messages/models/message.dart';
 import '../online-users/models/user_model.dart';
 

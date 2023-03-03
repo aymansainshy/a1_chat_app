@@ -3,7 +3,7 @@ import 'package:a1_chat_app/src/modules/online-users/repository/user_repository.
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../config/app_config.dart';
+import '../../../app/app_config_model.dart';
 import '../models/user_model.dart';
 
 part 'online_users_event.dart';

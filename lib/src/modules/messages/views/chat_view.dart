@@ -10,7 +10,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../config/app_config.dart';
+import '../../../app/app_config_model.dart';
 import '../../../core/utils/hellper_methods.dart';
 import '../../../core/utils/preference_utils.dart';
 import '../../home/widgets/user_avatar.dart';
@@ -277,10 +277,14 @@ class _ChatViewState extends State<ChatView> {
 
                                     final ImagePicker picker = ImagePicker();
                                     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-                                    if (image != null) {
-                                      print(image.path);
 
-                                      late MContent messageContent = MContent(filePath: image.path);
+                                    final savePath = "${Application.storageDir?.path}/downloads/${image?.name}";
+
+                                    await image?.saveTo(savePath);
+
+                                    if (image != null) {
+
+                                      late MContent messageContent = MContent(filePath: savePath);
                                       var imageMessage = Message(
                                         id: DateTime.now().toIso8601String(),
                                         uuid: DateTime.now().toIso8601String(),

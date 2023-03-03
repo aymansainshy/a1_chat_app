@@ -8,7 +8,7 @@ import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../../config/app_config.dart';
+import '../../../app/app_config_model.dart';
 import '../../../core/constan/const.dart';
 import '../../../modules/messages/message-bloc/message_bloc.dart';
 import '../../../modules/messages/models/message.dart';
