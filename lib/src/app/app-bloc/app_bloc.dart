@@ -11,8 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../config/app_config.dart';
-import '../../config/preferences_config.dart';
+import '../app_config_model.dart';
+import '../../core/config/preferences_config.dart';
 import '../../core/utils/preference_utils.dart';
 import '../../modules/auth/auth-bloc/auth_cubit.dart';
 import '../../modules/messages/repository/messages_repository.dart';

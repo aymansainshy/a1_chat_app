@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:a1_chat_app/src/config/app_config.dart';
+import 'package:a1_chat_app/src/app/app_config_model.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/widgets/text_message_widget.dart';
 import 'package:flutter/material.dart';

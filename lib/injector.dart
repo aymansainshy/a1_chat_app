@@ -1,4 +1,4 @@
-import 'package:a1_chat_app/src/core/theme/theme_cubit.dart';
+import 'package:a1_chat_app/src/app/theme/theme_cubit.dart';
 import 'package:a1_chat_app/src/modules/auth/repository/auth_repository.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';

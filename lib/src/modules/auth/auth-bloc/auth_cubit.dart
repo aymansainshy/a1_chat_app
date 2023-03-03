@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../config/app_config.dart';
+import '../../../app/app_config_model.dart';
 import '../../socket-Io/socket_io.dart';
 
 enum AuthStatus { unknown, authenticated, unAuthenticated, isTryLogin }

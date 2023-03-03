@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../../config/app_config.dart';
+import '../../../app/app_config_model.dart';
 import '../models/user_model.dart';
 
 abstract class OnlineUserRepository {

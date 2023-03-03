@@ -1,4 +1,4 @@
-import '../../config/app_config.dart';
+import '../../app/app_config_model.dart';
 
 class PreferencesUtils {
   

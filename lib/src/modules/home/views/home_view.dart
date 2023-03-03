@@ -1,5 +1,5 @@
-import 'package:a1_chat_app/src/config/app_config.dart';
-import 'package:a1_chat_app/src/core/theme/app_theme.dart';
+import 'package:a1_chat_app/src/app/app_config_model.dart';
+import 'package:a1_chat_app/src/app/theme/app_theme.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
