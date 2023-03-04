@@ -77,7 +77,7 @@ class _ChatViewState extends State<ChatView> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(color: Colors.white),
-          titleSpacing: MediaQuery.of(context).size.width/ 200,
+          titleSpacing: MediaQuery.of(context).size.width/ 250,
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -94,7 +94,7 @@ class _ChatViewState extends State<ChatView> {
                   bool isOnline = onlineUserState.users.contains(user);
                   return UserAvatar(
                     imageUrl: "${Application.domain}/uploads/${user.imageUrl}",
-                    radius: 24,
+                    radius: 22,
                     isOnline: isOnline,
                   );
                 },
@@ -108,7 +108,10 @@ class _ChatViewState extends State<ChatView> {
                   children: [
                     Text(
                       "${user.name ?? user.phoneNumber}",
-                      // style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 20),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontSize: 19,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     LastSeenInformationWidget(user: user),
