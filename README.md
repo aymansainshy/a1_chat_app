@@ -18,6 +18,7 @@ samples, guidance on mobile development, and a full API reference.
 
 
 ![sh1](https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh1.jpeg)
+<img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh1.jpeg" width="100">
 ![sh1](https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh2.jpeg)
 ![sh1](https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh3.jpeg)
 ![sh1](https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh4.jpeg)
