@@ -18,10 +18,10 @@ samples, guidance on mobile development, and a full API reference.
 
 <img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh3.jpeg" width="400">   <img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh4.jpeg" width="400">
 
-<img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh6.jpeg" width="350">   <img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh7.jpeg" width="350">
+<img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh6.jpeg" width="400">   <img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh7.jpeg" width="400">
 
-<img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh5.jpeg" width="350">   <img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh2.jpeg" width="350">
+<img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh5.jpeg" width="400">   <img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh2.jpeg" width="400">
 
-<img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh1.jpeg" width="350">
+<img src="https://github.com/aymansainshy/a1_chat_app/blob/main/assets/images/sh1.jpeg" width="400">
 
 
