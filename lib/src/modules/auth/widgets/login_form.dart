@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/animations/fade_transition.dart';
 import '../../../core/constan/const.dart';
 import '../../../core/errors/custom_error_dialog.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../app/theme/app_theme.dart';
 import '../../../core/utils/hellper_methods.dart';
 import '../auth-bloc/auth_cubit.dart';
 import '../auth-bloc/otp_bloc.dart';
@@ -89,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   border: Border.all(
                     color: !isPhoneValide
-                        ? Theme.of(context).errorColor
+                        ? Theme.of(context).colorScheme.error
                         : AppColors.borderColor,
                     width: 1,
                   ),
@@ -99,8 +99,8 @@ class _LoginFormState extends State<LoginForm> {
                   child: InternationalPhoneNumberInput(
                     focusNode: _phoneNumberFocusNode,
                     spaceBetweenSelectorAndTextField: 0,
-                    selectorTextStyle: Theme.of(context).textTheme.bodyText2!,
-                    textStyle: Theme.of(context).textTheme.bodyText2!,
+                    selectorTextStyle: Theme.of(context).textTheme.bodyMedium!,
+                    textStyle: Theme.of(context).textTheme.bodyMedium!,
                     textAlign: TextAlign.start,
                     selectorConfig: const SelectorConfig(
                       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
@@ -233,7 +233,7 @@ class _LoginFormState extends State<LoginForm> {
                             child: Text(
                               "Login",
                               style:
-                                  Theme.of(context).textTheme.button?.copyWith(
+                                  Theme.of(context).textTheme.labelLarge?.copyWith(
                                         color: AppColors.textButtomColor,
                                       ),
                             ),

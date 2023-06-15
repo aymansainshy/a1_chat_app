@@ -1,10 +1,11 @@
-import 'package:a1_chat_app/src/core/theme/theme_cubit.dart';
+import 'package:a1_chat_app/src/app/theme/theme_cubit.dart';
 import 'package:a1_chat_app/src/modules/auth/repository/auth_repository.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/message-bloc/single_message_bloc/single_message_bloc.dart';
 import 'package:a1_chat_app/src/modules/messages/repository/messages_repository.dart';
 import 'package:a1_chat_app/src/modules/online-users/online-users-bloc/online_users_bloc.dart';
 import 'package:a1_chat_app/src/modules/online-users/repository/user_repository.dart';
+import 'package:a1_chat_app/src/modules/online-users/user-update-bloc/user_update_bloc.dart';
 import 'package:a1_chat_app/src/modules/socket-Io/socket_io.dart';
 import 'package:a1_chat_app/src/modules/storage/storage.dart';
 import 'package:a1_chat_app/src/router/app_router.dart';
@@ -29,6 +30,7 @@ void setup() {
   injector.registerLazySingleton<ButtonSwitcherCubit>(() => ButtonSwitcherCubit());
   injector.registerLazySingleton<OnlineUsersBloc>(() => OnlineUsersBloc(injector()));
   injector.registerLazySingleton<SingleMessageBloc>(() => SingleMessageBloc(injector(), injector()));
+  injector.registerLazySingleton<UserUpdateBloc>(() => UserUpdateBloc());
 
   // Repositories
   injector.registerLazySingleton<MessageRepository>(() => MessageRepositoryImpl(injector()));

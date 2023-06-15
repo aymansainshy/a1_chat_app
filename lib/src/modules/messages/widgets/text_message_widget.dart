@@ -1,4 +1,4 @@
-import 'package:a1_chat_app/src/config/app_config.dart';
+import 'package:a1_chat_app/src/app/app_config_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +49,7 @@ class TextMessageWidget extends StatelessWidget {
                   maxWidth: mediaQuery.width / 1.2,
                 ),
                 decoration: BoxDecoration(
-                  color: isMe ? Theme.of(context).backgroundColor : Theme.of(context).primaryColor,
+                  color: isMe ? Theme.of(context).colorScheme.background : Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(18),
                     topRight: const Radius.circular(18),
@@ -108,7 +108,7 @@ class MessageContent extends StatelessWidget {
     return SelectableText(
       message.content.text ?? '',
       style: GoogleFonts.rubik(
-        textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: isMe ? Colors.black : Colors.white,
             ),
       ),
@@ -142,7 +142,7 @@ class BlueReadCheckAndDate extends StatelessWidget {
             child: Text(
               DateFormat('hh:mm a').format(message.createdAt),
               textAlign: TextAlign.right,
-              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 10,
                     color: isMe ? Colors.grey : Colors.grey,
                   ),

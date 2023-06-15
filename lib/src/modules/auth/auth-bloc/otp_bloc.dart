@@ -5,9 +5,9 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// import '../../../config/app_config.dart';
-import '../../../config/app_config.dart';
-import '../../../config/preferences_config.dart';
+// import '../../../config/app_config_model.dart';
+import '../../../app/app_config_model.dart';
+import '../../../core/config/preferences_config.dart';
 import '../../../core/utils/preference_utils.dart';
 import '../../online-users/models/user_model.dart';
 import '../repository/auth_repository.dart';

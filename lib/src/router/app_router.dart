@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:a1_chat_app/src/modules/auth/views/login_view.dart';
 import 'package:a1_chat_app/src/modules/messages/views/chat_view.dart';
+import 'package:a1_chat_app/src/modules/settings/views/user_profile_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,6 +17,7 @@ class RouteName {
   static const home = "home";
   static const login = "login";
   static const settings = "settings";
+  static const userSettings = "user-settings";
   static const otp = "otp";
   static const chat = "chat-view";
   static const fileView = "message-file-view";
@@ -64,13 +66,21 @@ class AppRouter {
               ),
             ],
           ),
-
           GoRoute(
             path: 'settings',
             name: RouteName.settings,
             builder: (context, state) {
               return const SettingsView();
             },
+            routes: [
+              GoRoute(
+                path: 'user-settings',
+                name: RouteName.userSettings,
+                builder: (context, state) {
+                  return const UserProfileSettingsView();
+                },
+              ),
+            ],
           ),
         ],
       ),

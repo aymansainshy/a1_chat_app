@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../core/language/app_lang.dart';
+import 'language/app_lang.dart';
 import '../modules/online-users/models/user_model.dart';
 
 class Application {

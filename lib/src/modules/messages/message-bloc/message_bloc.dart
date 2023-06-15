@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../config/app_config.dart';
+import '../../../app/app_config_model.dart';
 import '../../online-users/models/user_model.dart';
 import '../../socket-Io/socket_io.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -58,7 +58,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<FetchUserMessages>((event, emit) async {
-      try {
+     try {
         await messageRepository.fetchUserMessages();
       } catch (e) {
         if (kDebugMode) print(e.toString());

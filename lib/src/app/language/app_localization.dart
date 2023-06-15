@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
-import 'package:a1_chat_app/src/core/language/app_local_dalegate.dart';
+import 'package:a1_chat_app/src/app/language/app_local_dalegate.dart';
 
 
 class AppLocalization {

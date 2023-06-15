@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../animations/custom_page_transition.dart';
+import '../../core/animations/custom_page_transition.dart';
 
 class AppColors {
   static const Color primaryColor = Color.fromARGB(255, 41, 78, 200);
@@ -25,17 +25,15 @@ class AppTheme {
   static final lightTheme = ThemeData(
     brightness: Brightness.light,
     fontFamily: "Roboto",
-    colorScheme: colorScheme,
     useMaterial3: true,
     primaryColor: AppColors.primaryColor,
     indicatorColor: AppColors.indicatorColor,
-    backgroundColor: AppColors.backgroundColor,
     cardColor:AppColors.cardColor ,
     // scaffoldBackgroundColor: AppColors.backgroundColor,
     pageTransitionsTheme: PageTransitionsTheme(builders: {
       TargetPlatform.android: CustomPageTransitionBuilder(),
       TargetPlatform.iOS: CustomPageTransitionBuilder(),
-    }),
+    }), colorScheme: colorScheme.copyWith(background: AppColors.backgroundColor),
   );
 
   static final darkTheme = ThemeData(
