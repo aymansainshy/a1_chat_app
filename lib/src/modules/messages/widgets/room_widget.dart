@@ -75,7 +75,7 @@ class RoomWidget extends StatelessWidget {
                         ),
                         Text(
                           getMessageTime(messageRoom.messages.last),
-                          style: Theme.of(context).textTheme.caption?.copyWith(
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: newMessageCount == 0 ? Colors.grey : Theme.of(context).primaryColor,
                               ),
                         ),
@@ -93,7 +93,7 @@ class RoomWidget extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.rubik(
-                                textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: ScreenUtil().setSp(14)),
+                                textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: ScreenUtil().setSp(14)),
                               ),
                             ),
                           ),
@@ -117,7 +117,7 @@ class RoomWidget extends StatelessWidget {
                                 ),
                                 child: Text(
                                   '$newMessageCount',
-                                  style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).cardColor),
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).cardColor),
                                 ),
                               ),
                             ),

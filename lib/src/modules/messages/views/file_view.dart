@@ -38,7 +38,7 @@ class MessageFileView extends StatelessWidget {
               top: 12,
               left: 16,
               child: CircleAvatar(
-                backgroundColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).colorScheme.background,
                 child: IconButton(
                   onPressed: () {
                     context.pop();

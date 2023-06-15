@@ -139,7 +139,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Text(
                           "Varify Phone number",
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -150,7 +150,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                           const SizedBox(width: 5),
                           Text(
                             widget.phoneNumber!,
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
@@ -296,7 +296,7 @@ class _PinCodeVerificationViewState extends State<PinCodeVerificationView> {
                               : Center(
                                   child: Text(
                                     "Varify",
-                                    style: Theme.of(context).textTheme.button?.copyWith(
+                                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
                                           color: AppColors.textButtomColor,
                                         ),
                                   ),

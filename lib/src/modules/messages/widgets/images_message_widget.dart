@@ -54,7 +54,7 @@ class ImageMessageWidget extends StatelessWidget {
                     maxWidth: mediaQuery.width / 1.2,
                   ),
                   decoration: BoxDecoration(
-                    color: isMe ? Theme.of(context).backgroundColor : Theme.of(context).primaryColor,
+                    color: isMe ? Theme.of(context).colorScheme.background : Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(18),
                       topRight: const Radius.circular(18),
@@ -153,8 +153,8 @@ class ImageContent extends StatelessWidget {
                   sleekCircularSlider(
                     context,
                     30,
-                    Theme.of(context).backgroundColor,
-                    Theme.of(context).backgroundColor,
+                    Theme.of(context).colorScheme.background,
+                    Theme.of(context).colorScheme.background,
                   ),
                 if (!isMe && !message.content.isLoading! && !message.content.downloaded!)
                   IconButton(
@@ -163,7 +163,7 @@ class ImageContent extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.cloud_download_outlined,
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).colorScheme.background,
                       size: 30,
                     ),
                   ),
@@ -174,7 +174,7 @@ class ImageContent extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.cloud_upload_outlined,
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).colorScheme.background,
                       size: 30,
                     ),
                   ),

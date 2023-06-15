@@ -58,7 +58,7 @@ class MessageBloc extends Bloc<MessageBlocEvent, MessageBlocState> {
     });
 
     on<FetchUserMessages>((event, emit) async {
-      try {
+     try {
         await messageRepository.fetchUserMessages();
       } catch (e) {
         if (kDebugMode) print(e.toString());

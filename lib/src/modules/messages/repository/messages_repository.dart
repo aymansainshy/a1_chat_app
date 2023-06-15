@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:a1_chat_app/injector.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:permission_handler/permission_handler.dart';

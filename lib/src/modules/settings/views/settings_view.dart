@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/app_config_model.dart';
@@ -34,14 +33,14 @@ class SettingsView extends StatelessWidget {
                       ),
                 ),
                 Card(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).colorScheme.background,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
                         leading: CircleAvatar(
                           radius: 25,
-                          backgroundColor: Theme.of(context).accentColor,
+                          backgroundColor: Theme.of(context).colorScheme.secondary,
                           backgroundImage: Application.user?.imageUrl != null
                               ? NetworkImage('${Application.domain}/uploads/${Application.user?.imageUrl}')
                               : null,
@@ -78,7 +77,7 @@ class SettingsView extends StatelessWidget {
                       ),
                 ),
                 Card(
-                  color: Theme.of(context).backgroundColor,
+                  color: Theme.of(context).colorScheme.background,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -99,7 +98,7 @@ class SettingsView extends StatelessWidget {
                           showDialog(
                               context: context,
                               builder: (context) {
-                                return LanguageDialog();
+                                return const LanguageDialog();
                               });
                         },
                       ),
@@ -135,6 +134,8 @@ class SettingsView extends StatelessWidget {
 }
 
 class LanguageDialog extends StatelessWidget {
+  const LanguageDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -144,13 +145,13 @@ class LanguageDialog extends StatelessWidget {
         margin: const EdgeInsets.all(30),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: const BorderRadius.all(
             Radius.circular(15),
           ),
         ),
         child: Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

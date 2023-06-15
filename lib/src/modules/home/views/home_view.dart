@@ -22,7 +22,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -79,7 +79,7 @@ class ButtonSwitcher extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 "Messages",
-                                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       color: Theme.of(context).cardColor,
                                     ),
                               ),
@@ -109,7 +109,7 @@ class ButtonSwitcher extends StatelessWidget {
                                         child: Text(
                                           '${messageState.totalNewMessages()}',
                                           style:
-                                              Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).cardColor),
+                                              Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).cardColor),
                                         ),
                                       ),
                                     ),
@@ -140,7 +140,7 @@ class ButtonSwitcher extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Online Users",
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).cardColor,
                             ),
                       ),
@@ -181,14 +181,14 @@ class UserInformationWidget extends StatelessWidget {
               children: [
                 Text(
                   '${Application.user?.name ?? Application.user?.phoneNumber} ',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 10),
                 Transform.translate(
                   offset: const Offset(0, -5),
                   child: Text(
                     "Online",
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
               ],

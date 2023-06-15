@@ -126,7 +126,7 @@ class _ChatViewState extends State<ChatView> {
             ],
           ),
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: BlocConsumer<MessageBloc, MessageBlocState>(
           listener: (context, messageState) {
             // if (messageState is SendMessageWithNotificationSuccess) {
@@ -178,7 +178,7 @@ class _ChatViewState extends State<ChatView> {
                                     child: Text(
                                       DateFormat.yMMMd().format(message.createdAt),
                                       textAlign: TextAlign.center,
-                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                             fontSize: 12,
                                             color: Colors.white,
                                           ),
