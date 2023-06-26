@@ -106,7 +106,7 @@ class AppRouter {
       print("isAuthenticated $isAuthenticated");
       print('isTryLogin $isTryLogin');
 
-      final bool isLoginView = state.subloc == '/login';
+      final bool isLoginView = state.path == '/login';
 
       if (isAuthenticated) {
         // return '/';

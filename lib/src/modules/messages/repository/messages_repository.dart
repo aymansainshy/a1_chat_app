@@ -70,8 +70,8 @@ class MessageRepositoryImpl extends MessageRepository {
       final response = await _dio.get(
         "${Application.domain}/user-messages/${Application.user?.id}",
         options: Options(
-          sendTimeout: 5000,
-          receiveTimeout: 5000,
+          sendTimeout: const Duration(milliseconds: 5000),
+          receiveTimeout: const Duration(milliseconds: 5000),
           headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
@@ -110,8 +110,8 @@ class MessageRepositoryImpl extends MessageRepository {
       final response = await _dio.get(
         "${Application.domain}/user-received-messages/${Application.user?.id}",
         options: Options(
-          sendTimeout: 5000,
-          receiveTimeout: 5000,
+          sendTimeout: const Duration(milliseconds: 5000),
+          receiveTimeout: const Duration(milliseconds: 5000),
           headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
@@ -153,8 +153,8 @@ class MessageRepositoryImpl extends MessageRepository {
         "${Application.domain}/upload-message-file",
         data: multiPartData,
         options: Options(
-          sendTimeout: 5000,
-          receiveTimeout: 5000,
+          sendTimeout: const Duration(milliseconds: 5000),
+          receiveTimeout: const Duration(milliseconds: 5000),
           headers: {
             'Accept': 'application/json',
             'content-type': 'multipart/form-data',
@@ -196,8 +196,8 @@ class MessageRepositoryImpl extends MessageRepository {
         savePath,
         onReceiveProgress: showDownloadProgress,
         options: Options(
-          sendTimeout: 5000,
-          receiveTimeout: 5000,
+          sendTimeout: const Duration(milliseconds: 5000),
+          receiveTimeout: const Duration(milliseconds: 5000),
           headers: {
             'Accept': 'application/json',
             'content-type': 'multipart/form-data',

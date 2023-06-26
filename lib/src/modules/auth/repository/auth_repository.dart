@@ -40,8 +40,8 @@ class AuthRepositoryImpl extends AuthRepository {
       final response = await _dio.post(
         "${Application.domain}/login",
         options: Options(
-          sendTimeout: 2000,
-          receiveTimeout: 1000,
+          sendTimeout: const Duration(milliseconds: 1000),
+          receiveTimeout: const Duration(milliseconds: 1000),
           headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
@@ -64,8 +64,8 @@ class AuthRepositoryImpl extends AuthRepository {
       final response = await _dio.post(
         "${Application.domain}/login/confirmotp",
         options: Options(
-          sendTimeout: 2000,
-          receiveTimeout: 1000,
+          sendTimeout:const Duration(milliseconds: 2000),
+          receiveTimeout: const Duration(milliseconds: 1000),
           headers: {
             'Content-type': 'application/json',
             'Accept': 'application/json',
